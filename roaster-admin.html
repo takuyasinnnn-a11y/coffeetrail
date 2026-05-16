@@ -171,6 +171,10 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         HTMLを書き出す
       </div>
+      <div class="sidebar-item" onclick="showPage('settings')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        設定
+      </div>
     </div>
   </aside>
 
@@ -309,6 +313,31 @@
       </div>
     </div>
 
+    <!-- 設定 -->
+    <div class="page" id="page-settings">
+      <div class="page-header">
+        <div>
+          <div class="page-title">設定</div>
+          <div class="page-sub">GitHubトークンを設定してください</div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-group">
+          <label class="form-label">GitHub Personal Access Token</label>
+          <input type="password" class="form-input" id="settings-token" placeholder="ghp_xxxxxxxxxxxx">
+          <div class="form-hint" style="margin-top:6px;font-size:12px;color:var(--text-tertiary);line-height:1.6;">
+            <a href="https://github.com/settings/tokens" target="_blank" style="color:var(--brown);">github.com/settings/tokens</a> で発行してください。<br>
+            「Generate new token (classic)」→ repo にチェック → Generate token
+          </div>
+        </div>
+        <div id="token-status" style="font-size:12px;margin-bottom:1rem;"></div>
+        <div class="form-actions">
+          <button class="btn-primary" onclick="saveToken()">保存する</button>
+          <button class="btn-secondary" onclick="testToken()">接続テスト</button>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -361,13 +390,18 @@ function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  const pages = ['roasters','new','hero','export'];
+  const pages = ['roasters','new','hero','export','settings'];
   const idx = pages.indexOf(name);
   if (idx >= 0) document.querySelectorAll('.sidebar-item')[idx].classList.add('active');
   if (name === 'roasters') renderRoasterList();
   if (name === 'new') { clearForm(); document.getElementById('form-page-title').textContent = '新しいロースター'; }
   if (name === 'hero') loadHeroForm();
   if (name === 'export') generateExport();
+  if (name === 'settings') {
+    const t = getToken();
+    document.getElementById('settings-token').value = t;
+    document.getElementById('token-status').innerHTML = t ? '<span style="color:var(--teal);">✅ トークン設定済み</span>' : '<span style="color:var(--red);">⚠️ トークンが未設定です</span>';
+  }
 }
 
 function renderRoasterList() {
@@ -596,12 +630,17 @@ function copyExport() {
 }
 
 // ---- GITHUB AUTO PUBLISH ----
-const GITHUB_TOKEN = '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';
 const GITHUB_OWNER = 'takuyasinnnn-a11y';
 const GITHUB_REPO  = 'coffeetrail';
 const GITHUB_FILE  = 'index.html';
+function getToken() { return localStorage.getItem('gh_token') || ''; }
 
 async function publishToGitHub() {
+  if (!getToken()) {
+    showToast('⚠️ 先に「設定」からトークンを設定してください');
+    showPage('settings');
+    return;
+  }
   const btn = document.getElementById('publish-btn');
   btn.textContent = '公開中...';
   btn.disabled = true;
@@ -610,7 +649,7 @@ async function publishToGitHub() {
     // 1. 現在のファイルのSHAを取得
     const getRes = await fetch(
       `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`,
-      { headers: { Authorization: `Bearer ${GITHUB_TOKEN}`, Accept: 'application/vnd.github+json' } }
+      { headers: { Authorization: `Bearer ${getToken()}`, Accept: 'application/vnd.github+json' } }
     );
     const getData = await getRes.json();
     const sha = getData.sha;
@@ -625,7 +664,7 @@ async function publishToGitHub() {
       `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`,
       {
         method: 'PUT',
-        headers: { Authorization: `Bearer ${GITHUB_TOKEN}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+        headers: { Authorization: `Bearer ${getToken()}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: `Update site: ${new Date().toLocaleString('ja-JP')}`,
           content: encoded,
@@ -649,13 +688,41 @@ async function publishToGitHub() {
   }
 }
 
+// ---- 設定 ----
+function saveToken() {
+  const token = document.getElementById('settings-token').value.trim();
+  if (!token) { showToast('トークンを入力してください'); return; }
+  localStorage.setItem('gh_token', token);
+  document.getElementById('token-status').innerHTML = '<span style="color:var(--teal);">✅ 保存しました</span>';
+  showToast('トークンを保存しました');
+}
+
+async function testToken() {
+  const token = getToken();
+  if (!token) { showToast('先にトークンを入力して保存してください'); return; }
+  document.getElementById('token-status').innerHTML = '<span style="color:var(--text-tertiary);">接続テスト中...</span>';
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`,
+      { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' } }
+    );
+    if (res.ok) {
+      document.getElementById('token-status').innerHTML = '<span style="color:var(--teal);">✅ 接続成功！GitHubに公開できます</span>';
+    } else {
+      document.getElementById('token-status').innerHTML = '<span style="color:var(--red);">❌ 接続失敗。トークンを確認してください</span>';
+    }
+  } catch(e) {
+    document.getElementById('token-status').innerHTML = '<span style="color:var(--red);">❌ 通信エラー</span>';
+  }
+}
+
 // ---- GitHubから最新データを読み込む ----
 async function loadFromGitHub() {
   showToast('GitHubから最新データを読み込み中...');
   try {
     const res = await fetch(
       `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`,
-      { headers: { Authorization: `Bearer ${GITHUB_TOKEN}`, Accept: 'application/vnd.github+json' } }
+      { headers: { Authorization: `Bearer ${getToken()}`, Accept: 'application/vnd.github+json' } }
     );
     const data = await res.json();
     const html = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));

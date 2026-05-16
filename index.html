@@ -3,14 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Roaster Trails in Japan</title>
+  <title>JAPAN COFFEE TRAIL</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>body { font-family: Inter, sans-serif; background: #f8f5ef; }</style>
+  <style>
+    body { font-family: Inter, sans-serif; background: #f8f5ef; }
+    .roaster-card { background: #fff; border-radius: 2rem; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+    .card-img { width: 100%; height: 18rem; object-fit: cover; display: block; }
+    .card-body { padding: 2rem; }
+    .card-city { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.45; margin-bottom: 0.5rem; }
+    .card-name { font-size: 1.4rem; font-weight: 600; margin-bottom: 0.6rem; line-height: 1.3; }
+    .card-desc { font-size: 0.9rem; color: rgba(0,0,0,0.6); line-height: 1.7; margin-bottom: 1.25rem; }
+    .card-details { border-top: 1px solid rgba(0,0,0,0.07); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1.25rem; }
+    .detail-row { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.82rem; }
+    .detail-row.concept { font-style: italic; color: #7a5a2a; border-left: 2px solid #c6a16e; padding-left: 0.75rem; margin-bottom: 0.25rem; }
+    .detail-icon { color: #c6a16e; flex-shrink: 0; margin-top: 1px; }
+    .detail-label { color: rgba(0,0,0,0.4); white-space: nowrap; flex-shrink: 0; min-width: 72px; }
+    .detail-val { color: rgba(0,0,0,0.75); line-height: 1.5; }
+    .card-link { display: inline-block; font-size: 0.8rem; color: #7a5a2a; border: 1px solid #c6a16e; padding: 0.35rem 0.9rem; border-radius: 999px; text-decoration: none; transition: background 0.2s, color 0.2s; }
+    .card-link:hover { background: #c6a16e; color: #fff; }
+  </style>
 </head>
 <body class="bg-[#f8f5ef] text-[#1c1c1c]">
   <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#f8f5ef]/80 border-b border-black/5">
     <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-      <h1 class="text-xl tracking-[0.25em] font-semibold">ROASTER TRAILS</h1>
+      <h1 class="text-xl tracking-[0.25em] font-semibold">JAPAN COFFEE TRAIL</h1>
       <nav class="hidden md:flex gap-8 text-sm tracking-wide">
         <a href="#cities">Cities</a>
         <a href="#roasters">Roasters</a>
@@ -38,36 +54,64 @@
       <h3 class="text-4xl font-light">Places Worth The Journey</h3>
     </div>
     <div class="grid md:grid-cols-3 gap-8">
-        <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm">
-          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&amp;w=1400&amp;auto=format&amp;fit=crop" class="h-72 w-full object-cover" alt="Glitch Coffee &amp; Roasters" />
-          <div class="p-8">
-            <p class="uppercase text-xs tracking-[0.2em] opacity-50 mb-3">Tokyo</p>
-            <h4 class="text-2xl mb-4 leading-snug">Glitch Coffee &amp; Roasters</h4>
-            <p class="text-black/70 leading-relaxed">Experimental light roasts and rare beans.</p>
+        <div class="roaster-card">
+          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&amp;w=1400&amp;auto=format&amp;fit=crop" class="card-img" alt="Glitch Coffee &amp; Roasters" />
+          <div class="card-body">
+            <p class="card-city">Tokyo</p>
+            <h4 class="card-name">Glitch Coffee &amp; Roasters</h4>
+            <p class="card-desc">Experimental light roasts and rare beans.</p>
+            <div class="card-details">
+            
+            </div>
+            
           </div>
         </div>
-        <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm">
-          <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&amp;w=1400&amp;auto=format&amp;fit=crop" class="h-72 w-full object-cover" alt="Kurasu" />
-          <div class="p-8">
-            <p class="uppercase text-xs tracking-[0.2em] opacity-50 mb-3">Kyoto</p>
-            <h4 class="text-2xl mb-4 leading-snug">Kurasu</h4>
-            <p class="text-black/70 leading-relaxed">Minimal Kyoto coffee culture with global appeal.</p>
+        <div class="roaster-card">
+          <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&amp;w=1400&amp;auto=format&amp;fit=crop" class="card-img" alt="Kurasu" />
+          <div class="card-body">
+            <p class="card-city">Kyoto</p>
+            <h4 class="card-name">Kurasu</h4>
+            <p class="card-desc">Minimal Kyoto coffee culture with global appeal.</p>
+            <div class="card-details">
+            
+            </div>
+            
           </div>
         </div>
-        <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm">
-          <img src="https://www.oc-ogawa.co.jp/cms/wp-content/uploads/2021/07/AFU5083-876x584.jpg" class="h-72 w-full object-cover" alt="OGAWA COFFEE LABORATORY Shimokitazawa" />
-          <div class="p-8">
-            <p class="uppercase text-xs tracking-[0.2em] opacity-50 mb-3">Tokyo,Shimokitazawa</p>
-            <h4 class="text-2xl mb-4 leading-snug">OGAWA COFFEE LABORATORY Shimokitazawa</h4>
-            <p class="text-black/70 leading-relaxed">Experience-based beans salon in Shimokitazawa. Roast, grind, and brew with expert baristas.</p>
+        <div class="roaster-card">
+          <img src="https://www.oc-ogawa.co.jp/cms/wp-content/uploads/2021/07/AFU5083-876x584.jpg" class="card-img" alt="OGAWA COFFEE LABORATORY Shimokitazawa" />
+          <div class="card-body">
+            <p class="card-city">Tokyo,Shimokitazawa</p>
+            <h4 class="card-name">OGAWA COFFEE LABORATORY Shimokitazawa</h4>
+            <p class="card-desc">Experience-based beans salon in Shimokitazawa. Roast, grind, and brew with expert baristas.</p>
+            <div class="card-details">
+            
+            </div>
+            
           </div>
         </div>
-        <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm">
-          <img src="" class="h-72 w-full object-cover" alt="Saladday coffee" />
-          <div class="p-8">
-            <p class="uppercase text-xs tracking-[0.2em] opacity-50 mb-3"></p>
-            <h4 class="text-2xl mb-4 leading-snug">Saladday coffee</h4>
-            <p class="text-black/70 leading-relaxed"></p>
+        <div class="roaster-card">
+          <img src="" class="card-img" alt="Saladday coffee" />
+          <div class="card-body">
+            <p class="card-city"></p>
+            <h4 class="card-name">Saladday coffee</h4>
+            <p class="card-desc"></p>
+            <div class="card-details">
+            
+            </div>
+            
+          </div>
+        </div>
+        <div class="roaster-card">
+          <img src="" class="card-img" alt="r" />
+          <div class="card-body">
+            <p class="card-city"></p>
+            <h4 class="card-name">r</h4>
+            <p class="card-desc"></p>
+            <div class="card-details">
+            
+            </div>
+            
           </div>
         </div>
     </div>

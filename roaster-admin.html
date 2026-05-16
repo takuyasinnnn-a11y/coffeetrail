@@ -109,6 +109,14 @@
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   .form-actions { display: flex; gap: 0.75rem; padding-top: 0.5rem; }
 
+  /* SECTION DIVIDER IN FORM */
+  .form-section-title {
+    font-size: 11px; font-weight: 500; color: var(--text-tertiary);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    border-top: 0.5px solid var(--gray-border);
+    padding-top: 1.25rem; margin-top: 0.25rem; margin-bottom: 1rem;
+  }
+
   /* IMAGE PREVIEW */
   .img-preview { width: 100%; height: 160px; border-radius: var(--radius); overflow: hidden; background: var(--brown-light); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; }
   .img-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -221,6 +229,8 @@
       </div>
       <div class="form-card">
         <input type="hidden" id="edit-id" value="">
+
+        <!-- 基本情報 -->
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">ロースター名</label>
@@ -235,6 +245,44 @@
           <label class="form-label">説明</label>
           <textarea class="form-textarea" id="f-desc" placeholder="例：Experimental light roasts and rare beans."></textarea>
         </div>
+
+        <!-- 詳細情報 -->
+        <div class="form-section-title">詳細情報</div>
+        <div class="form-group">
+          <label class="form-label">コンセプト</label>
+          <textarea class="form-textarea" id="f-concept" placeholder="例：「日本から世界にコーヒーカルチャーを発信する」をテーマに、シングルオリジンのみを扱う。" style="min-height:70px;"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">焙煎機</label>
+            <input type="text" class="form-input" id="f-roaster-machine" placeholder="例：Diedrich IR-2.5（米国製）">
+          </div>
+          <div class="form-group">
+            <label class="form-label">抽出器具</label>
+            <input type="text" class="form-input" id="f-brew-tools" placeholder="例：Hario V60、AeroPress、エスプレッソ">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">価格帯</label>
+            <input type="text" class="form-input" id="f-price" placeholder="例：ドリンク ¥600〜¥1,200 / 豆 100g ¥900〜">
+          </div>
+          <div class="form-group">
+            <label class="form-label">アクセス</label>
+            <input type="text" class="form-input" id="f-access" placeholder="例：神保町駅 徒歩5分">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">営業時間</label>
+          <input type="text" class="form-input" id="f-hours" placeholder="例：月〜金 8:00–19:00 / 土日 9:00–19:00">
+        </div>
+        <div class="form-group">
+          <label class="form-label">ホームページ URL</label>
+          <input type="url" class="form-input" id="f-website" placeholder="https://glitchcoffee.com">
+        </div>
+
+        <!-- 画像・ステータス -->
+        <div class="form-section-title">画像・公開設定</div>
         <div class="form-group">
           <label class="form-label">画像</label>
           <div class="img-preview" id="img-preview">
@@ -339,8 +387,36 @@ function saveHeroData(h) { localStorage.setItem('rt_hero', JSON.stringify(h)); }
 // 初期データ
 if (!localStorage.getItem('rt_roasters')) {
   saveRoasters([
-    { id: '1', name: 'Glitch Coffee & Roasters', city: 'Tokyo', desc: 'Experimental light roasts and rare beans.', image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1400&auto=format&fit=crop', status: 'published' },
-    { id: '2', name: 'Kurasu', city: 'Kyoto', desc: 'Minimal Kyoto coffee culture with global appeal.', image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1400&auto=format&fit=crop', status: 'published' }
+    {
+      id: '1',
+      name: 'Glitch Coffee & Roasters',
+      city: 'Tokyo',
+      desc: 'Experimental light roasts and rare beans.',
+      concept: '「日本から世界にコーヒーカルチャーを発信する」をコンセプトに、シングルオリジンの浅煎りのみを扱う神保町の旗手。',
+      roasterMachine: '店内大型焙煎機（詳細非公開）',
+      brewTools: 'Hario V60、AeroPress、エスプレッソ',
+      price: 'ドリンク ¥600〜¥3,500 / 豆 100g ¥900〜',
+      access: '神保町駅 徒歩5分 / 神田駅 徒歩7分',
+      hours: '月〜金 8:00–19:00 / 土日 9:00–19:00',
+      website: 'https://glitchcoffee.com',
+      image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1400&auto=format&fit=crop',
+      status: 'published'
+    },
+    {
+      id: '2',
+      name: 'Kurasu',
+      city: 'Kyoto',
+      desc: 'Minimal Kyoto coffee culture with global appeal.',
+      concept: '京都の暮らしに寄り添うミニマルなコーヒー文化を世界へ発信するロースター。',
+      roasterMachine: '',
+      brewTools: 'ハンドドリップ、エスプレッソ',
+      price: 'ドリンク ¥600〜¥1,200',
+      access: '東山駅 徒歩3分',
+      hours: '月〜日 9:00–18:00',
+      website: 'https://kurasu.kyoto',
+      image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1400&auto=format&fit=crop',
+      status: 'published'
+    }
   ]);
 }
 if (!localStorage.getItem('rt_hero')) {
@@ -412,6 +488,13 @@ function clearForm() {
   document.getElementById('f-name').value = '';
   document.getElementById('f-city').value = '';
   document.getElementById('f-desc').value = '';
+  document.getElementById('f-concept').value = '';
+  document.getElementById('f-roaster-machine').value = '';
+  document.getElementById('f-brew-tools').value = '';
+  document.getElementById('f-price').value = '';
+  document.getElementById('f-access').value = '';
+  document.getElementById('f-hours').value = '';
+  document.getElementById('f-website').value = '';
   document.getElementById('f-image-url').value = '';
   document.getElementById('f-image-file').value = '';
   document.getElementById('f-status').value = 'published';
@@ -444,6 +527,13 @@ function editRoaster(id) {
   document.getElementById('f-name').value = r.name;
   document.getElementById('f-city').value = r.city;
   document.getElementById('f-desc').value = r.desc;
+  document.getElementById('f-concept').value = r.concept || '';
+  document.getElementById('f-roaster-machine').value = r.roasterMachine || '';
+  document.getElementById('f-brew-tools').value = r.brewTools || '';
+  document.getElementById('f-price').value = r.price || '';
+  document.getElementById('f-access').value = r.access || '';
+  document.getElementById('f-hours').value = r.hours || '';
+  document.getElementById('f-website').value = r.website || '';
   document.getElementById('f-image-url').value = r.image || '';
   document.getElementById('f-status').value = r.status;
   currentImageData = '';
@@ -467,6 +557,13 @@ function saveRoaster() {
     name,
     city: document.getElementById('f-city').value.trim(),
     desc: document.getElementById('f-desc').value.trim(),
+    concept: document.getElementById('f-concept').value.trim(),
+    roasterMachine: document.getElementById('f-roaster-machine').value.trim(),
+    brewTools: document.getElementById('f-brew-tools').value.trim(),
+    price: document.getElementById('f-price').value.trim(),
+    access: document.getElementById('f-access').value.trim(),
+    hours: document.getElementById('f-hours').value.trim(),
+    website: document.getElementById('f-website').value.trim(),
     image,
     status: document.getElementById('f-status').value
   };
@@ -531,23 +628,58 @@ function generateExport() {
   const roasters = getRoasters().filter(r => r.status === 'published');
   const hero = getHero() || {};
 
-  const roasterCards = roasters.map(r => `        <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm">
-          <img src="${escHtml(r.image)}" class="h-72 w-full object-cover" alt="${escHtml(r.name)}" />
-          <div class="p-8">
-            <p class="uppercase text-xs tracking-[0.2em] opacity-50 mb-3">${escHtml(r.city)}</p>
-            <h4 class="text-2xl mb-4 leading-snug">${escHtml(r.name)}</h4>
-            <p class="text-black/70 leading-relaxed">${escHtml(r.desc)}</p>
+  const roasterCards = roasters.map(r => {
+    const detailRows = [
+      r.concept       ? `<div class="detail-row concept"><span class="detail-icon">✦</span><p>${escHtml(r.concept)}</p></div>` : '',
+      r.roasterMachine ? `<div class="detail-row"><span class="detail-label">焙煎機</span><span class="detail-val">${escHtml(r.roasterMachine)}</span></div>` : '',
+      r.brewTools      ? `<div class="detail-row"><span class="detail-label">抽出器具</span><span class="detail-val">${escHtml(r.brewTools)}</span></div>` : '',
+      r.price          ? `<div class="detail-row"><span class="detail-label">価格帯</span><span class="detail-val">${escHtml(r.price)}</span></div>` : '',
+      r.hours          ? `<div class="detail-row"><span class="detail-label">営業時間</span><span class="detail-val">${escHtml(r.hours)}</span></div>` : '',
+      r.access         ? `<div class="detail-row"><span class="detail-label">アクセス</span><span class="detail-val">${escHtml(r.access)}</span></div>` : '',
+    ].filter(Boolean).join('\n            ');
+
+    const websiteLink = r.website
+      ? `<a href="${escHtml(r.website)}" target="_blank" rel="noopener" class="card-link">ウェブサイト →</a>`
+      : '';
+
+    return `        <div class="roaster-card">
+          <img src="${escHtml(r.image)}" class="card-img" alt="${escHtml(r.name)}" />
+          <div class="card-body">
+            <p class="card-city">${escHtml(r.city)}</p>
+            <h4 class="card-name">${escHtml(r.name)}</h4>
+            <p class="card-desc">${escHtml(r.desc)}</p>
+            <div class="card-details">
+            ${detailRows}
+            </div>
+            ${websiteLink}
           </div>
-        </div>`).join('\n');
+        </div>`;
+  }).join('\n');
 
   const fullHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> JAPAN ROASTER TRAIL</title>
+  <title>JAPAN ROASTER TRAIL</title>
   <script src="https://cdn.tailwindcss.com"><\/script>
-  <style>body { font-family: Inter, sans-serif; background: #f8f5ef; }</style>
+  <style>
+    body { font-family: Inter, sans-serif; background: #f8f5ef; }
+    .roaster-card { background: #fff; border-radius: 2rem; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+    .card-img { width: 100%; height: 18rem; object-fit: cover; display: block; }
+    .card-body { padding: 2rem; }
+    .card-city { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.45; margin-bottom: 0.5rem; }
+    .card-name { font-size: 1.4rem; font-weight: 600; margin-bottom: 0.6rem; line-height: 1.3; }
+    .card-desc { font-size: 0.9rem; color: rgba(0,0,0,0.6); line-height: 1.7; margin-bottom: 1.25rem; }
+    .card-details { border-top: 1px solid rgba(0,0,0,0.07); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1.25rem; }
+    .detail-row { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.82rem; }
+    .detail-row.concept { font-style: italic; color: #7a5a2a; border-left: 2px solid #c6a16e; padding-left: 0.75rem; margin-bottom: 0.25rem; }
+    .detail-icon { color: #c6a16e; flex-shrink: 0; margin-top: 1px; }
+    .detail-label { color: rgba(0,0,0,0.4); white-space: nowrap; flex-shrink: 0; min-width: 72px; }
+    .detail-val { color: rgba(0,0,0,0.75); line-height: 1.5; }
+    .card-link { display: inline-block; font-size: 0.8rem; color: #7a5a2a; border: 1px solid #c6a16e; padding: 0.35rem 0.9rem; border-radius: 999px; text-decoration: none; transition: background 0.2s, color 0.2s; }
+    .card-link:hover { background: #c6a16e; color: #fff; }
+  </style>
 </head>
 <body class="bg-[#f8f5ef] text-[#1c1c1c]">
   <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#f8f5ef]/80 border-b border-black/5">

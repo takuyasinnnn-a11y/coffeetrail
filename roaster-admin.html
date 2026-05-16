@@ -486,7 +486,10 @@ function editRoaster(id) {
     document.getElementById('img-preview').innerHTML = `<img src="${r.image}">`;
   }
   document.getElementById('form-page-title').textContent = 'ロースターを編集';
-  showPage('new');
+  // showPageを使わず直接ページ切り替え（clearFormを避けるため）
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('page-new').classList.add('active');
   document.querySelectorAll('.sidebar-item')[1].classList.add('active');
 }
 

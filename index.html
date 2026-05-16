@@ -3,310 +3,66 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Japan Coffee Trail</title>
-
+  <title>Roaster Trails in Japan</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <style>
-    body {
-      font-family: Inter, sans-serif;
-      background: #f8f5ef;
-    }
-
-    textarea,
-    input {
-      resize: none;
-    }
-  </style>
+  <style>body { font-family: Inter, sans-serif; background: #f8f5ef; }</style>
 </head>
-<body>
-  <div class="grid lg:grid-cols-[340px_1fr] min-h-screen">
-    <!-- Admin Panel -->
-    <aside class="bg-[#111111] text-white p-6 border-r border-white/10 overflow-y-auto sticky top-0 h-screen">
-      <div class="flex items-center justify-between mb-6">
-        <button id="loginBtn" class="bg-white text-black px-4 py-2 rounded-full text-sm">
-          Admin Login
-        </button>
+<body class="bg-[#f8f5ef] text-[#1c1c1c]">
+  <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#f8f5ef]/80 border-b border-black/5">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+      <h1 class="text-xl tracking-[0.25em] font-semibold">ROASTER TRAILS</h1>
+      <nav class="hidden md:flex gap-8 text-sm tracking-wide">
+        <a href="#cities">Cities</a>
+        <a href="#roasters">Roasters</a>
+        <a href="#stories">Stories</a>
+      </nav>
+    </div>
+  </header>
 
-        <button id="saveBtn" class="bg-[#c6a16e] text-black px-4 py-2 rounded-full text-sm">
-          Save
-        </button>
+  <section class="relative h-screen overflow-hidden">
+    <img src="https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&amp;w=2000&amp;auto=format&amp;fit=crop" class="absolute inset-0 w-full h-full object-cover" />
+    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="relative z-10 h-full flex items-center max-w-7xl mx-auto px-6">
+      <div class="max-w-2xl text-white">
+        <p class="uppercase tracking-[0.3em] text-sm mb-6 opacity-80">Tokyo &amp; Kyoto Specialty Coffee Guide</p>
+        <h2 class="text-5xl md:text-7xl leading-tight font-light mb-8">Explore Japan's Coffee Culture</h2>
+        <p class="text-lg md:text-xl opacity-90 max-w-xl leading-relaxed mb-10">Discover hidden roasters, quiet cafés, and unforgettable coffee experiences across Japan.</p>
+        <button class="bg-white text-black px-8 py-4 rounded-full text-sm tracking-wide hover:bg-black hover:text-white transition duration-300">Start Exploring</button>
       </div>
+    </div>
+  </section>
 
-      <p class="uppercase text-xs tracking-[0.3em] opacity-50 mb-3">
-        Admin Panel
-      </p>
-
-      <h2 class="text-2xl font-light mb-10">Japan Coffee Trail CMS</h2>
-
-      <!-- Site Settings -->
-      <div class="bg-white/5 border border-white/10 rounded-2xl p-4 mb-10">
-        <h3 class="text-sm uppercase tracking-[0.2em] opacity-60 mb-4">
-          Site Settings
-        </h3>
-
-        <div class="space-y-4">
-          <button id="langBtn" class="w-full flex items-center justify-between bg-black/20 border border-white/10 rounded-xl px-4 py-3">
-            <span class="flex items-center gap-2">
-              <i data-lucide="globe"></i>
-              Language
-            </span>
-            <span id="langText">EN</span>
-          </button>
-
-          <button id="statusBtn" class="w-full flex items-center justify-between bg-black/20 border border-white/10 rounded-xl px-4 py-3">
-            <span class="flex items-center gap-2">
-              <i data-lucide="eye-off"></i>
-              Status
-            </span>
-            <span id="statusText">Draft</span>
-          </button>
+  <section id="roasters" class="max-w-7xl mx-auto px-6 py-28">
+    <div class="mb-14">
+      <p class="uppercase text-sm tracking-[0.2em] mb-3 opacity-60">Featured Roasters</p>
+      <h3 class="text-4xl font-light">Places Worth The Journey</h3>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm">
+          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&amp;w=1400&amp;auto=format&amp;fit=crop" class="h-72 w-full object-cover" alt="Glitch Coffee &amp; Roasters" />
+          <div class="p-8">
+            <p class="uppercase text-xs tracking-[0.2em] opacity-50 mb-3">Tokyo</p>
+            <h4 class="text-2xl mb-4 leading-snug">Glitch Coffee &amp; Roasters</h4>
+            <p class="text-black/70 leading-relaxed">Experimental light roasts and rare beans.</p>
+          </div>
         </div>
-      </div>
-
-      <!-- Hero -->
-      <div class="mb-10">
-        <h3 class="text-sm uppercase tracking-[0.2em] opacity-60 mb-4">
-          Hero Section
-        </h3>
-
-        <div class="space-y-4">
-          <textarea id="heroTitleInput" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none min-h-[100px]">Explore Japan's Coffee Culture</textarea>
-
-          <textarea id="heroDescInput" class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none min-h-[120px]">Discover hidden roasters, quiet cafés, and unforgettable coffee experiences across Japan.</textarea>
+        <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm">
+          <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&amp;w=1400&amp;auto=format&amp;fit=crop" class="h-72 w-full object-cover" alt="Kurasu" />
+          <div class="p-8">
+            <p class="uppercase text-xs tracking-[0.2em] opacity-50 mb-3">Kyoto</p>
+            <h4 class="text-2xl mb-4 leading-snug">Kurasu</h4>
+            <p class="text-black/70 leading-relaxed">Minimal Kyoto coffee culture with global appeal.</p>
+          </div>
         </div>
-      </div>
-
-      <!-- Roasters -->
-      <div>
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="text-sm uppercase tracking-[0.2em] opacity-60">
-            Featured Roasters
-          </h3>
-
-          <button id="addRoasterBtn" class="bg-white text-black px-4 py-2 rounded-full text-sm flex items-center gap-2">
-            <i data-lucide="plus"></i>
-            Add
-          </button>
+        <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm">
+          <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&amp;w=1400&amp;auto=format&amp;fit=crop" class="h-72 w-full object-cover" alt="OGAWA COFFEE LABORATORY Shimokitazawa" />
+          <div class="p-8">
+            <p class="uppercase text-xs tracking-[0.2em] opacity-50 mb-3">Tokyo,Shimokitazawa</p>
+            <h4 class="text-2xl mb-4 leading-snug">OGAWA COFFEE LABORATORY Shimokitazawa</h4>
+            <p class="text-black/70 leading-relaxed">Experience-based beans salon in Shimokitazawa. Roast, grind, and brew with expert baristas.</p>
+          </div>
         </div>
-
-        <div id="roasterList" class="space-y-6"></div>
-      </div>
-    </aside>
-
-    <!-- Live Preview -->
-    <main>
-      <div class="bg-[#f8f5ef] text-[#1c1c1c] min-h-screen">
-        <!-- Navigation -->
-        <header class="fixed top-0 left-[340px] right-0 z-50 backdrop-blur-md bg-[#f8f5ef]/80 border-b border-black/5">
-          <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-            <h1 id="siteStatus" class="text-xl tracking-[0.25em] font-semibold">
-              JAPAN COFFEE TRAIL • DRAFT
-            </h1>
-
-            <nav class="hidden md:flex gap-8 text-sm tracking-wide">
-              <a href="#cities">Cities</a>
-              <a href="#roasters">Roasters</a>
-              <a href="#stories">Stories</a>
-            </nav>
-          </div>
-        </header>
-
-        <!-- Hero -->
-        <section class="relative h-screen overflow-hidden">
-          <img
-            src="https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=2000&auto=format&fit=crop"
-            class="absolute inset-0 w-full h-full object-cover"
-          />
-
-          <div class="absolute inset-0 bg-black/40"></div>
-
-          <div class="relative z-10 h-full flex items-center max-w-7xl mx-auto px-6">
-            <div class="max-w-2xl text-white">
-              <p class="uppercase tracking-[0.3em] text-sm mb-6 opacity-80">
-                Tokyo & Kyoto Specialty Coffee Guide
-              </p>
-
-              <h2 id="heroTitle" class="text-5xl md:text-7xl leading-tight font-light mb-8">
-                Explore Japan's Coffee Culture
-              </h2>
-
-              <p id="heroDescription" class="text-lg md:text-xl opacity-90 max-w-xl leading-relaxed mb-10">
-                Discover hidden roasters, quiet cafés, and unforgettable coffee experiences across Japan.
-              </p>
-
-              <button class="bg-white text-black px-8 py-4 rounded-full text-sm tracking-wide hover:bg-black hover:text-white transition duration-300">
-                Start Exploring
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <!-- Roasters -->
-        <section id="roasters" class="max-w-7xl mx-auto px-6 py-28">
-          <div class="mb-14">
-            <p class="uppercase text-sm tracking-[0.2em] mb-3 opacity-60">
-              Featured Roasters
-            </p>
-
-            <h3 class="text-4xl font-light">Places Worth The Journey</h3>
-          </div>
-
-          <div id="roasterPreview" class="grid md:grid-cols-3 gap-8"></div>
-        </section>
-      </div>
-    </main>
-  </div>
-
-  <script>
-    lucide.createIcons();
-
-    let isDraft = true;
-    let language = 'EN';
-
-    const roasters = [
-      {
-        name: 'Glitch Coffee & Roasters',
-        city: 'Tokyo',
-        description: 'Experimental light roasts and rare beans.',
-        image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1400&auto=format&fit=crop'
-      },
-      {
-        name: 'Kurasu',
-        city: 'Kyoto',
-        description: 'Minimal Kyoto coffee culture with global appeal.',
-        image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1400&auto=format&fit=crop'
-      }
-    ];
-
-    const roasterList = document.getElementById('roasterList');
-    const roasterPreview = document.getElementById('roasterPreview');
-
-    function renderRoasters() {
-      roasterList.innerHTML = '';
-      roasterPreview.innerHTML = '';
-
-      roasters.forEach((roaster, index) => {
-        roasterList.innerHTML += `
-          <div class="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3">
-            <div class="flex justify-end">
-              <button onclick="deleteRoaster(${index})" class="text-red-400">
-                <i data-lucide="trash-2"></i>
-              </button>
-            </div>
-
-            <input
-              value="${roaster.name}"
-              onchange="updateRoaster(${index}, 'name', this.value)"
-              class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 outline-none"
-            />
-
-            <input
-              value="${roaster.city}"
-              onchange="updateRoaster(${index}, 'city', this.value)"
-              class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 outline-none"
-            />
-
-            <textarea
-              onchange="updateRoaster(${index}, 'description', this.value)"
-              class="w-full bg-black/20 border border-white/10 rounded-xl p-4 outline-none"
-            >${roaster.description}</textarea>
-
-            <input
-              value="${roaster.image}"
-              onchange="updateRoaster(${index}, 'image', this.value)"
-              class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 outline-none"
-            />
-
-            <input type="file" accept="image/*" onchange="uploadImage(event, ${index})" class="w-full text-sm" />
-          </div>
-        `;
-
-        roasterPreview.innerHTML += `
-          <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm">
-            <img src="${roaster.image}" class="h-72 w-full object-cover" />
-
-            <div class="p-8">
-              <p class="uppercase text-xs tracking-[0.2em] opacity-50 mb-3">
-                ${roaster.city}
-              </p>
-
-              <h4 class="text-2xl mb-4 leading-snug">
-                ${roaster.name}
-              </h4>
-
-              <p class="text-black/70 leading-relaxed">
-                ${roaster.description}
-              </p>
-            </div>
-          </div>
-        `;
-      });
-
-      lucide.createIcons();
-    }
-
-    function updateRoaster(index, field, value) {
-      roasters[index][field] = value;
-      renderRoasters();
-    }
-
-    function deleteRoaster(index) {
-      roasters.splice(index, 1);
-      renderRoasters();
-    }
-
-    function uploadImage(event, index) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      roasters[index].image = URL.createObjectURL(file);
-      renderRoasters();
-    }
-
-    document.getElementById('addRoasterBtn').addEventListener('click', () => {
-      roasters.push({
-        name: 'New Roaster',
-        city: 'Tokyo',
-        description: 'Description here',
-        image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1400&auto=format&fit=crop'
-      });
-
-      renderRoasters();
-    });
-
-    document.getElementById('heroTitleInput').addEventListener('input', (e) => {
-      document.getElementById('heroTitle').innerText = e.target.value;
-    });
-
-    document.getElementById('heroDescInput').addEventListener('input', (e) => {
-      document.getElementById('heroDescription').innerText = e.target.value;
-    });
-
-    document.getElementById('statusBtn').addEventListener('click', () => {
-      isDraft = !isDraft;
-
-      document.getElementById('statusText').innerText = isDraft
-        ? 'Draft'
-        : 'Published';
-
-      document.getElementById('siteStatus').innerText = isDraft
-        ? 'JAPAN COFFEE TRAIL • DRAFT'
-        : 'JAPAN COFFEE TRAIL • LIVE';
-    });
-
-    document.getElementById('langBtn').addEventListener('click', () => {
-      language = language === 'EN' ? 'JP' : 'EN';
-      document.getElementById('langText').innerText = language;
-    });
-
-    document.getElementById('saveBtn').addEventListener('click', () => {
-      localStorage.setItem('roaster-trails-data', JSON.stringify(roasters));
-      alert('Saved locally');
-    });
-
-    renderRoasters();
-  </script>
+    </div>
+  </section>
 </body>
 </html>

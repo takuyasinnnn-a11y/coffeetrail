@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Roaster Trails — 管理画面</title>
+<title>JAPAN ROASTER TRAIL — 管理画面</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
@@ -109,6 +109,14 @@
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   .form-actions { display: flex; gap: 0.75rem; padding-top: 0.5rem; }
 
+  /* SECTION DIVIDER IN FORM */
+  .form-section-title {
+    font-size: 11px; font-weight: 500; color: var(--text-tertiary);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    border-top: 0.5px solid var(--gray-border);
+    padding-top: 1.25rem; margin-top: 0.25rem; margin-bottom: 1rem;
+  }
+
   /* IMAGE PREVIEW */
   .img-preview { width: 100%; height: 160px; border-radius: var(--radius); overflow: hidden; background: var(--brown-light); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; }
   .img-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -140,12 +148,11 @@
 
 <nav>
   <div style="display:flex;align-items:center;">
-    <div class="logo">JAPAN COFFEE <span>TRAILS</span></div>
+    <div class="logo">JAPAN COFFEE <span>TRAIL</span></div>
     <span class="logo-sub">管理画面</span>
   </div>
   <div class="nav-right">
-    <a href="https://japancoffeetrail.netlify.app" class="nav-link" target="_blank">サイトを見る →</a>
-    <button id="publish-btn" class="btn-secondary" onclick="publishToGitHub()" style="background:#1a7f37;color:white;border-color:#1a7f37;">GitHubに公開する</button>
+    <a href="https://roastertrailsinjapan.netlify.app" class="nav-link" target="_blank">サイトを見る →</a>
     <button class="btn-primary" onclick="showPage('new')">＋ ロースターを追加</button>
   </div>
 </nav>
@@ -171,9 +178,10 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         HTMLを書き出す
       </div>
-      <div class="sidebar-item" onclick="showPage('settings')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-        設定
+      <div class="sidebar-item" onclick="showPage('github')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub設定
+        <span class="badge" id="github-status-badge" style="display:none;background:#d1fae5;color:#065f46;">✓</span>
       </div>
     </div>
   </aside>
@@ -226,6 +234,8 @@
       </div>
       <div class="form-card">
         <input type="hidden" id="edit-id" value="">
+
+        <!-- 基本情報 -->
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">ロースター名</label>
@@ -240,6 +250,44 @@
           <label class="form-label">説明</label>
           <textarea class="form-textarea" id="f-desc" placeholder="例：Experimental light roasts and rare beans."></textarea>
         </div>
+
+        <!-- 詳細情報 -->
+        <div class="form-section-title">詳細情報</div>
+        <div class="form-group">
+          <label class="form-label">コンセプト</label>
+          <textarea class="form-textarea" id="f-concept" placeholder="例：「日本から世界にコーヒーカルチャーを発信する」をテーマに、シングルオリジンのみを扱う。" style="min-height:70px;"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">焙煎機</label>
+            <input type="text" class="form-input" id="f-roaster-machine" placeholder="例：Diedrich IR-2.5（米国製）">
+          </div>
+          <div class="form-group">
+            <label class="form-label">抽出器具</label>
+            <input type="text" class="form-input" id="f-brew-tools" placeholder="例：Hario V60、AeroPress、エスプレッソ">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">価格帯</label>
+            <input type="text" class="form-input" id="f-price" placeholder="例：ドリンク ¥600〜¥1,200 / 豆 100g ¥900〜">
+          </div>
+          <div class="form-group">
+            <label class="form-label">アクセス</label>
+            <input type="text" class="form-input" id="f-access" placeholder="例：神保町駅 徒歩5分">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">営業時間</label>
+          <input type="text" class="form-input" id="f-hours" placeholder="例：月〜金 8:00–19:00 / 土日 9:00–19:00">
+        </div>
+        <div class="form-group">
+          <label class="form-label">ホームページ URL</label>
+          <input type="url" class="form-input" id="f-website" placeholder="https://glitchcoffee.com">
+        </div>
+
+        <!-- 画像・ステータス -->
+        <div class="form-section-title">画像・公開設定</div>
         <div class="form-group">
           <label class="form-label">画像</label>
           <div class="img-preview" id="img-preview">
@@ -309,36 +357,58 @@
         <div style="display:flex;gap:0.75rem;">
           <button class="btn-primary" onclick="copyExport()">コードをコピー</button>
           <button class="btn-secondary" onclick="generateExport()">再生成</button>
+          <button class="btn-primary" id="push-btn" onclick="pushToGitHub()" style="background:var(--text-primary);display:flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHubへプッシュ
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- 設定 -->
-    <div class="page" id="page-settings">
+    <!-- GitHub設定 -->
+    <div class="page" id="page-github">
       <div class="page-header">
         <div>
-          <div class="page-title">設定</div>
-          <div class="page-sub">GitHubトークンを設定してください</div>
+          <div class="page-title">GitHub設定</div>
+          <div class="page-sub">一度設定すればワンタップでデプロイできます</div>
         </div>
       </div>
       <div class="form-card">
+        <div style="background:#fffbeb;border:0.5px solid #fde68a;border-radius:var(--radius);padding:1rem;margin-bottom:1.5rem;font-size:13px;color:#92400e;line-height:1.7;">
+          <strong>Personal Access Token の作り方：</strong><br>
+          GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token<br>
+          スコープは <code style="background:#fef3c7;padding:1px 5px;border-radius:3px;">repo</code> にチェックを入れてください。
+        </div>
         <div class="form-group">
           <label class="form-label">GitHub Personal Access Token</label>
-          <input type="password" class="form-input" id="settings-token" placeholder="ghp_xxxxxxxxxxxx">
-          <div class="form-hint" style="margin-top:6px;font-size:12px;color:var(--text-tertiary);line-height:1.6;">
-            <a href="https://github.com/settings/tokens" target="_blank" style="color:var(--brown);">github.com/settings/tokens</a> で発行してください。<br>
-            「Generate new token (classic)」→ repo にチェック → Generate token
+          <input type="password" class="form-input" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">オーナー名（GitHubユーザー名）</label>
+            <input type="text" class="form-input" id="gh-owner" placeholder="例：takuyasinnnn-a1ty">
+          </div>
+          <div class="form-group">
+            <label class="form-label">リポジトリ名</label>
+            <input type="text" class="form-input" id="gh-repo" placeholder="例：coffeetrail">
           </div>
         </div>
-        <div id="token-status" style="font-size:12px;margin-bottom:1rem;"></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">ブランチ名</label>
+            <input type="text" class="form-input" id="gh-branch" placeholder="main">
+          </div>
+          <div class="form-group">
+            <label class="form-label">ファイルパス</label>
+            <input type="text" class="form-input" id="gh-path" placeholder="index.html">
+          </div>
+        </div>
         <div class="form-actions">
-          <button class="btn-primary" onclick="saveToken()">保存する</button>
-          <button class="btn-secondary" onclick="testToken()">接続テスト</button>
+          <button class="btn-primary" onclick="saveGitHubSettings()">保存する</button>
+          <button class="btn-secondary" onclick="testGitHubConnection()">接続テスト</button>
         </div>
       </div>
     </div>
-
-  </main>
 </div>
 
 <!-- 削除確認モーダル -->
@@ -367,20 +437,50 @@ function getHero() {
 function saveHeroData(h) { localStorage.setItem('rt_hero', JSON.stringify(h)); }
 
 // 初期データ
-if (!localStorage.getItem('rt_roasters')) {
-  saveRoasters([
-    { id: '1', name: 'Glitch Coffee & Roasters', city: 'Tokyo', desc: 'Experimental light roasts and rare beans.', image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1400&auto=format&fit=crop', status: 'published' },
-    { id: '2', name: 'Kurasu', city: 'Kyoto', desc: 'Minimal Kyoto coffee culture with global appeal.', image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1400&auto=format&fit=crop', status: 'published' }
-  ]);
-}
-if (!localStorage.getItem('rt_hero')) {
-  saveHeroData({
-    title: "Explore Japan's Coffee Culture",
-    subtitle: 'Tokyo & Kyoto Specialty Coffee Guide',
-    desc: 'Discover hidden roasters, quiet cafés, and unforgettable coffee experiences across Japan.',
-    image: 'https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=2000&auto=format&fit=crop'
-  });
-}
+try {
+  if (!localStorage.getItem('rt_roasters')) {
+    saveRoasters([
+      {
+        id: '1',
+        name: 'Glitch Coffee & Roasters',
+        city: 'Tokyo',
+        desc: 'Experimental light roasts and rare beans.',
+        concept: '「日本から世界にコーヒーカルチャーを発信する」をコンセプトに、シングルオリジンの浅煎りのみを扱う神保町の旗手。',
+        roasterMachine: '店内大型焙煎機（詳細非公開）',
+        brewTools: 'Hario V60、AeroPress、エスプレッソ',
+        price: 'ドリンク ¥600〜¥3,500 / 豆 100g ¥900〜',
+        access: '神保町駅 徒歩5分 / 神田駅 徒歩7分',
+        hours: '月〜金 8:00–19:00 / 土日 9:00–19:00',
+        website: 'https://glitchcoffee.com',
+        image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1400&auto=format&fit=crop',
+        status: 'published'
+      },
+      {
+        id: '2',
+        name: 'Kurasu',
+        city: 'Kyoto',
+        desc: 'Minimal Kyoto coffee culture with global appeal.',
+        concept: '京都の暮らしに寄り添うミニマルなコーヒー文化を世界へ発信するロースター。',
+        roasterMachine: '',
+        brewTools: 'ハンドドリップ、エスプレッソ',
+        price: 'ドリンク ¥600〜¥1,200',
+        access: '東山駅 徒歩3分',
+        hours: '月〜日 9:00–18:00',
+        website: 'https://kurasu.kyoto',
+        image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1400&auto=format&fit=crop',
+        status: 'published'
+      }
+    ]);
+  }
+  if (!localStorage.getItem('rt_hero')) {
+    saveHeroData({
+      title: "Explore Japan's Coffee Culture",
+      subtitle: 'Tokyo & Kyoto Specialty Coffee Guide',
+      desc: 'Discover hidden roasters, quiet cafés, and unforgettable coffee experiences across Japan.',
+      image: 'https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=2000&auto=format&fit=crop'
+    });
+  }
+} catch(e) { console.warn('localStorage unavailable:', e); }
 
 // ---- UI ----
 let deleteTargetId = null;
@@ -390,18 +490,14 @@ function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  const pages = ['roasters','new','hero','export','settings'];
+  const pages = ['roasters','new','hero','export','github'];
   const idx = pages.indexOf(name);
   if (idx >= 0) document.querySelectorAll('.sidebar-item')[idx].classList.add('active');
   if (name === 'roasters') renderRoasterList();
   if (name === 'new') { clearForm(); document.getElementById('form-page-title').textContent = '新しいロースター'; }
   if (name === 'hero') loadHeroForm();
   if (name === 'export') generateExport();
-  if (name === 'settings') {
-    const t = getToken();
-    document.getElementById('settings-token').value = t;
-    document.getElementById('token-status').innerHTML = t ? '<span style="color:var(--teal);">✅ トークン設定済み</span>' : '<span style="color:var(--red);">⚠️ トークンが未設定です</span>';
-  }
+  if (name === 'github') loadGitHubForm();
 }
 
 function renderRoasterList() {
@@ -447,6 +543,13 @@ function clearForm() {
   document.getElementById('f-name').value = '';
   document.getElementById('f-city').value = '';
   document.getElementById('f-desc').value = '';
+  document.getElementById('f-concept').value = '';
+  document.getElementById('f-roaster-machine').value = '';
+  document.getElementById('f-brew-tools').value = '';
+  document.getElementById('f-price').value = '';
+  document.getElementById('f-access').value = '';
+  document.getElementById('f-hours').value = '';
+  document.getElementById('f-website').value = '';
   document.getElementById('f-image-url').value = '';
   document.getElementById('f-image-file').value = '';
   document.getElementById('f-status').value = 'published';
@@ -479,6 +582,13 @@ function editRoaster(id) {
   document.getElementById('f-name').value = r.name;
   document.getElementById('f-city').value = r.city;
   document.getElementById('f-desc').value = r.desc;
+  document.getElementById('f-concept').value = r.concept || '';
+  document.getElementById('f-roaster-machine').value = r.roasterMachine || '';
+  document.getElementById('f-brew-tools').value = r.brewTools || '';
+  document.getElementById('f-price').value = r.price || '';
+  document.getElementById('f-access').value = r.access || '';
+  document.getElementById('f-hours').value = r.hours || '';
+  document.getElementById('f-website').value = r.website || '';
   document.getElementById('f-image-url').value = r.image || '';
   document.getElementById('f-status').value = r.status;
   currentImageData = '';
@@ -486,10 +596,7 @@ function editRoaster(id) {
     document.getElementById('img-preview').innerHTML = `<img src="${r.image}">`;
   }
   document.getElementById('form-page-title').textContent = 'ロースターを編集';
-  // showPageを使わず直接ページ切り替え（clearFormを避けるため）
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
-  document.getElementById('page-new').classList.add('active');
+  showPage('new');
   document.querySelectorAll('.sidebar-item')[1].classList.add('active');
 }
 
@@ -505,6 +612,13 @@ function saveRoaster() {
     name,
     city: document.getElementById('f-city').value.trim(),
     desc: document.getElementById('f-desc').value.trim(),
+    concept: document.getElementById('f-concept').value.trim(),
+    roasterMachine: document.getElementById('f-roaster-machine').value.trim(),
+    brewTools: document.getElementById('f-brew-tools').value.trim(),
+    price: document.getElementById('f-price').value.trim(),
+    access: document.getElementById('f-access').value.trim(),
+    hours: document.getElementById('f-hours').value.trim(),
+    website: document.getElementById('f-website').value.trim(),
     image,
     status: document.getElementById('f-status').value
   };
@@ -569,28 +683,63 @@ function generateExport() {
   const roasters = getRoasters().filter(r => r.status === 'published');
   const hero = getHero() || {};
 
-  const roasterCards = roasters.map(r => `        <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm">
-          <img src="${escHtml(r.image)}" class="h-72 w-full object-cover" alt="${escHtml(r.name)}" />
-          <div class="p-8">
-            <p class="uppercase text-xs tracking-[0.2em] opacity-50 mb-3">${escHtml(r.city)}</p>
-            <h4 class="text-2xl mb-4 leading-snug">${escHtml(r.name)}</h4>
-            <p class="text-black/70 leading-relaxed">${escHtml(r.desc)}</p>
+  const roasterCards = roasters.map(r => {
+    const detailRows = [
+      r.concept       ? `<div class="detail-row concept"><span class="detail-icon">✦</span><p>${escHtml(r.concept)}</p></div>` : '',
+      r.roasterMachine ? `<div class="detail-row"><span class="detail-label">焙煎機</span><span class="detail-val">${escHtml(r.roasterMachine)}</span></div>` : '',
+      r.brewTools      ? `<div class="detail-row"><span class="detail-label">抽出器具</span><span class="detail-val">${escHtml(r.brewTools)}</span></div>` : '',
+      r.price          ? `<div class="detail-row"><span class="detail-label">価格帯</span><span class="detail-val">${escHtml(r.price)}</span></div>` : '',
+      r.hours          ? `<div class="detail-row"><span class="detail-label">営業時間</span><span class="detail-val">${escHtml(r.hours)}</span></div>` : '',
+      r.access         ? `<div class="detail-row"><span class="detail-label">アクセス</span><span class="detail-val">${escHtml(r.access)}</span></div>` : '',
+    ].filter(Boolean).join('\n            ');
+
+    const websiteLink = r.website
+      ? `<a href="${escHtml(r.website)}" target="_blank" rel="noopener" class="card-link">ウェブサイト →</a>`
+      : '';
+
+    return `        <div class="roaster-card">
+          <img src="${escHtml(r.image)}" class="card-img" alt="${escHtml(r.name)}" />
+          <div class="card-body">
+            <p class="card-city">${escHtml(r.city)}</p>
+            <h4 class="card-name">${escHtml(r.name)}</h4>
+            <p class="card-desc">${escHtml(r.desc)}</p>
+            <div class="card-details">
+            ${detailRows}
+            </div>
+            ${websiteLink}
           </div>
-        </div>`).join('\n');
+        </div>`;
+  }).join('\n');
 
   const fullHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Roaster Trails in Japan</title>
+  <title>JAPAN COFFEE TRAIL</title>
   <script src="https://cdn.tailwindcss.com"><\/script>
-  <style>body { font-family: Inter, sans-serif; background: #f8f5ef; }</style>
+  <style>
+    body { font-family: Inter, sans-serif; background: #f8f5ef; }
+    .roaster-card { background: #fff; border-radius: 2rem; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+    .card-img { width: 100%; height: 18rem; object-fit: cover; display: block; }
+    .card-body { padding: 2rem; }
+    .card-city { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.45; margin-bottom: 0.5rem; }
+    .card-name { font-size: 1.4rem; font-weight: 600; margin-bottom: 0.6rem; line-height: 1.3; }
+    .card-desc { font-size: 0.9rem; color: rgba(0,0,0,0.6); line-height: 1.7; margin-bottom: 1.25rem; }
+    .card-details { border-top: 1px solid rgba(0,0,0,0.07); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1.25rem; }
+    .detail-row { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.82rem; }
+    .detail-row.concept { font-style: italic; color: #7a5a2a; border-left: 2px solid #c6a16e; padding-left: 0.75rem; margin-bottom: 0.25rem; }
+    .detail-icon { color: #c6a16e; flex-shrink: 0; margin-top: 1px; }
+    .detail-label { color: rgba(0,0,0,0.4); white-space: nowrap; flex-shrink: 0; min-width: 72px; }
+    .detail-val { color: rgba(0,0,0,0.75); line-height: 1.5; }
+    .card-link { display: inline-block; font-size: 0.8rem; color: #7a5a2a; border: 1px solid #c6a16e; padding: 0.35rem 0.9rem; border-radius: 999px; text-decoration: none; transition: background 0.2s, color 0.2s; }
+    .card-link:hover { background: #c6a16e; color: #fff; }
+  </style>
 </head>
 <body class="bg-[#f8f5ef] text-[#1c1c1c]">
   <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#f8f5ef]/80 border-b border-black/5">
     <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-      <h1 class="text-xl tracking-[0.25em] font-semibold">ROASTER TRAILS</h1>
+      <h1 class="text-xl tracking-[0.25em] font-semibold">JAPAN COFFEE TRAIL</h1>
       <nav class="hidden md:flex gap-8 text-sm tracking-wide">
         <a href="#cities">Cities</a>
         <a href="#roasters">Roasters</a>
@@ -632,97 +781,107 @@ function copyExport() {
   navigator.clipboard.writeText(text).then(() => showToast('コピーしました！GitHubのindex.htmlに貼り付けてください'));
 }
 
-
-
-// ---- GITHUB: JSONを読み書き ----
-const GITHUB_OWNER = 'takuyasinnnn-a11y';
-const GITHUB_REPO  = 'coffeetrail';
-const DATA_FILE    = 'roasters.json';
-const INDEX_FILE   = 'index.html';
-function getToken() { return localStorage.getItem('gh_token') || ''; }
-
-async function ghGet(file) {
-  const res = await fetch(
-    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${file}`,
-    { headers: { Authorization: `Bearer ${getToken()}`, Accept: 'application/vnd.github+json' } }
-  );
-  if (!res.ok) return null;
-  return await res.json();
+// ---- GITHUB ----
+function getGitHubSettings() {
+  try { return JSON.parse(localStorage.getItem('rt_github') || 'null'); } catch(e) { return null; }
 }
-
-async function ghPut(file, contentStr, sha, message) {
-  const encoded = btoa(unescape(encodeURIComponent(contentStr)));
-  const body = { message, content: encoded };
-  if (sha) body.sha = sha;
-  const res = await fetch(
-    `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${file}`,
-    {
-      method: 'PUT',
-      headers: { Authorization: `Bearer ${getToken()}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    }
-  );
-  return res.ok ? await res.json() : null;
-}
-
-// GitHubからロースターデータを読み込む
-async function loadFromGitHub() {
-  if (!getToken()) { renderRoasterList(); return; }
-  showToast('GitHubから読み込み中...');
+function saveGitHubSettings() {
+  const token = document.getElementById('gh-token').value.trim();
+  const owner = document.getElementById('gh-owner').value.trim();
+  const repo  = document.getElementById('gh-repo').value.trim();
+  const branch = document.getElementById('gh-branch').value.trim() || 'main';
+  const path = document.getElementById('gh-path').value.trim() || 'index.html';
+  if (!token || !owner || !repo) { showToast('Token・オーナー名・リポジトリ名は必須です'); return; }
   try {
-    const data = await ghGet(DATA_FILE);
-    if (data && data.content) {
-      const json = JSON.parse(decodeURIComponent(escape(atob(data.content.replace(/
-/g, '')))));
-      if (json.roasters) saveRoasters(json.roasters);
-      if (json.hero) saveHeroData(json.hero);
-      showToast('✅ ' + (json.roasters ? json.roasters.length : 0) + '件読み込みました');
-    }
-  } catch(e) {
-    console.log('読み込みエラー:', e);
-  }
-  renderRoasterList();
+    localStorage.setItem('rt_github', JSON.stringify({ token, owner, repo, branch, path }));
+  } catch(e) {}
+  document.getElementById('github-status-badge').style.display = 'inline-block';
+  showToast('GitHub設定を保存しました');
 }
 
-// GitHubにデータ＋index.htmlを公開
-async function publishToGitHub() {
-  if (!getToken()) {
-    showToast('⚠️ 先に「設定」からトークンを設定してください');
-    showPage('settings');
+function loadGitHubForm() {
+  const s = getGitHubSettings();
+  if (!s) return;
+  document.getElementById('gh-token').value = s.token || '';
+  document.getElementById('gh-owner').value = s.owner || '';
+  document.getElementById('gh-repo').value  = s.repo  || '';
+  document.getElementById('gh-branch').value = s.branch || 'main';
+  document.getElementById('gh-path').value   = s.path  || 'index.html';
+  document.getElementById('github-status-badge').style.display = 'inline-block';
+}
+
+async function testGitHubConnection() {
+  const s = getGitHubSettings();
+  if (!s) { showToast('先に設定を保存してください'); return; }
+  showToast('接続テスト中…');
+  try {
+    const res = await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}`, {
+      headers: { Authorization: `token ${s.token}`, Accept: 'application/vnd.github.v3+json' }
+    });
+    if (res.ok) { showToast('✓ 接続成功！リポジトリを確認できました'); }
+    else { showToast(`✗ エラー ${res.status}：Token・リポジトリ名を確認してください`); }
+  } catch(e) { showToast('✗ ネットワークエラー'); }
+}
+
+async function pushToGitHub() {
+  const s = getGitHubSettings();
+  if (!s || !s.token) {
+    showToast('GitHub設定をしてください');
+    showPage('github');
     return;
   }
-  const btn = document.getElementById('publish-btn');
-  btn.textContent = '公開中...';
+  generateExport();
+  const html = document.getElementById('export-code').textContent;
+  const btn = document.getElementById('push-btn');
+  btn.textContent = 'プッシュ中…';
   btn.disabled = true;
 
   try {
-    const ts = new Date().toLocaleString('ja-JP');
+    // 現在のファイルのSHAを取得
+    const getRes = await fetch(
+      `https://api.github.com/repos/${s.owner}/${s.repo}/contents/${s.path}?ref=${s.branch}`,
+      { headers: { Authorization: `token ${s.token}`, Accept: 'application/vnd.github.v3+json' } }
+    );
+    let sha = null;
+    if (getRes.ok) { const data = await getRes.json(); sha = data.sha; }
 
-    // 1. roasters.json を保存
-    const jsonData = JSON.stringify({ roasters: getRoasters(), hero: getHero() }, null, 2);
-    const jsonFile = await ghGet(DATA_FILE);
-    const jsonResult = await ghPut(DATA_FILE, jsonData, jsonFile ? jsonFile.sha : null, 'Update data: ' + ts);
-    if (!jsonResult) throw new Error('JSON保存失敗');
+    // ファイルをプッシュ
+    const body = {
+      message: `Update ${s.path} from admin`,
+      content: btoa(unescape(encodeURIComponent(html))),
+      branch: s.branch
+    };
+    if (sha) body.sha = sha;
 
-    // 2. index.html を生成して保存
-    generateExport();
-    const html = document.getElementById('export-code').textContent;
-    const indexFile = await ghGet(INDEX_FILE);
-    const indexResult = await ghPut(INDEX_FILE, html, indexFile ? indexFile.sha : null, 'Update site: ' + ts);
-    if (!indexResult) throw new Error('HTML保存失敗');
+    const putRes = await fetch(
+      `https://api.github.com/repos/${s.owner}/${s.repo}/contents/${s.path}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${s.token}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      }
+    );
 
-    showToast('✅ 公開しました！1〜2分で反映されます');
+    if (putRes.ok) {
+      showToast('✓ GitHubにプッシュしました！Netlifyが自動デプロイします');
+    } else {
+      const err = await putRes.json();
+      showToast(`✗ エラー: ${err.message}`);
+    }
   } catch(e) {
-    showToast('エラー: ' + e.message);
-    console.error(e);
+    showToast('✗ プッシュに失敗しました');
   } finally {
-    btn.textContent = 'GitHubに公開する';
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg> GitHubへプッシュ';
     btn.disabled = false;
   }
 }
 
 // 初期表示
-loadFromGitHub();
+renderRoasterList();
 </script>
 </body>
 </html>

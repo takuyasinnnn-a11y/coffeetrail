@@ -145,6 +145,7 @@
   </div>
   <div class="nav-right">
     <a href="https://roastertrailsinjapan.netlify.app" class="nav-link" target="_blank">サイトを見る →</a>
+    <button id="publish-btn" class="btn-secondary" onclick="publishToGitHub()" style="background:#1a7f37;color:white;border-color:#1a7f37;">GitHubに公開する</button>
     <button class="btn-primary" onclick="showPage('new')">＋ ロースターを追加</button>
   </div>
 </nav>
@@ -592,6 +593,60 @@ ${roasterCards}
 function copyExport() {
   const text = document.getElementById('export-code').textContent;
   navigator.clipboard.writeText(text).then(() => showToast('コピーしました！GitHubのindex.htmlに貼り付けてください'));
+}
+
+// ---- GITHUB AUTO PUBLISH ----
+const GITHUB_TOKEN = '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';
+const GITHUB_OWNER = 'takuyasinnnn-a11y';
+const GITHUB_REPO  = 'coffeetrail';
+const GITHUB_FILE  = 'index.html';
+
+async function publishToGitHub() {
+  const btn = document.getElementById('publish-btn');
+  btn.textContent = '公開中...';
+  btn.disabled = true;
+
+  try {
+    // 1. 現在のファイルのSHAを取得
+    const getRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`,
+      { headers: { Authorization: `Bearer ${GITHUB_TOKEN}`, Accept: 'application/vnd.github+json' } }
+    );
+    const getData = await getRes.json();
+    const sha = getData.sha;
+
+    // 2. HTMLを生成してbase64エンコード
+    generateExport();
+    const html = document.getElementById('export-code').textContent;
+    const encoded = btoa(unescape(encodeURIComponent(html)));
+
+    // 3. GitHubにPUT
+    const putRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`,
+      {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${GITHUB_TOKEN}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: `Update site: ${new Date().toLocaleString('ja-JP')}`,
+          content: encoded,
+          sha
+        })
+      }
+    );
+
+    if (putRes.ok) {
+      showToast('✅ GitHubに公開しました！1〜2分で反映されます');
+    } else {
+      const err = await putRes.json();
+      showToast('エラー: ' + (err.message || '不明なエラー'));
+    }
+  } catch (e) {
+    showToast('通信エラーが発生しました');
+    console.error(e);
+  } finally {
+    btn.textContent = 'GitHubに公開する';
+    btn.disabled = false;
+  }
 }
 
 // 初期表示

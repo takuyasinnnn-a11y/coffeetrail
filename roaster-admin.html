@@ -1,10 +1,552 @@
 <!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roaster Trails — 管理画面</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --brown: #c6a16e;
+    --brown-light: #f5ede0;
+    --brown-dark: #7a5a2a;
+    --teal: #2a9d8f;
+    --teal-light: #e0f5f3;
+    --teal-dark: #1a6b60;
+    --red: #E24B4A;
+    --red-light: #FCEBEB;
+    --gray-bg: #F8F7F4;
+    --gray-border: rgba(0,0,0,0.1);
+    --text-primary: #1a1a18;
+    --text-secondary: #6b6b67;
+    --text-tertiary: #a0a09a;
+    --white: #ffffff;
+    --font-sans: 'Noto Sans JP', sans-serif;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+  html { font-size: 16px; }
+  body { font-family: var(--font-sans); background: var(--gray-bg); color: var(--text-primary); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  a { text-decoration: none; color: inherit; }
+
+  /* NAV */
+  nav {
+    background: var(--white);
+    border-bottom: 0.5px solid var(--gray-border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px; position: sticky; top: 0; z-index: 100;
+  }
+  .logo { font-size: 16px; font-weight: 500; letter-spacing: 0.05em; }
+  .logo span { color: var(--brown); }
+  .logo-sub { font-size: 12px; color: var(--text-tertiary); margin-left: 8px; }
+  .nav-right { display: flex; align-items: center; gap: 1rem; }
+  .nav-link { font-size: 13px; color: var(--text-secondary); }
+  .btn-primary { font-size: 13px; font-family: var(--font-sans); font-weight: 500; padding: 7px 18px; background: var(--brown); color: white; border: none; border-radius: 999px; cursor: pointer; transition: opacity 0.15s; }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-secondary { font-size: 13px; font-family: var(--font-sans); font-weight: 500; padding: 7px 18px; background: transparent; color: var(--text-secondary); border: 0.5px solid var(--gray-border); border-radius: 999px; cursor: pointer; transition: background 0.15s; }
+  .btn-secondary:hover { background: var(--gray-bg); }
+
+  /* LAYOUT */
+  .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 56px); }
+
+  /* SIDEBAR */
+  .sidebar { background: var(--white); border-right: 0.5px solid var(--gray-border); padding: 1.5rem 0; }
+  .sidebar-label { font-size: 10px; font-weight: 500; color: var(--text-tertiary); letter-spacing: 0.1em; text-transform: uppercase; padding: 0 1.25rem; margin-bottom: 0.5rem; }
+  .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 0.6rem 1.25rem; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: background 0.1s, color 0.1s; border-left: 2px solid transparent; }
+  .sidebar-item:hover { background: var(--gray-bg); color: var(--text-primary); }
+  .sidebar-item.active { background: var(--brown-light); color: var(--brown-dark); border-left-color: var(--brown); font-weight: 500; }
+  .sidebar-item svg { flex-shrink: 0; opacity: 0.7; }
+  .sidebar-item.active svg { opacity: 1; }
+  .badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 999px; background: var(--brown-light); color: var(--brown-dark); margin-left: auto; }
+
+  /* MAIN */
+  .main { padding: 2rem; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* PAGE HEADER */
+  .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.75rem; }
+  .page-title { font-size: 20px; font-weight: 500; }
+  .page-sub { font-size: 13px; color: var(--text-tertiary); margin-top: 2px; }
+
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; }
+  .stat-card { background: var(--white); border: 0.5px solid var(--gray-border); border-radius: var(--radius-lg); padding: 1.1rem 1.25rem; }
+  .stat-label { font-size: 11px; color: var(--text-tertiary); margin-bottom: 0.4rem; }
+  .stat-value { font-size: 24px; font-weight: 500; }
+  .stat-sub { font-size: 11px; color: var(--teal); margin-top: 2px; }
+
+  /* ROASTER LIST */
+  .roaster-list { background: var(--white); border: 0.5px solid var(--gray-border); border-radius: var(--radius-lg); overflow: hidden; }
+  .roaster-list-header { display: grid; grid-template-columns: 60px 1fr 100px 80px 60px; gap: 1rem; padding: 0.75rem 1.25rem; border-bottom: 0.5px solid var(--gray-border); font-size: 11px; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; }
+  .roaster-row { display: grid; grid-template-columns: 60px 1fr 100px 80px 60px; gap: 1rem; padding: 1rem 1.25rem; border-bottom: 0.5px solid var(--gray-border); align-items: center; transition: background 0.1s; }
+  .roaster-row:last-child { border-bottom: none; }
+  .roaster-row:hover { background: var(--gray-bg); }
+  .roaster-thumb { width: 48px; height: 48px; border-radius: var(--radius); overflow: hidden; background: var(--brown-light); flex-shrink: 0; }
+  .roaster-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .roaster-name { font-size: 13px; font-weight: 500; }
+  .roaster-desc { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
+  .city-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 999px; background: var(--brown-light); color: var(--brown-dark); display: inline-block; }
+  .status-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 999px; display: inline-block; }
+  .status-published { background: var(--teal-light); color: var(--teal-dark); }
+  .status-draft { background: #FAEEDA; color: #BA7517; }
+  .row-actions { display: flex; gap: 6px; }
+  .btn-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border: 0.5px solid var(--gray-border); border-radius: var(--radius); background: transparent; cursor: pointer; color: var(--text-secondary); transition: background 0.1s, color 0.1s; }
+  .btn-icon:hover { background: var(--gray-bg); color: var(--text-primary); }
+  .btn-icon.danger:hover { background: var(--red-light); color: var(--red); border-color: var(--red); }
+
+  /* FORM */
+  .form-card { background: var(--white); border: 0.5px solid var(--gray-border); border-radius: var(--radius-lg); padding: 1.75rem; max-width: 720px; }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-label { font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 0.4rem; display: block; }
+  .form-input, .form-select, .form-textarea { width: 100%; font-size: 14px; font-family: var(--font-sans); padding: 10px 14px; border: 0.5px solid rgba(0,0,0,0.2); border-radius: var(--radius); background: var(--gray-bg); color: var(--text-primary); outline: none; transition: border-color 0.15s; display: block; }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--brown); background: var(--white); }
+  .form-textarea { resize: vertical; line-height: 1.7; min-height: 100px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-actions { display: flex; gap: 0.75rem; padding-top: 0.5rem; }
+
+  /* IMAGE PREVIEW */
+  .img-preview { width: 100%; height: 160px; border-radius: var(--radius); overflow: hidden; background: var(--brown-light); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; }
+  .img-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .img-preview-empty { font-size: 12px; color: var(--text-tertiary); }
+
+  /* HERO SECTION */
+  .hero-card { background: var(--white); border: 0.5px solid var(--gray-border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 2rem; max-width: 720px; }
+  .hero-card-header { padding: 1rem 1.25rem; border-bottom: 0.5px solid var(--gray-border); font-size: 12px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
+  .hero-card-body { padding: 1.25rem; }
+
+  /* EXPORT */
+  .export-box { background: var(--gray-bg); border: 0.5px solid var(--gray-border); border-radius: var(--radius); padding: 1rem; font-size: 12px; color: var(--text-secondary); font-family: monospace; white-space: pre-wrap; max-height: 300px; overflow-y: auto; margin-bottom: 1rem; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 200; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--white); border-radius: var(--radius-lg); padding: 1.75rem; width: 480px; max-width: 90vw; }
+  .modal-title { font-size: 16px; font-weight: 500; margin-bottom: 0.5rem; }
+  .modal-desc { font-size: 13px; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6; }
+  .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--text-primary); color: white; font-size: 13px; padding: 10px 18px; border-radius: 999px; opacity: 0; transform: translateY(8px); transition: opacity 0.2s, transform 0.2s; pointer-events: none; z-index: 999; }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .empty-state { text-align: center; padding: 3rem; color: var(--text-tertiary); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div style="display:flex;align-items:center;">
+    <div class="logo">JAPAN COFFEE <span>TRAILS</span></div>
+    <span class="logo-sub">管理画面</span>
+  </div>
+  <div class="nav-right">
+    <a href="https://roastertrailsinjapan.netlify.app" class="nav-link" target="_blank">サイトを見る →</a>
+    <button class="btn-primary" onclick="showPage('new')">＋ ロースターを追加</button>
+  </div>
+</nav>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div style="margin-bottom:2rem;">
+      <div class="sidebar-label">メニュー</div>
+      <div class="sidebar-item active" onclick="showPage('roasters')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        ロースター一覧
+        <span class="badge" id="roaster-count-badge">0</span>
+      </div>
+      <div class="sidebar-item" onclick="showPage('new')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        新しいロースター
+      </div>
+      <div class="sidebar-item" onclick="showPage('hero')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        ヒーロー編集
+      </div>
+      <div class="sidebar-item" onclick="showPage('export')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        HTMLを書き出す
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- ロースター一覧 -->
+    <div class="page active" id="page-roasters">
+      <div class="page-header">
+        <div>
+          <div class="page-title">ロースター一覧</div>
+          <div class="page-sub" id="roaster-count-sub">ロースターを追加してください</div>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">総ロースター数</div>
+          <div class="stat-value" id="stat-total">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">公開中</div>
+          <div class="stat-value" id="stat-published">0</div>
+          <div class="stat-sub">公開済み</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">都市数</div>
+          <div class="stat-value" id="stat-cities">0</div>
+          <div class="stat-sub">掲載都市</div>
+        </div>
+      </div>
+      <div class="roaster-list">
+        <div class="roaster-list-header">
+          <div>画像</div>
+          <div>名前</div>
+          <div>都市</div>
+          <div>ステータス</div>
+          <div>操作</div>
+        </div>
+        <div id="roaster-list-body"></div>
+      </div>
+    </div>
+
+    <!-- 新規・編集フォーム -->
+    <div class="page" id="page-new">
+      <div class="page-header">
+        <div>
+          <div class="page-title" id="form-page-title">新しいロースター</div>
+          <div class="page-sub">ロースターの情報を入力してください</div>
+        </div>
+      </div>
+      <div class="form-card">
+        <input type="hidden" id="edit-id" value="">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">ロースター名</label>
+            <input type="text" class="form-input" id="f-name" placeholder="例：Glitch Coffee & Roasters">
+          </div>
+          <div class="form-group">
+            <label class="form-label">都市</label>
+            <input type="text" class="form-input" id="f-city" placeholder="例：Tokyo">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">説明</label>
+          <textarea class="form-textarea" id="f-desc" placeholder="例：Experimental light roasts and rare beans."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">画像</label>
+          <div class="img-preview" id="img-preview">
+            <span class="img-preview-empty">画像を選択してください</span>
+          </div>
+          <input type="file" accept="image/*" class="form-input" id="f-image-file" onchange="previewImage(event)" style="margin-bottom:0.5rem;">
+          <input type="text" class="form-input" id="f-image-url" placeholder="またはURLを入力：https://..." oninput="previewImageUrl(this.value)">
+        </div>
+        <div class="form-group">
+          <label class="form-label">ステータス</label>
+          <select class="form-select" id="f-status">
+            <option value="published">公開</option>
+            <option value="draft">下書き</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" onclick="saveRoaster()">保存する</button>
+          <button class="btn-secondary" onclick="showPage('roasters')">キャンセル</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ヒーロー編集 -->
+    <div class="page" id="page-hero">
+      <div class="page-header">
+        <div>
+          <div class="page-title">ヒーロー編集</div>
+          <div class="page-sub">トップページのメインビジュアルを編集します</div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="form-group">
+          <label class="form-label">タイトル</label>
+          <input type="text" class="form-input" id="hero-title" value="Explore Japan's Coffee Culture">
+        </div>
+        <div class="form-group">
+          <label class="form-label">サブタイトル</label>
+          <input type="text" class="form-input" id="hero-subtitle" value="Tokyo & Kyoto Specialty Coffee Guide">
+        </div>
+        <div class="form-group">
+          <label class="form-label">説明文</label>
+          <textarea class="form-textarea" id="hero-desc">Discover hidden roasters, quiet cafés, and unforgettable coffee experiences across Japan.</textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">背景画像URL</label>
+          <input type="text" class="form-input" id="hero-image" value="https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=2000&auto=format&fit=crop">
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" onclick="saveHero()">保存する</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HTMLエクスポート -->
+    <div class="page" id="page-export">
+      <div class="page-header">
+        <div>
+          <div class="page-title">HTMLを書き出す</div>
+          <div class="page-sub">コピーしてGitHubのindex.htmlと置き換えてください</div>
+        </div>
+      </div>
+      <div class="form-card" style="max-width:100%;">
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:1rem;line-height:1.7;">
+          下の「コードをコピー」を押して、GitHubの <code style="background:var(--gray-bg);padding:2px 6px;border-radius:4px;font-size:12px;">index.html</code> を全選択して貼り付けてください。
+        </p>
+        <div class="export-box" id="export-code">ロースターを追加してから書き出してください。</div>
+        <div style="display:flex;gap:0.75rem;">
+          <button class="btn-primary" onclick="copyExport()">コードをコピー</button>
+          <button class="btn-secondary" onclick="generateExport()">再生成</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- 削除確認モーダル -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal">
+    <div class="modal-title">ロースターを削除しますか？</div>
+    <div class="modal-desc">この操作は取り消せません。本当に削除しますか？</div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal()">キャンセル</button>
+      <button class="btn-primary" style="background:var(--red);" onclick="confirmDelete()">削除する</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ---- DATA ----
+function getRoasters() {
+  try { return JSON.parse(localStorage.getItem('rt_roasters') || '[]'); } catch(e) { return []; }
+}
+function saveRoasters(r) { localStorage.setItem('rt_roasters', JSON.stringify(r)); }
+function getHero() {
+  try { return JSON.parse(localStorage.getItem('rt_hero') || 'null'); } catch(e) { return null; }
+}
+function saveHeroData(h) { localStorage.setItem('rt_hero', JSON.stringify(h)); }
+
+// 初期データ
+if (!localStorage.getItem('rt_roasters')) {
+  saveRoasters([
+    { id: '1', name: 'Glitch Coffee & Roasters', city: 'Tokyo', desc: 'Experimental light roasts and rare beans.', image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1400&auto=format&fit=crop', status: 'published' },
+    { id: '2', name: 'Kurasu', city: 'Kyoto', desc: 'Minimal Kyoto coffee culture with global appeal.', image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1400&auto=format&fit=crop', status: 'published' }
+  ]);
+}
+if (!localStorage.getItem('rt_hero')) {
+  saveHeroData({
+    title: "Explore Japan's Coffee Culture",
+    subtitle: 'Tokyo & Kyoto Specialty Coffee Guide',
+    desc: 'Discover hidden roasters, quiet cafés, and unforgettable coffee experiences across Japan.',
+    image: 'https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=2000&auto=format&fit=crop'
+  });
+}
+
+// ---- UI ----
+let deleteTargetId = null;
+let currentImageData = '';
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  const pages = ['roasters','new','hero','export'];
+  const idx = pages.indexOf(name);
+  if (idx >= 0) document.querySelectorAll('.sidebar-item')[idx].classList.add('active');
+  if (name === 'roasters') renderRoasterList();
+  if (name === 'new') { clearForm(); document.getElementById('form-page-title').textContent = '新しいロースター'; }
+  if (name === 'hero') loadHeroForm();
+  if (name === 'export') generateExport();
+}
+
+function renderRoasterList() {
+  const roasters = getRoasters();
+  const published = roasters.filter(r => r.status === 'published').length;
+  const cities = [...new Set(roasters.map(r => r.city))].length;
+  document.getElementById('stat-total').textContent = roasters.length;
+  document.getElementById('stat-published').textContent = published;
+  document.getElementById('stat-cities').textContent = cities;
+  document.getElementById('roaster-count-badge').textContent = roasters.length;
+  document.getElementById('roaster-count-sub').textContent = roasters.length > 0 ? `全${roasters.length}件` : 'ロースターを追加してください';
+
+  const body = document.getElementById('roaster-list-body');
+  if (roasters.length === 0) {
+    body.innerHTML = '<div class="empty-state">まだロースターがありません。「新しいロースター」から追加してください。</div>';
+    return;
+  }
+  body.innerHTML = roasters.map(r => `
+    <div class="roaster-row">
+      <div class="roaster-thumb">
+        ${r.image ? `<img src="${escHtml(r.image)}" alt="${escHtml(r.name)}">` : ''}
+      </div>
+      <div>
+        <div class="roaster-name">${escHtml(r.name)}</div>
+        <div class="roaster-desc">${escHtml(r.desc)}</div>
+      </div>
+      <div><span class="city-badge">${escHtml(r.city)}</span></div>
+      <div><span class="status-badge ${r.status === 'published' ? 'status-published' : 'status-draft'}">${r.status === 'published' ? '公開' : '下書き'}</span></div>
+      <div class="row-actions">
+        <button class="btn-icon" onclick="editRoaster('${r.id}')" title="編集">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="btn-icon danger" onclick="deleteRoaster('${r.id}')" title="削除">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function clearForm() {
+  document.getElementById('edit-id').value = '';
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-city').value = '';
+  document.getElementById('f-desc').value = '';
+  document.getElementById('f-image-url').value = '';
+  document.getElementById('f-image-file').value = '';
+  document.getElementById('f-status').value = 'published';
+  currentImageData = '';
+  document.getElementById('img-preview').innerHTML = '<span class="img-preview-empty">画像を選択してください</span>';
+}
+
+function previewImage(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    currentImageData = e.target.result;
+    document.getElementById('img-preview').innerHTML = `<img src="${currentImageData}">`;
+    document.getElementById('f-image-url').value = '';
+  };
+  reader.readAsDataURL(file);
+}
+
+function previewImageUrl(url) {
+  if (!url) { document.getElementById('img-preview').innerHTML = '<span class="img-preview-empty">画像を選択してください</span>'; return; }
+  currentImageData = '';
+  document.getElementById('img-preview').innerHTML = `<img src="${url}" onerror="this.parentElement.innerHTML='<span class=\\'img-preview-empty\\'>URLが無効です</span>'">`;
+}
+
+function editRoaster(id) {
+  const r = getRoasters().find(x => x.id === id);
+  if (!r) return;
+  document.getElementById('edit-id').value = r.id;
+  document.getElementById('f-name').value = r.name;
+  document.getElementById('f-city').value = r.city;
+  document.getElementById('f-desc').value = r.desc;
+  document.getElementById('f-image-url').value = r.image || '';
+  document.getElementById('f-status').value = r.status;
+  currentImageData = '';
+  if (r.image) {
+    document.getElementById('img-preview').innerHTML = `<img src="${r.image}">`;
+  }
+  document.getElementById('form-page-title').textContent = 'ロースターを編集';
+  showPage('new');
+  document.querySelectorAll('.sidebar-item')[1].classList.add('active');
+}
+
+function saveRoaster() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { showToast('ロースター名を入力してください'); return; }
+  const imageUrl = document.getElementById('f-image-url').value.trim();
+  const image = currentImageData || imageUrl;
+  const roasters = getRoasters();
+  const editId = document.getElementById('edit-id').value;
+  const roaster = {
+    id: editId || Date.now().toString(),
+    name,
+    city: document.getElementById('f-city').value.trim(),
+    desc: document.getElementById('f-desc').value.trim(),
+    image,
+    status: document.getElementById('f-status').value
+  };
+  if (editId) {
+    const idx = roasters.findIndex(r => r.id === editId);
+    if (idx >= 0) roasters[idx] = roaster;
+  } else {
+    roasters.push(roaster);
+  }
+  saveRoasters(roasters);
+  showToast(editId ? '更新しました' : '追加しました');
+  showPage('roasters');
+}
+
+function deleteRoaster(id) {
+  deleteTargetId = id;
+  document.getElementById('delete-modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('delete-modal').classList.remove('open');
+  deleteTargetId = null;
+}
+function confirmDelete() {
+  if (!deleteTargetId) return;
+  saveRoasters(getRoasters().filter(r => r.id !== deleteTargetId));
+  closeModal();
+  showToast('削除しました');
+  renderRoasterList();
+}
+
+function loadHeroForm() {
+  const h = getHero() || {};
+  document.getElementById('hero-title').value = h.title || '';
+  document.getElementById('hero-subtitle').value = h.subtitle || '';
+  document.getElementById('hero-desc').value = h.desc || '';
+  document.getElementById('hero-image').value = h.image || '';
+}
+
+function saveHero() {
+  saveHeroData({
+    title: document.getElementById('hero-title').value,
+    subtitle: document.getElementById('hero-subtitle').value,
+    desc: document.getElementById('hero-desc').value,
+    image: document.getElementById('hero-image').value
+  });
+  showToast('ヒーローを保存しました');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function escHtml(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ---- EXPORT ----
+function generateExport() {
+  const roasters = getRoasters().filter(r => r.status === 'published');
+  const hero = getHero() || {};
+
+  const roasterCards = roasters.map(r => `        <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm">
+          <img src="${escHtml(r.image)}" class="h-72 w-full object-cover" alt="${escHtml(r.name)}" />
+          <div class="p-8">
+            <p class="uppercase text-xs tracking-[0.2em] opacity-50 mb-3">${escHtml(r.city)}</p>
+            <h4 class="text-2xl mb-4 leading-snug">${escHtml(r.name)}</h4>
+            <p class="text-black/70 leading-relaxed">${escHtml(r.desc)}</p>
+          </div>
+        </div>`).join('\n');
+
+  const fullHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Roaster Trails in Japan</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com"><\/script>
   <style>body { font-family: Inter, sans-serif; background: #f8f5ef; }</style>
 </head>
 <body class="bg-[#f8f5ef] text-[#1c1c1c]">
@@ -20,13 +562,13 @@
   </header>
 
   <section class="relative h-screen overflow-hidden">
-    <img src="https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&amp;w=2000&amp;auto=format&amp;fit=crop" class="absolute inset-0 w-full h-full object-cover" />
+    <img src="${escHtml(hero.image||'https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=2000&auto=format&fit=crop')}" class="absolute inset-0 w-full h-full object-cover" />
     <div class="absolute inset-0 bg-black/40"></div>
     <div class="relative z-10 h-full flex items-center max-w-7xl mx-auto px-6">
       <div class="max-w-2xl text-white">
-        <p class="uppercase tracking-[0.3em] text-sm mb-6 opacity-80">Tokyo &amp; Kyoto Specialty Coffee Guide</p>
-        <h2 class="text-5xl md:text-7xl leading-tight font-light mb-8">Explore Japan's Coffee Culture</h2>
-        <p class="text-lg md:text-xl opacity-90 max-w-xl leading-relaxed mb-10">Discover hidden roasters, quiet cafés, and unforgettable coffee experiences across Japan.</p>
+        <p class="uppercase tracking-[0.3em] text-sm mb-6 opacity-80">${escHtml(hero.subtitle||'Tokyo & Kyoto Specialty Coffee Guide')}</p>
+        <h2 class="text-5xl md:text-7xl leading-tight font-light mb-8">${escHtml(hero.title||"Explore Japan's Coffee Culture")}</h2>
+        <p class="text-lg md:text-xl opacity-90 max-w-xl leading-relaxed mb-10">${escHtml(hero.desc||'Discover hidden roasters, quiet cafés, and unforgettable coffee experiences across Japan.')}</p>
         <button class="bg-white text-black px-8 py-4 rounded-full text-sm tracking-wide hover:bg-black hover:text-white transition duration-300">Start Exploring</button>
       </div>
     </div>
@@ -38,23 +580,22 @@
       <h3 class="text-4xl font-light">Places Worth The Journey</h3>
     </div>
     <div class="grid md:grid-cols-3 gap-8">
-        <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm">
-          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&amp;w=1400&amp;auto=format&amp;fit=crop" class="h-72 w-full object-cover" alt="Glitch Coffee &amp; Roasters" />
-          <div class="p-8">
-            <p class="uppercase text-xs tracking-[0.2em] opacity-50 mb-3">Tokyo</p>
-            <h4 class="text-2xl mb-4 leading-snug">Glitch Coffee &amp; Roasters</h4>
-            <p class="text-black/70 leading-relaxed">Experimental light roasts and rare beans.</p>
-          </div>
-        </div>
-        <div class="bg-white rounded-[2rem] overflow-hidden shadow-sm">
-          <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&amp;w=1400&amp;auto=format&amp;fit=crop" class="h-72 w-full object-cover" alt="Kurasu" />
-          <div class="p-8">
-            <p class="uppercase text-xs tracking-[0.2em] opacity-50 mb-3">Kyoto</p>
-            <h4 class="text-2xl mb-4 leading-snug">Kurasu</h4>
-            <p class="text-black/70 leading-relaxed">Minimal Kyoto coffee culture with global appeal.</p>
-          </div>
-        </div>
+${roasterCards}
     </div>
   </section>
+</body>
+</html>`;
+
+  document.getElementById('export-code').textContent = fullHtml;
+}
+
+function copyExport() {
+  const text = document.getElementById('export-code').textContent;
+  navigator.clipboard.writeText(text).then(() => showToast('コピーしました！GitHubのindex.htmlに貼り付けてください'));
+}
+
+// 初期表示
+renderRoasterList();
+</script>
 </body>
 </html>

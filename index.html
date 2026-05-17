@@ -50,7 +50,9 @@
   /* HERO */
   header.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 56px 9vh;position:relative;overflow:hidden}
   .hero-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,var(--paper) 0%,var(--paper-2) 70%,var(--concrete) 100%)}
-  .hero-bg svg{position:absolute;right:6%;top:46%;transform:translateY(-50%);width:min(34vw,440px);opacity:.85}
+  .hero-photos{position:absolute;right:6%;top:50%;transform:translateY(-50%);width:min(34vw,440px);height:min(46vw,600px);border-radius:6px;overflow:hidden;box-shadow:0 30px 80px -30px rgba(0,0,0,.35)}
+  .hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.4s ease}
+  .hero-photo.active{opacity:1}
   .hero-grid{position:absolute;inset:0;background-image:linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);background-size:calc(100%/12) 100%;opacity:.5}
   .hero-inner{position:relative;z-index:3;max-width:1320px;margin:0 auto;width:100%}
   .hero-top{position:relative;margin-bottom:40px;display:flex;gap:18px;align-items:baseline;font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--grey);font-weight:500;flex-wrap:wrap}
@@ -211,7 +213,7 @@
     .nav-links a{font-size:1.2rem}
     .burger{display:flex;z-index:1001}
     .nav-right{gap:16px}
-    header.hero{padding:0 22px 8vh}.hero-bg svg{opacity:.28;right:-14%}.hero-top{margin-bottom:24px}
+    header.hero{padding:0 22px 8vh}.hero-photos{opacity:.35;right:-14%;width:80vw;height:80vw}.hero-top{margin-bottom:24px}
     section{padding:5.5rem 0}
     .cafe-grid{grid-template-columns:1fr}
     .ledger{grid-template-columns:1fr}.ledger div{border-right:none;border-bottom:1px solid var(--line-soft);padding:22px 0}
@@ -246,13 +248,11 @@
 <header class="hero">
   <div class="hero-bg">
     <div class="hero-grid"></div>
-    <svg viewBox="0 0 360 460" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M88 150 H272 V288 Q272 392 180 412 Q88 392 88 288 Z" fill="none" stroke="#1B1A16" stroke-width="1.5"/>
-      <path d="M272 184 H308 Q344 184 344 230 Q344 280 296 284" stroke="#1B1A16" stroke-width="1.5" fill="none"/>
-      <line x1="88" y1="150" x2="272" y2="150" stroke="#1B1A16" stroke-width="1.5"/>
-      <path d="M150 110 Q138 86 156 64 M180 106 Q166 78 186 54 M210 110 Q200 88 216 70" stroke="#8C5A38" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      <text x="180" y="455" text-anchor="middle" font-family="Zen Old Mincho, serif" font-size="13" letter-spacing="6" fill="#8B8576">珈琲</text>
-    </svg>
+    <div class="hero-photos">
+      <img class="hero-photo active" src="/images/hero1.jpg" alt="" loading="eager">
+      <img class="hero-photo" src="/images/hero2.jpg" alt="" loading="lazy">
+      <img class="hero-photo" src="/images/hero3.jpg" alt="" loading="lazy">
+    </div>
   </div>
   <div class="hero-inner">
     <div class="hero-top reveal in">
@@ -577,6 +577,18 @@ async function boot(){
   applyStatic(); renderAll(); observeReveals();
 }
 boot();
+
+/* ---- hero photo slideshow ---- */
+(function(){
+  const imgs = document.querySelectorAll('.hero-photo');
+  if(imgs.length < 2) return;
+  let i = 0;
+  setInterval(()=>{
+    imgs[i].classList.remove('active');
+    i = (i+1) % imgs.length;
+    imgs[i].classList.add('active');
+  }, 4500);
+})();
 </script>
 </body>
 </html>

@@ -922,6 +922,58 @@
           "hp": "https://nexpect.theshop.jp/"
         },
         {
+          "cat": {
+            "ja": "",
+            "en": ""
+          },
+          "name": {
+            "ja": "OGAWA COFFEE LABORATORY下北沢",
+            "en": "OGAWA COFFEE LABORATORY Shimokitazawa"
+          },
+          "type": {
+            "ja": "コーヒーショップ・体験型ビーンズサロン",
+            "en": "Experiential Coffee Lounge & Beans Salon"
+          },
+          "ward": {
+            "ja": "東京・下北沢",
+            "en": "Tokyo,Shimokitazawa"
+          },
+          "blurb": {
+            "ja": "京都の老舗「小川珈琲」のフラッグシップブランド。美味しいコーヒーを淹れるための実験室がコンセプト。20種類以上あるコーヒー豆を、ドリップ、エアロプレス、エスプレッソなど様々な抽出方法で楽しむことができる。",
+            "en": "The flagship brand of Kyoto's historic \"Ogawa Coffee.\" Conceived as a laboratory for brewing the perfect cup, it offers over 20 types of coffee beans that can be enjoyed through various extraction methods, including drip, Aeropress, and espresso."
+          },
+          "order": {
+            "ja": "",
+            "en": ""
+          },
+          "owner": {
+            "ja": "",
+            "en": ""
+          },
+          "bio": {
+            "ja": "",
+            "en": ""
+          },
+          "awards": {
+            "ja": "",
+            "en": ""
+          },
+          "killer": {
+            "ja": "",
+            "en": ""
+          },
+          "features": {
+            "ja": "",
+            "en": ""
+          },
+          "access": {
+            "ja": "小田急線・京王井の頭線「下北沢駅」東口・小田急中央口から徒歩約4分（商業施設「reload」1-1）",
+            "en": "A 4-minute walk from Shimokitazawa Station (East or Od齊yu Central Exit), located inside \"reload\" 1-1."
+          },
+          "img": "/images/ogawa coffee.jpg",
+          "hp": "https://www.oc-ogawa.co.jp/ocl-shimokitazawa/"
+        },
+        {
           "img": "tok-allseasons",
           "cat": {
             "ja": "コーヒーショップ",
@@ -1284,58 +1336,6 @@
             "en": "— (to confirm)"
           },
           "hp": "#"
-        },
-        {
-          "cat": {
-            "ja": "",
-            "en": ""
-          },
-          "name": {
-            "ja": "OGAWA COFFEE LABORATORY下北沢",
-            "en": "OGAWA COFFEE LABORATORY Shimokitazawa"
-          },
-          "type": {
-            "ja": "コーヒーショップ・体験型ビーンズサロン",
-            "en": "Experiential Coffee Lounge & Beans Salon"
-          },
-          "ward": {
-            "ja": "東京・下北沢",
-            "en": "Tokyo,Shimokitazawa"
-          },
-          "blurb": {
-            "ja": "京都の老舗「小川珈琲」のフラッグシップブランド。美味しいコーヒーを淹れるための実験室がコンセプト。20種類以上あるコーヒー豆を、ドリップ、エアロプレス、エスプレッソなど様々な抽出方法で楽しむことができる。",
-            "en": "The flagship brand of Kyoto's historic \"Ogawa Coffee.\" Conceived as a laboratory for brewing the perfect cup, it offers over 20 types of coffee beans that can be enjoyed through various extraction methods, including drip, Aeropress, and espresso."
-          },
-          "order": {
-            "ja": "",
-            "en": ""
-          },
-          "owner": {
-            "ja": "",
-            "en": ""
-          },
-          "bio": {
-            "ja": "",
-            "en": ""
-          },
-          "awards": {
-            "ja": "",
-            "en": ""
-          },
-          "killer": {
-            "ja": "",
-            "en": ""
-          },
-          "features": {
-            "ja": "",
-            "en": ""
-          },
-          "access": {
-            "ja": "小田急線・京王井の頭線「下北沢駅」東口・小田急中央口から徒歩約4分（商業施設「reload」1-1）",
-            "en": "A 4-minute walk from Shimokitazawa Station (East or Od齊yu Central Exit), located inside \"reload\" 1-1."
-          },
-          "img": "/images/ogawa coffee.jpg",
-          "hp": "https://www.oc-ogawa.co.jp/ocl-shimokitazawa/"
         }
       ]
     },

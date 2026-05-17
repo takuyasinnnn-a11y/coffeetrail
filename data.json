@@ -558,13 +558,12 @@
           "hp": "#"
         },
         {
-          "img": "tok-ogawalab",
           "cat": {
             "ja": "コーヒーショップ",
             "en": "Coffee Shop"
           },
           "name": {
-            "ja": "Ogawa Coffee Laboratory Shimokitazawa",
+            "ja": "Ogawa Coffee Laboratory 下北沢",
             "en": "Ogawa Coffee Laboratory Shimokitazawa"
           },
           "type": {
@@ -576,20 +575,20 @@
             "en": "Shimokitazawa, Tokyo"
           },
           "blurb": {
-            "ja": "京都発「小川珈琲」の体験型ビーンズサロン。豆と器具を選び自分で淹れられ、焙煎体験も。",
-            "en": "Kyoto's Ogawa Coffee 'experience-based beans salon' — choose beans and gear and brew it yourself; roasting experiences too."
+            "ja": "京都の老舗「小川珈琲」のフラッグシップブランド。美味しいコーヒーを淹れるための実験室がコンセプト。20種類以上あるコーヒー豆を、ドリップ、エアロプレス、エスプレッソなど様々な抽出方法で楽しむことができる。",
+            "en": "The flagship brand of Kyoto's historic \"Ogawa Coffee.\" Conceived as a laboratory for brewing the perfect cup, it offers over 20 types of coffee beans that can be enjoyed through various extraction methods, including drip, Aeropress, and espresso."
           },
           "order": {
-            "ja": "シングルオリジン（抽出器具を選択）",
-            "en": "Single origin (choose your brewer)"
+            "ja": "Jamaica Blue Mountain NO.1 OGAWA PLOT",
+            "en": "Jamaica Blue Mountain NO.1 OGAWA PLOT"
           },
           "owner": {
-            "ja": "—（要確認）",
-            "en": "— (to confirm)"
+            "ja": "",
+            "en": ""
           },
           "bio": {
-            "ja": "※経歴は要確認。京都「小川珈琲」のフラッグシップ業態。",
-            "en": "Placeholder bio — a flagship format of Kyoto's Ogawa Coffee (to confirm)."
+            "ja": "",
+            "en": ""
           },
           "awards": {
             "ja": "※受賞・実績は要確認。",
@@ -604,10 +603,11 @@
             "en": "Experience-based · roasting sessions · beans · app reservation"
           },
           "access": {
-            "ja": "各線「下北沢」駅 徒歩圏",
-            "en": "Walking distance from Shimokitazawa Stn"
+            "ja": "小田急線・京王井の頭線「下北沢駅」東口・小田急中央口から徒歩約4分（商業施設「reload」1-1）",
+            "en": "A 4-minute walk from Shimokitazawa Station (East or Od齊yu Central Exit), located inside \"reload\" 1-1."
           },
-          "hp": "#"
+          "img": "/images/ogawa coffee.jpg",
+          "hp": "https://www.oc-ogawa.co.jp/shop/"
         },
         {
           "img": "tok-wavy",

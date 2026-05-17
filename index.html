@@ -23,7 +23,7 @@
   .jp{font-family:"Zen Old Mincho",serif}
   h1,h2,h3,h4{font-family:"Fraunces",serif;font-weight:300;line-height:1.08;letter-spacing:-.015em}
   img{display:block;max-width:100%}
-  .ph{filter:grayscale(1) sepia(.32) brightness(1.03) contrast(1.02);width:100%;height:100%;object-fit:cover}
+  .ph{width:100%;height:100%;object-fit:cover}
 
   .index-label{display:flex;align-items:baseline;gap:18px;font-size:.74rem;letter-spacing:.26em;text-transform:uppercase;color:var(--grey);font-weight:500}
   .index-label .no{font-family:"Fraunces",serif;font-size:.9rem;color:var(--ink);letter-spacing:.05em}
@@ -436,7 +436,12 @@ const STR = {
    ============================================================ */
 let LANG = 'ja';
 const $ = s => document.querySelector(s);
-const img = (seed,w=900,h=650)=>`<img class="ph" loading="lazy" alt="" src="https://picsum.photos/seed/${seed}/${w}/${h}">`;
+const img = (val,w=900,h=650)=>{
+  const v = String(val||'');
+  const isUrl = /^(https?:\/\/|\/)/.test(v);
+  const src = isUrl ? v : `https://picsum.photos/seed/${v||'x'}/${w}/${h}`;
+  return `<img class="ph" loading="lazy" alt="" src="${src}">`;
+};
 
 function applyStatic(){
   document.documentElement.lang = LANG;

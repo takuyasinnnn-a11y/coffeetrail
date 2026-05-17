@@ -922,7 +922,6 @@
           "hp": "#"
         },
         {
-          "img": "tok-nexpect",
           "cat": {
             "ja": "コーヒーショップ",
             "en": "Coffee Shop"
@@ -932,28 +931,28 @@
             "en": "Nexpect Coffee"
           },
           "type": {
-            "ja": "コーヒーショップ",
-            "en": "Coffee Shop"
+            "ja": "Speciality Coffee Roaster",
+            "en": "Speciality Coffee Roaster"
           },
           "ward": {
-            "ja": "東京（エリア要確認）",
-            "en": "Tokyo (area to confirm)"
+            "ja": "東京・日本橋",
+            "en": "Tokyo,Nihonbashi"
           },
           "blurb": {
-            "ja": "※店名のみ掲載。場所・特徴など詳細は後日加筆予定。",
-            "en": "Name only — location and details to be added."
+            "ja": "「FUGLEN」元日本代表の小島賢治氏が立ち上げたカフェ。築60年超のレトロなビルをリノベーションした心地よい空間で、最高峰のノルディックロースト（浅煎り）を堪能できます。",
+            "en": "A talked-about coffee shop opened by Kenji Kojima, the former Japan representative of FUGLEN. Enjoy exceptional light, Nordic-style roasts in a beautifully renovated 60-year-old building."
           },
           "order": {
             "ja": "—",
             "en": "—"
           },
           "owner": {
-            "ja": "—（未取材）",
-            "en": "— (not yet visited)"
+            "ja": "小島賢治",
+            "en": "Kenji Kojima"
           },
           "bio": {
-            "ja": "※詳細未取材。要追記。",
-            "en": "Placeholder — to research."
+            "ja": "「Paul Bassett 新宿」で修行を積んだ後、ノルウェーのオスロに留学。帰国後に「FUGLEN JAPAN」を立ち上げた、日本の北欧コーヒーカルチャーの第一人者です。",
+            "en": "After training at Paul Bassett Shinjuku, he studied abroad in Oslo, Norway. Upon returning, he launched FUGLEN JAPAN and has become a pioneer of Nordic coffee culture in Japan."
           },
           "awards": {
             "ja": "—（要確認）",
@@ -968,10 +967,11 @@
             "en": "— (to confirm)"
           },
           "access": {
-            "ja": "—（要確認）",
-            "en": "— (to confirm)"
+            "ja": "東京メトロ日比谷線「小伝馬町駅」から徒歩約2〜5分、JR総武本線「新日本橋駅」から徒歩約4分",
+            "en": "A 2 to 5-minute walk from Kodenmacho Station, or a 4-minute walk from Shin-Nihombashi Station."
           },
-          "hp": "#"
+          "img": "/images/Nexpect coffee.jpeg",
+          "hp": "https://nexpect.theshop.jp/"
         },
         {
           "img": "tok-allseasons",

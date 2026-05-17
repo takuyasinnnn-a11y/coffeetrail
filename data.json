@@ -1349,6 +1349,58 @@
           },
           "img": "/images/Goodmancoffee.jpg",
           "hp": "https://goodmanroaster.com/"
+        },
+        {
+          "cat": {
+            "ja": "",
+            "en": ""
+          },
+          "name": {
+            "ja": "COYOTE the ordinary shop",
+            "en": "COYOTE the ordinary shop"
+          },
+          "type": {
+            "ja": "El Salvador Speciality Coffee Shop",
+            "en": "El Salvador Speciality Coffee Shop"
+          },
+          "ward": {
+            "ja": "京都・京都駅前",
+            "en": "Kyoto Station,Kyoto"
+          },
+          "blurb": {
+            "ja": "エルサルバドルのコーヒーだけを取り扱う唯一無二のコーヒーショップ。現地の農園とダイレクトに繋がり、生産者のストーリーとともにここでしか飲めない、希少なコーヒーを楽しめます",
+            "en": "A one-of-a-kind coffee shop specializing exclusively in El Salvadorian coffee. Sourced directly from local farms, it offers rare coffees you won't find anywhere else, served alongside the unique stories of the producers."
+          },
+          "order": {
+            "ja": "",
+            "en": ""
+          },
+          "owner": {
+            "ja": "門川 雄輔",
+            "en": "Yusuke Kadokawa"
+          },
+          "bio": {
+            "ja": "新卒で小川珈琲株式会社に入社。営業職として働いた後、JICA（国際協力機構）の隊員としてエルサルバドルのコーヒー農園に1年半滞在。コロナ禍での現地の危機をきっかけに2020年に創業。2021年7月に初の店舗として京都駅前にオープンした。",
+            "en": "After graduating, he joined Ogawa Coffee as a sales representative. He then spent a year and a half working at coffee farms in El Salvador as a JICA (Japan International Cooperation Agency) volunteer. Driven to support producers during the crisis of the pandemic, he founded COYOTE in 2020 and opened this first branch near Kyoto Station in July 2021."
+          },
+          "awards": {
+            "ja": "",
+            "en": ""
+          },
+          "killer": {
+            "ja": "",
+            "en": ""
+          },
+          "features": {
+            "ja": "",
+            "en": ""
+          },
+          "access": {
+            "ja": "JR・地下鉄「京都駅」烏丸中央口（京都タワー側）から徒歩約5分（キャンパスプラザ京都 1F）",
+            "en": "A 5-minute walk from the Karasuma Central Exit of Kyoto Station, located on the 1st floor of Campus Plaza Kyoto."
+          },
+          "img": "/images/coyote.jpg",
+          "hp": "https://coyote-coffee.stores.jp/"
         }
       ]
     },

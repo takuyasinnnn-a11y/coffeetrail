@@ -1,887 +1,2235 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JAPAN ROASTER TRAIL — 管理画面</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --brown: #c6a16e;
-    --brown-light: #f5ede0;
-    --brown-dark: #7a5a2a;
-    --teal: #2a9d8f;
-    --teal-light: #e0f5f3;
-    --teal-dark: #1a6b60;
-    --red: #E24B4A;
-    --red-light: #FCEBEB;
-    --gray-bg: #F8F7F4;
-    --gray-border: rgba(0,0,0,0.1);
-    --text-primary: #1a1a18;
-    --text-secondary: #6b6b67;
-    --text-tertiary: #a0a09a;
-    --white: #ffffff;
-    --font-sans: 'Noto Sans JP', sans-serif;
-    --radius: 10px;
-    --radius-lg: 14px;
-  }
-  html { font-size: 16px; }
-  body { font-family: var(--font-sans); background: var(--gray-bg); color: var(--text-primary); -webkit-font-smoothing: antialiased; min-height: 100vh; }
-  a { text-decoration: none; color: inherit; }
-
-  /* NAV */
-  nav {
-    background: var(--white);
-    border-bottom: 0.5px solid var(--gray-border);
-    padding: 0 2rem;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 56px; position: sticky; top: 0; z-index: 100;
-  }
-  .logo { font-size: 16px; font-weight: 500; letter-spacing: 0.05em; }
-  .logo span { color: var(--brown); }
-  .logo-sub { font-size: 12px; color: var(--text-tertiary); margin-left: 8px; }
-  .nav-right { display: flex; align-items: center; gap: 1rem; }
-  .nav-link { font-size: 13px; color: var(--text-secondary); }
-  .btn-primary { font-size: 13px; font-family: var(--font-sans); font-weight: 500; padding: 7px 18px; background: var(--brown); color: white; border: none; border-radius: 999px; cursor: pointer; transition: opacity 0.15s; }
-  .btn-primary:hover { opacity: 0.85; }
-  .btn-secondary { font-size: 13px; font-family: var(--font-sans); font-weight: 500; padding: 7px 18px; background: transparent; color: var(--text-secondary); border: 0.5px solid var(--gray-border); border-radius: 999px; cursor: pointer; transition: background 0.15s; }
-  .btn-secondary:hover { background: var(--gray-bg); }
-
-  /* LAYOUT */
-  .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 56px); }
-
-  /* SIDEBAR */
-  .sidebar { background: var(--white); border-right: 0.5px solid var(--gray-border); padding: 1.5rem 0; }
-  .sidebar-label { font-size: 10px; font-weight: 500; color: var(--text-tertiary); letter-spacing: 0.1em; text-transform: uppercase; padding: 0 1.25rem; margin-bottom: 0.5rem; }
-  .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 0.6rem 1.25rem; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: background 0.1s, color 0.1s; border-left: 2px solid transparent; }
-  .sidebar-item:hover { background: var(--gray-bg); color: var(--text-primary); }
-  .sidebar-item.active { background: var(--brown-light); color: var(--brown-dark); border-left-color: var(--brown); font-weight: 500; }
-  .sidebar-item svg { flex-shrink: 0; opacity: 0.7; }
-  .sidebar-item.active svg { opacity: 1; }
-  .badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 999px; background: var(--brown-light); color: var(--brown-dark); margin-left: auto; }
-
-  /* MAIN */
-  .main { padding: 2rem; }
-  .page { display: none; }
-  .page.active { display: block; }
-
-  /* PAGE HEADER */
-  .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.75rem; }
-  .page-title { font-size: 20px; font-weight: 500; }
-  .page-sub { font-size: 13px; color: var(--text-tertiary); margin-top: 2px; }
-
-  /* STATS */
-  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; }
-  .stat-card { background: var(--white); border: 0.5px solid var(--gray-border); border-radius: var(--radius-lg); padding: 1.1rem 1.25rem; }
-  .stat-label { font-size: 11px; color: var(--text-tertiary); margin-bottom: 0.4rem; }
-  .stat-value { font-size: 24px; font-weight: 500; }
-  .stat-sub { font-size: 11px; color: var(--teal); margin-top: 2px; }
-
-  /* ROASTER LIST */
-  .roaster-list { background: var(--white); border: 0.5px solid var(--gray-border); border-radius: var(--radius-lg); overflow: hidden; }
-  .roaster-list-header { display: grid; grid-template-columns: 60px 1fr 100px 80px 60px; gap: 1rem; padding: 0.75rem 1.25rem; border-bottom: 0.5px solid var(--gray-border); font-size: 11px; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; }
-  .roaster-row { display: grid; grid-template-columns: 60px 1fr 100px 80px 60px; gap: 1rem; padding: 1rem 1.25rem; border-bottom: 0.5px solid var(--gray-border); align-items: center; transition: background 0.1s; }
-  .roaster-row:last-child { border-bottom: none; }
-  .roaster-row:hover { background: var(--gray-bg); }
-  .roaster-thumb { width: 48px; height: 48px; border-radius: var(--radius); overflow: hidden; background: var(--brown-light); flex-shrink: 0; }
-  .roaster-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .roaster-name { font-size: 13px; font-weight: 500; }
-  .roaster-desc { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
-  .city-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 999px; background: var(--brown-light); color: var(--brown-dark); display: inline-block; }
-  .status-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 999px; display: inline-block; }
-  .status-published { background: var(--teal-light); color: var(--teal-dark); }
-  .status-draft { background: #FAEEDA; color: #BA7517; }
-  .row-actions { display: flex; gap: 6px; }
-  .btn-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border: 0.5px solid var(--gray-border); border-radius: var(--radius); background: transparent; cursor: pointer; color: var(--text-secondary); transition: background 0.1s, color 0.1s; }
-  .btn-icon:hover { background: var(--gray-bg); color: var(--text-primary); }
-  .btn-icon.danger:hover { background: var(--red-light); color: var(--red); border-color: var(--red); }
-
-  /* FORM */
-  .form-card { background: var(--white); border: 0.5px solid var(--gray-border); border-radius: var(--radius-lg); padding: 1.75rem; max-width: 720px; }
-  .form-group { margin-bottom: 1.25rem; }
-  .form-label { font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 0.4rem; display: block; }
-  .form-input, .form-select, .form-textarea { width: 100%; font-size: 14px; font-family: var(--font-sans); padding: 10px 14px; border: 0.5px solid rgba(0,0,0,0.2); border-radius: var(--radius); background: var(--gray-bg); color: var(--text-primary); outline: none; transition: border-color 0.15s; display: block; }
-  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--brown); background: var(--white); }
-  .form-textarea { resize: vertical; line-height: 1.7; min-height: 100px; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .form-actions { display: flex; gap: 0.75rem; padding-top: 0.5rem; }
-
-  /* SECTION DIVIDER IN FORM */
-  .form-section-title {
-    font-size: 11px; font-weight: 500; color: var(--text-tertiary);
-    text-transform: uppercase; letter-spacing: 0.1em;
-    border-top: 0.5px solid var(--gray-border);
-    padding-top: 1.25rem; margin-top: 0.25rem; margin-bottom: 1rem;
-  }
-
-  /* IMAGE PREVIEW */
-  .img-preview { width: 100%; height: 160px; border-radius: var(--radius); overflow: hidden; background: var(--brown-light); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; }
-  .img-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .img-preview-empty { font-size: 12px; color: var(--text-tertiary); }
-
-  /* HERO SECTION */
-  .hero-card { background: var(--white); border: 0.5px solid var(--gray-border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 2rem; max-width: 720px; }
-  .hero-card-header { padding: 1rem 1.25rem; border-bottom: 0.5px solid var(--gray-border); font-size: 12px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
-  .hero-card-body { padding: 1.25rem; }
-
-  /* EXPORT */
-  .export-box { background: var(--gray-bg); border: 0.5px solid var(--gray-border); border-radius: var(--radius); padding: 1rem; font-size: 12px; color: var(--text-secondary); font-family: monospace; white-space: pre-wrap; max-height: 300px; overflow-y: auto; margin-bottom: 1rem; }
-
-  /* MODAL */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 200; align-items: center; justify-content: center; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: var(--white); border-radius: var(--radius-lg); padding: 1.75rem; width: 480px; max-width: 90vw; }
-  .modal-title { font-size: 16px; font-weight: 500; margin-bottom: 0.5rem; }
-  .modal-desc { font-size: 13px; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6; }
-  .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
-
-  /* TOAST */
-  .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--text-primary); color: white; font-size: 13px; padding: 10px 18px; border-radius: 999px; opacity: 0; transform: translateY(8px); transition: opacity 0.2s, transform 0.2s; pointer-events: none; z-index: 999; }
-  .toast.show { opacity: 1; transform: translateY(0); }
-  .empty-state { text-align: center; padding: 3rem; color: var(--text-tertiary); font-size: 13px; }
-</style>
-</head>
-<body>
-
-<nav>
-  <div style="display:flex;align-items:center;">
-    <div class="logo">JAPAN COFFEE <span>TRAIL</span></div>
-    <span class="logo-sub">管理画面</span>
-  </div>
-  <div class="nav-right">
-    <a href="https://japancoffeetrail.netlify.app" class="nav-link" target="_blank">サイトを見る →</a>
-    <button class="btn-primary" onclick="showPage('new')">＋ ロースターを追加</button>
-  </div>
-</nav>
-
-<div class="layout">
-  <aside class="sidebar">
-    <div style="margin-bottom:2rem;">
-      <div class="sidebar-label">メニュー</div>
-      <div class="sidebar-item active" onclick="showPage('roasters')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-        ロースター一覧
-        <span class="badge" id="roaster-count-badge">0</span>
-      </div>
-      <div class="sidebar-item" onclick="showPage('new')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        新しいロースター
-      </div>
-      <div class="sidebar-item" onclick="showPage('hero')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        ヒーロー編集
-      </div>
-      <div class="sidebar-item" onclick="showPage('export')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        HTMLを書き出す
-      </div>
-      <div class="sidebar-item" onclick="showPage('github')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        GitHub設定
-        <span class="badge" id="github-status-badge" style="display:none;background:#d1fae5;color:#065f46;">✓</span>
-      </div>
-    </div>
-  </aside>
-
-  <main class="main">
-
-    <!-- ロースター一覧 -->
-    <div class="page active" id="page-roasters">
-      <div class="page-header">
-        <div>
-          <div class="page-title">ロースター一覧</div>
-          <div class="page-sub" id="roaster-count-sub">ロースターを追加してください</div>
-        </div>
-      </div>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-label">総ロースター数</div>
-          <div class="stat-value" id="stat-total">0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">公開中</div>
-          <div class="stat-value" id="stat-published">0</div>
-          <div class="stat-sub">公開済み</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">都市数</div>
-          <div class="stat-value" id="stat-cities">0</div>
-          <div class="stat-sub">掲載都市</div>
-        </div>
-      </div>
-      <div class="roaster-list">
-        <div class="roaster-list-header">
-          <div>画像</div>
-          <div>名前</div>
-          <div>都市</div>
-          <div>ステータス</div>
-          <div>操作</div>
-        </div>
-        <div id="roaster-list-body"></div>
-      </div>
-    </div>
-
-    <!-- 新規・編集フォーム -->
-    <div class="page" id="page-new">
-      <div class="page-header">
-        <div>
-          <div class="page-title" id="form-page-title">新しいロースター</div>
-          <div class="page-sub">ロースターの情報を入力してください</div>
-        </div>
-      </div>
-      <div class="form-card">
-        <input type="hidden" id="edit-id" value="">
-
-        <!-- 基本情報 -->
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">ロースター名</label>
-            <input type="text" class="form-input" id="f-name" placeholder="例：Glitch Coffee & Roasters">
-          </div>
-          <div class="form-group">
-            <label class="form-label">都市</label>
-            <input type="text" class="form-input" id="f-city" placeholder="例：Tokyo">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">説明</label>
-          <textarea class="form-textarea" id="f-desc" placeholder="例：Experimental light roasts and rare beans."></textarea>
-        </div>
-
-        <!-- 詳細情報 -->
-        <div class="form-section-title">詳細情報</div>
-        <div class="form-group">
-          <label class="form-label">コンセプト</label>
-          <textarea class="form-textarea" id="f-concept" placeholder="例：「日本から世界にコーヒーカルチャーを発信する」をテーマに、シングルオリジンのみを扱う。" style="min-height:70px;"></textarea>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">焙煎機</label>
-            <input type="text" class="form-input" id="f-roaster-machine" placeholder="例：Diedrich IR-2.5（米国製）">
-          </div>
-          <div class="form-group">
-            <label class="form-label">抽出器具</label>
-            <input type="text" class="form-input" id="f-brew-tools" placeholder="例：Hario V60、AeroPress、エスプレッソ">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">価格帯</label>
-            <input type="text" class="form-input" id="f-price" placeholder="例：ドリンク ¥600〜¥1,200 / 豆 100g ¥900〜">
-          </div>
-          <div class="form-group">
-            <label class="form-label">アクセス</label>
-            <input type="text" class="form-input" id="f-access" placeholder="例：神保町駅 徒歩5分">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">営業時間</label>
-          <input type="text" class="form-input" id="f-hours" placeholder="例：月〜金 8:00–19:00 / 土日 9:00–19:00">
-        </div>
-        <div class="form-group">
-          <label class="form-label">ホームページ URL</label>
-          <input type="url" class="form-input" id="f-website" placeholder="https://glitchcoffee.com">
-        </div>
-
-        <!-- 画像・ステータス -->
-        <div class="form-section-title">画像・公開設定</div>
-        <div class="form-group">
-          <label class="form-label">画像</label>
-          <div class="img-preview" id="img-preview">
-            <span class="img-preview-empty">画像を選択してください</span>
-          </div>
-          <input type="file" accept="image/*" class="form-input" id="f-image-file" onchange="previewImage(event)" style="margin-bottom:0.5rem;">
-          <input type="text" class="form-input" id="f-image-url" placeholder="またはURLを入力：https://..." oninput="previewImageUrl(this.value)">
-        </div>
-        <div class="form-group">
-          <label class="form-label">ステータス</label>
-          <select class="form-select" id="f-status">
-            <option value="published">公開</option>
-            <option value="draft">下書き</option>
-          </select>
-        </div>
-        <div class="form-actions">
-          <button class="btn-primary" onclick="saveRoaster()">保存する</button>
-          <button class="btn-secondary" onclick="showPage('roasters')">キャンセル</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ヒーロー編集 -->
-    <div class="page" id="page-hero">
-      <div class="page-header">
-        <div>
-          <div class="page-title">ヒーロー編集</div>
-          <div class="page-sub">トップページのメインビジュアルを編集します</div>
-        </div>
-      </div>
-      <div class="form-card">
-        <div class="form-group">
-          <label class="form-label">タイトル</label>
-          <input type="text" class="form-input" id="hero-title" value="Explore Japan's Coffee Culture">
-        </div>
-        <div class="form-group">
-          <label class="form-label">サブタイトル</label>
-          <input type="text" class="form-input" id="hero-subtitle" value="Tokyo & Kyoto Specialty Coffee Guide">
-        </div>
-        <div class="form-group">
-          <label class="form-label">説明文</label>
-          <textarea class="form-textarea" id="hero-desc">Discover hidden roasters, quiet cafés, and unforgettable coffee experiences across Japan.</textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">背景画像URL</label>
-          <input type="text" class="form-input" id="hero-image" value="https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=2000&auto=format&fit=crop">
-        </div>
-        <div class="form-actions">
-          <button class="btn-primary" onclick="saveHero()">保存する</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- HTMLエクスポート -->
-    <div class="page" id="page-export">
-      <div class="page-header">
-        <div>
-          <div class="page-title">HTMLを書き出す</div>
-          <div class="page-sub">コピーしてGitHubのindex.htmlと置き換えてください</div>
-        </div>
-      </div>
-      <div class="form-card" style="max-width:100%;">
-        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:1rem;line-height:1.7;">
-          下の「コードをコピー」を押して、GitHubの <code style="background:var(--gray-bg);padding:2px 6px;border-radius:4px;font-size:12px;">index.html</code> を全選択して貼り付けてください。
-        </p>
-        <div class="export-box" id="export-code">ロースターを追加してから書き出してください。</div>
-        <div style="display:flex;gap:0.75rem;">
-          <button class="btn-primary" onclick="copyExport()">コードをコピー</button>
-          <button class="btn-secondary" onclick="generateExport()">再生成</button>
-          <button class="btn-primary" id="push-btn" onclick="pushToGitHub()" style="background:var(--text-primary);display:flex;align-items:center;gap:6px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-            GitHubへプッシュ
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- GitHub設定 -->
-    <div class="page" id="page-github">
-      <div class="page-header">
-        <div>
-          <div class="page-title">GitHub設定</div>
-          <div class="page-sub">一度設定すればワンタップでデプロイできます</div>
-        </div>
-      </div>
-      <div class="form-card">
-        <div style="background:#fffbeb;border:0.5px solid #fde68a;border-radius:var(--radius);padding:1rem;margin-bottom:1.5rem;font-size:13px;color:#92400e;line-height:1.7;">
-          <strong>Personal Access Token の作り方：</strong><br>
-          GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token<br>
-          スコープは <code style="background:#fef3c7;padding:1px 5px;border-radius:3px;">repo</code> にチェックを入れてください。
-        </div>
-        <div class="form-group">
-          <label class="form-label">GitHub Personal Access Token</label>
-          <input type="password" class="form-input" id="gh-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">オーナー名（GitHubユーザー名）</label>
-            <input type="text" class="form-input" id="gh-owner" placeholder="例：takuyasinnnn-a1ty">
-          </div>
-          <div class="form-group">
-            <label class="form-label">リポジトリ名</label>
-            <input type="text" class="form-input" id="gh-repo" placeholder="例：coffeetrail">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">ブランチ名</label>
-            <input type="text" class="form-input" id="gh-branch" placeholder="main">
-          </div>
-          <div class="form-group">
-            <label class="form-label">ファイルパス</label>
-            <input type="text" class="form-input" id="gh-path" placeholder="index.html">
-          </div>
-        </div>
-        <div class="form-actions">
-          <button class="btn-primary" onclick="saveGitHubSettings()">保存する</button>
-          <button class="btn-secondary" onclick="testGitHubConnection()">接続テスト</button>
-        </div>
-      </div>
-    </div>
-</div>
-
-<!-- 削除確認モーダル -->
-<div class="modal-overlay" id="delete-modal">
-  <div class="modal">
-    <div class="modal-title">ロースターを削除しますか？</div>
-    <div class="modal-desc">この操作は取り消せません。本当に削除しますか？</div>
-    <div class="modal-actions">
-      <button class="btn-secondary" onclick="closeModal()">キャンセル</button>
-      <button class="btn-primary" style="background:var(--red);" onclick="confirmDelete()">削除する</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-// ---- DATA ----
-function getRoasters() {
-  try { return JSON.parse(localStorage.getItem('rt_roasters') || '[]'); } catch(e) { return []; }
-}
-function saveRoasters(r) { localStorage.setItem('rt_roasters', JSON.stringify(r)); }
-function getHero() {
-  try { return JSON.parse(localStorage.getItem('rt_hero') || 'null'); } catch(e) { return null; }
-}
-function saveHeroData(h) { localStorage.setItem('rt_hero', JSON.stringify(h)); }
-
-// 初期データ
-try {
-  if (!localStorage.getItem('rt_roasters')) {
-    saveRoasters([
-      {
-        id: '1',
-        name: 'Glitch Coffee & Roasters',
-        city: 'Tokyo',
-        desc: 'Experimental light roasts and rare beans.',
-        concept: '「日本から世界にコーヒーカルチャーを発信する」をコンセプトに、シングルオリジンの浅煎りのみを扱う神保町の旗手。',
-        roasterMachine: '店内大型焙煎機（詳細非公開）',
-        brewTools: 'Hario V60、AeroPress、エスプレッソ',
-        price: 'ドリンク ¥600〜¥3,500 / 豆 100g ¥900〜',
-        access: '神保町駅 徒歩5分 / 神田駅 徒歩7分',
-        hours: '月〜金 8:00–19:00 / 土日 9:00–19:00',
-        website: 'https://glitchcoffee.com',
-        image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1400&auto=format&fit=crop',
-        status: 'published'
+{
+  "areas": [
+    {
+      "region": {
+        "ja": "北海道",
+        "en": "Hokkaido"
       },
-      {
-        id: '2',
-        name: 'Kurasu',
-        city: 'Kyoto',
-        desc: 'Minimal Kyoto coffee culture with global appeal.',
-        concept: '京都の暮らしに寄り添うミニマルなコーヒー文化を世界へ発信するロースター。',
-        roasterMachine: '',
-        brewTools: 'ハンドドリップ、エスプレッソ',
-        price: 'ドリンク ¥600〜¥1,200',
-        access: '東山駅 徒歩3分',
-        hours: '月〜日 9:00–18:00',
-        website: 'https://kurasu.kyoto',
-        image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1400&auto=format&fit=crop',
-        status: 'published'
-      }
-    ]);
-  }
-  if (!localStorage.getItem('rt_hero')) {
-    saveHeroData({
-      title: "Explore Japan's Coffee Culture",
-      subtitle: 'Tokyo & Kyoto Specialty Coffee Guide',
-      desc: 'Discover hidden roasters, quiet cafés, and unforgettable coffee experiences across Japan.',
-      image: 'https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=2000&auto=format&fit=crop'
-    });
-  }
-} catch(e) { console.warn('localStorage unavailable:', e); }
-
-// ---- UI ----
-let deleteTargetId = null;
-let currentImageData = '';
-
-function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  const pages = ['roasters','new','hero','export','github'];
-  const idx = pages.indexOf(name);
-  if (idx >= 0) document.querySelectorAll('.sidebar-item')[idx].classList.add('active');
-  if (name === 'roasters') renderRoasterList();
-  if (name === 'new') { clearForm(); document.getElementById('form-page-title').textContent = '新しいロースター'; }
-  if (name === 'hero') loadHeroForm();
-  if (name === 'export') generateExport();
-  if (name === 'github') loadGitHubForm();
-}
-
-function renderRoasterList() {
-  const roasters = getRoasters();
-  const published = roasters.filter(r => r.status === 'published').length;
-  const cities = [...new Set(roasters.map(r => r.city))].length;
-  document.getElementById('stat-total').textContent = roasters.length;
-  document.getElementById('stat-published').textContent = published;
-  document.getElementById('stat-cities').textContent = cities;
-  document.getElementById('roaster-count-badge').textContent = roasters.length;
-  document.getElementById('roaster-count-sub').textContent = roasters.length > 0 ? `全${roasters.length}件` : 'ロースターを追加してください';
-
-  const body = document.getElementById('roaster-list-body');
-  if (roasters.length === 0) {
-    body.innerHTML = '<div class="empty-state">まだロースターがありません。「新しいロースター」から追加してください。</div>';
-    return;
-  }
-  body.innerHTML = roasters.map(r => `
-    <div class="roaster-row">
-      <div class="roaster-thumb">
-        ${r.image ? `<img src="${escHtml(r.image)}" alt="${escHtml(r.name)}">` : ''}
-      </div>
-      <div>
-        <div class="roaster-name">${escHtml(r.name)}</div>
-        <div class="roaster-desc">${escHtml(r.desc)}</div>
-      </div>
-      <div><span class="city-badge">${escHtml(r.city)}</span></div>
-      <div><span class="status-badge ${r.status === 'published' ? 'status-published' : 'status-draft'}">${r.status === 'published' ? '公開' : '下書き'}</span></div>
-      <div class="row-actions">
-        <button class="btn-icon" onclick="editRoaster('${r.id}')" title="編集">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        </button>
-        <button class="btn-icon danger" onclick="deleteRoaster('${r.id}')" title="削除">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-        </button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function clearForm() {
-  document.getElementById('edit-id').value = '';
-  document.getElementById('f-name').value = '';
-  document.getElementById('f-city').value = '';
-  document.getElementById('f-desc').value = '';
-  document.getElementById('f-concept').value = '';
-  document.getElementById('f-roaster-machine').value = '';
-  document.getElementById('f-brew-tools').value = '';
-  document.getElementById('f-price').value = '';
-  document.getElementById('f-access').value = '';
-  document.getElementById('f-hours').value = '';
-  document.getElementById('f-website').value = '';
-  document.getElementById('f-image-url').value = '';
-  document.getElementById('f-image-file').value = '';
-  document.getElementById('f-status').value = 'published';
-  currentImageData = '';
-  document.getElementById('img-preview').innerHTML = '<span class="img-preview-empty">画像を選択してください</span>';
-}
-
-function previewImage(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    currentImageData = e.target.result;
-    document.getElementById('img-preview').innerHTML = `<img src="${currentImageData}">`;
-    document.getElementById('f-image-url').value = '';
-  };
-  reader.readAsDataURL(file);
-}
-
-function previewImageUrl(url) {
-  if (!url) { document.getElementById('img-preview').innerHTML = '<span class="img-preview-empty">画像を選択してください</span>'; return; }
-  currentImageData = '';
-  document.getElementById('img-preview').innerHTML = `<img src="${url}" onerror="this.parentElement.innerHTML='<span class=\\'img-preview-empty\\'>URLが無効です</span>'">`;
-}
-
-function editRoaster(id) {
-  const r = getRoasters().find(x => x.id === id);
-  if (!r) return;
-  document.getElementById('edit-id').value = r.id;
-  document.getElementById('f-name').value = r.name;
-  document.getElementById('f-city').value = r.city;
-  document.getElementById('f-desc').value = r.desc;
-  document.getElementById('f-concept').value = r.concept || '';
-  document.getElementById('f-roaster-machine').value = r.roasterMachine || '';
-  document.getElementById('f-brew-tools').value = r.brewTools || '';
-  document.getElementById('f-price').value = r.price || '';
-  document.getElementById('f-access').value = r.access || '';
-  document.getElementById('f-hours').value = r.hours || '';
-  document.getElementById('f-website').value = r.website || '';
-  document.getElementById('f-image-url').value = r.image || '';
-  document.getElementById('f-status').value = r.status;
-  currentImageData = '';
-  if (r.image) {
-    document.getElementById('img-preview').innerHTML = `<img src="${r.image}">`;
-  }
-  document.getElementById('form-page-title').textContent = 'ロースターを編集';
-  showPage('new');
-  document.querySelectorAll('.sidebar-item')[1].classList.add('active');
-}
-
-function saveRoaster() {
-  const name = document.getElementById('f-name').value.trim();
-  if (!name) { showToast('ロースター名を入力してください'); return; }
-  const imageUrl = document.getElementById('f-image-url').value.trim();
-  const image = currentImageData || imageUrl;
-  const roasters = getRoasters();
-  const editId = document.getElementById('edit-id').value;
-  const roaster = {
-    id: editId || Date.now().toString(),
-    name,
-    city: document.getElementById('f-city').value.trim(),
-    desc: document.getElementById('f-desc').value.trim(),
-    concept: document.getElementById('f-concept').value.trim(),
-    roasterMachine: document.getElementById('f-roaster-machine').value.trim(),
-    brewTools: document.getElementById('f-brew-tools').value.trim(),
-    price: document.getElementById('f-price').value.trim(),
-    access: document.getElementById('f-access').value.trim(),
-    hours: document.getElementById('f-hours').value.trim(),
-    website: document.getElementById('f-website').value.trim(),
-    image,
-    status: document.getElementById('f-status').value
-  };
-  if (editId) {
-    const idx = roasters.findIndex(r => r.id === editId);
-    if (idx >= 0) roasters[idx] = roaster;
-  } else {
-    roasters.push(roaster);
-  }
-  saveRoasters(roasters);
-  showToast(editId ? '更新しました' : '追加しました');
-  showPage('roasters');
-}
-
-function deleteRoaster(id) {
-  deleteTargetId = id;
-  document.getElementById('delete-modal').classList.add('open');
-}
-function closeModal() {
-  document.getElementById('delete-modal').classList.remove('open');
-  deleteTargetId = null;
-}
-function confirmDelete() {
-  if (!deleteTargetId) return;
-  saveRoasters(getRoasters().filter(r => r.id !== deleteTargetId));
-  closeModal();
-  showToast('削除しました');
-  renderRoasterList();
-}
-
-function loadHeroForm() {
-  const h = getHero() || {};
-  document.getElementById('hero-title').value = h.title || '';
-  document.getElementById('hero-subtitle').value = h.subtitle || '';
-  document.getElementById('hero-desc').value = h.desc || '';
-  document.getElementById('hero-image').value = h.image || '';
-}
-
-function saveHero() {
-  saveHeroData({
-    title: document.getElementById('hero-title').value,
-    subtitle: document.getElementById('hero-subtitle').value,
-    desc: document.getElementById('hero-desc').value,
-    image: document.getElementById('hero-image').value
-  });
-  showToast('ヒーローを保存しました');
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-function escHtml(str) {
-  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// ---- EXPORT ----
-function generateExport() {
-  const roasters = getRoasters().filter(r => r.status === 'published');
-  const hero = getHero() || {};
-
-  const roasterCards = roasters.map(r => {
-    const detailRows = [
-      r.concept       ? `<div class="detail-row concept"><span class="detail-icon">✦</span><p>${escHtml(r.concept)}</p></div>` : '',
-      r.roasterMachine ? `<div class="detail-row"><span class="detail-label">焙煎機</span><span class="detail-val">${escHtml(r.roasterMachine)}</span></div>` : '',
-      r.brewTools      ? `<div class="detail-row"><span class="detail-label">抽出器具</span><span class="detail-val">${escHtml(r.brewTools)}</span></div>` : '',
-      r.price          ? `<div class="detail-row"><span class="detail-label">価格帯</span><span class="detail-val">${escHtml(r.price)}</span></div>` : '',
-      r.hours          ? `<div class="detail-row"><span class="detail-label">営業時間</span><span class="detail-val">${escHtml(r.hours)}</span></div>` : '',
-      r.access         ? `<div class="detail-row"><span class="detail-label">アクセス</span><span class="detail-val">${escHtml(r.access)}</span></div>` : '',
-    ].filter(Boolean).join('\n            ');
-
-    const websiteLink = r.website
-      ? `<a href="${escHtml(r.website)}" target="_blank" rel="noopener" class="card-link">ウェブサイト →</a>`
-      : '';
-
-    return `        <div class="roaster-card">
-          <img src="${escHtml(r.image)}" class="card-img" alt="${escHtml(r.name)}" />
-          <div class="card-body">
-            <p class="card-city">${escHtml(r.city)}</p>
-            <h4 class="card-name">${escHtml(r.name)}</h4>
-            <p class="card-desc">${escHtml(r.desc)}</p>
-            <div class="card-details">
-            ${detailRows}
-            </div>
-            ${websiteLink}
-          </div>
-        </div>`;
-  }).join('\n');
-
-  const fullHtml = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JAPAN COFFEE TRAIL</title>
-  <script src="https://cdn.tailwindcss.com"><\/script>
-  <style>
-    body { font-family: Inter, sans-serif; background: #f8f5ef; }
-    .roaster-card { background: #fff; border-radius: 2rem; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
-    .card-img { width: 100%; height: 18rem; object-fit: cover; display: block; }
-    .card-body { padding: 2rem; }
-    .card-city { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.45; margin-bottom: 0.5rem; }
-    .card-name { font-size: 1.4rem; font-weight: 600; margin-bottom: 0.6rem; line-height: 1.3; }
-    .card-desc { font-size: 0.9rem; color: rgba(0,0,0,0.6); line-height: 1.7; margin-bottom: 1.25rem; }
-    .card-details { border-top: 1px solid rgba(0,0,0,0.07); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1.25rem; }
-    .detail-row { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.82rem; }
-    .detail-row.concept { font-style: italic; color: #7a5a2a; border-left: 2px solid #c6a16e; padding-left: 0.75rem; margin-bottom: 0.25rem; }
-    .detail-icon { color: #c6a16e; flex-shrink: 0; margin-top: 1px; }
-    .detail-label { color: rgba(0,0,0,0.4); white-space: nowrap; flex-shrink: 0; min-width: 72px; }
-    .detail-val { color: rgba(0,0,0,0.75); line-height: 1.5; }
-    .card-link { display: inline-block; font-size: 0.8rem; color: #7a5a2a; border: 1px solid #c6a16e; padding: 0.35rem 0.9rem; border-radius: 999px; text-decoration: none; transition: background 0.2s, color 0.2s; }
-    .card-link:hover { background: #c6a16e; color: #fff; }
-  </style>
-</head>
-<body class="bg-[#f8f5ef] text-[#1c1c1c]">
-  <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#f8f5ef]/80 border-b border-black/5">
-    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-      <h1 class="text-xl tracking-[0.25em] font-semibold">JAPAN COFFEE TRAIL</h1>
-      <nav class="hidden md:flex gap-8 text-sm tracking-wide">
-        <a href="#cities">Cities</a>
-        <a href="#roasters">Roasters</a>
-        <a href="#stories">Stories</a>
-      </nav>
-    </div>
-  </header>
-
-  <section class="relative h-screen overflow-hidden">
-    <img src="${escHtml(hero.image||'https://images.unsplash.com/photo-1517705008128-361805f42e86?q=80&w=2000&auto=format&fit=crop')}" class="absolute inset-0 w-full h-full object-cover" />
-    <div class="absolute inset-0 bg-black/40"></div>
-    <div class="relative z-10 h-full flex items-center max-w-7xl mx-auto px-6">
-      <div class="max-w-2xl text-white">
-        <p class="uppercase tracking-[0.3em] text-sm mb-6 opacity-80">${escHtml(hero.subtitle||'Tokyo & Kyoto Specialty Coffee Guide')}</p>
-        <h2 class="text-5xl md:text-7xl leading-tight font-light mb-8">${escHtml(hero.title||"Explore Japan's Coffee Culture")}</h2>
-        <p class="text-lg md:text-xl opacity-90 max-w-xl leading-relaxed mb-10">${escHtml(hero.desc||'Discover hidden roasters, quiet cafés, and unforgettable coffee experiences across Japan.')}</p>
-        <button class="bg-white text-black px-8 py-4 rounded-full text-sm tracking-wide hover:bg-black hover:text-white transition duration-300">Start Exploring</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="roasters" class="max-w-7xl mx-auto px-6 py-28">
-    <div class="mb-14">
-      <p class="uppercase text-sm tracking-[0.2em] mb-3 opacity-60">Featured Roasters</p>
-      <h3 class="text-4xl font-light">Places Worth The Journey</h3>
-    </div>
-    <div class="grid md:grid-cols-3 gap-8">
-${roasterCards}
-    </div>
-  </section>
-</body>
-</html>`;
-
-  document.getElementById('export-code').textContent = fullHtml;
-}
-
-function copyExport() {
-  const text = document.getElementById('export-code').textContent;
-  navigator.clipboard.writeText(text).then(() => showToast('コピーしました！GitHubのindex.htmlに貼り付けてください'));
-}
-
-// ---- GITHUB ----
-function getGitHubSettings() {
-  try { return JSON.parse(localStorage.getItem('rt_github') || 'null'); } catch(e) { return null; }
-}
-function saveGitHubSettings() {
-  const token = document.getElementById('gh-token').value.trim();
-  const owner = document.getElementById('gh-owner').value.trim();
-  const repo  = document.getElementById('gh-repo').value.trim();
-  const branch = document.getElementById('gh-branch').value.trim() || 'main';
-  const path = document.getElementById('gh-path').value.trim() || 'index.html';
-  if (!token || !owner || !repo) { showToast('Token・オーナー名・リポジトリ名は必須です'); return; }
-  try {
-    localStorage.setItem('rt_github', JSON.stringify({ token, owner, repo, branch, path }));
-  } catch(e) {}
-  document.getElementById('github-status-badge').style.display = 'inline-block';
-  showToast('GitHub設定を保存しました');
-}
-
-function loadGitHubForm() {
-  const s = getGitHubSettings();
-  if (!s) return;
-  document.getElementById('gh-token').value = s.token || '';
-  document.getElementById('gh-owner').value = s.owner || '';
-  document.getElementById('gh-repo').value  = s.repo  || '';
-  document.getElementById('gh-branch').value = s.branch || 'main';
-  document.getElementById('gh-path').value   = s.path  || 'index.html';
-  document.getElementById('github-status-badge').style.display = 'inline-block';
-}
-
-async function testGitHubConnection() {
-  const s = getGitHubSettings();
-  if (!s) { showToast('先に設定を保存してください'); return; }
-  showToast('接続テスト中…');
-  try {
-    const res = await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}`, {
-      headers: { Authorization: `token ${s.token}`, Accept: 'application/vnd.github.v3+json' }
-    });
-    if (res.ok) { showToast('✓ 接続成功！リポジトリを確認できました'); }
-    else { showToast(`✗ エラー ${res.status}：Token・リポジトリ名を確認してください`); }
-  } catch(e) { showToast('✗ ネットワークエラー'); }
-}
-
-async function pushToGitHub() {
-  const s = getGitHubSettings();
-  if (!s || !s.token) {
-    showToast('GitHub設定をしてください');
-    showPage('github');
-    return;
-  }
-  generateExport();
-  const html = document.getElementById('export-code').textContent;
-  const btn = document.getElementById('push-btn');
-  btn.textContent = 'プッシュ中…';
-  btn.disabled = true;
-
-  try {
-    // 現在のファイルのSHAを取得
-    const getRes = await fetch(
-      `https://api.github.com/repos/${s.owner}/${s.repo}/contents/${s.path}?ref=${s.branch}`,
-      { headers: { Authorization: `token ${s.token}`, Accept: 'application/vnd.github.v3+json' } }
-    );
-    let sha = null;
-    if (getRes.ok) { const data = await getRes.json(); sha = data.sha; }
-
-    // ファイルをプッシュ
-    const body = {
-      message: `Update ${s.path} from admin`,
-      content: btoa(unescape(encodeURIComponent(html))),
-      branch: s.branch
-    };
-    if (sha) body.sha = sha;
-
-    const putRes = await fetch(
-      `https://api.github.com/repos/${s.owner}/${s.repo}/contents/${s.path}`,
-      {
-        method: 'PUT',
-        headers: {
-          Authorization: `token ${s.token}`,
-          Accept: 'application/vnd.github.v3+json',
-          'Content-Type': 'application/json'
+      "kanji": "北海道",
+      "meta": {
+        "ja": "道央・道南 ／ 5軒掲載",
+        "en": "Hokkaido · 5 logged"
+      },
+      "cafes": [
+        {
+          "img": "hok1",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "森のロースタリー",
+            "en": "Mori Roastery"
+          },
+          "type": {
+            "ja": "焙煎所・喫茶",
+            "en": "Roastery · Café"
+          },
+          "ward": {
+            "ja": "札幌・円山",
+            "en": "Maruyama, Sapporo"
+          },
+          "blurb": {
+            "ja": "円山の住宅街にある薪火の小さな焙煎所。北海道の冬に合う深めの一杯。",
+            "en": "A tiny wood-fired roastery in a Maruyama backstreet — deep roasts built for Hokkaido winters."
+          },
+          "order": {
+            "ja": "本日の薪火ブレンド",
+            "en": "Today's wood-fire blend"
+          },
+          "owner": {
+            "ja": "佐藤 健一",
+            "en": "Kenichi Sato"
+          },
+          "bio": {
+            "ja": "札幌の老舗喫茶で15年勤めた後、2016年に独立。薪火焙煎を独学で確立。",
+            "en": "Worked 15 years at a classic Sapporo kissaten before going independent in 2016; self-taught in wood-fire roasting."
+          },
+          "awards": {
+            "ja": "ジャパン ロースティング選手権 2021 ファイナリスト",
+            "en": "Japan Roasting Championship 2021 — Finalist"
+          },
+          "killer": {
+            "ja": "薪火の直火焙煎による“煙の余韻”が残る深煎り",
+            "en": "Direct wood-flame deep roast with a lingering smoke finish"
+          },
+          "features": {
+            "ja": "薪火焙煎・席数8・冬季はストーブ常設・豆販売あり",
+            "en": "Wood-fire roasting · 8 seats · winter stove · beans for sale"
+          },
+          "access": {
+            "ja": "地下鉄東西線「円山公園」駅 徒歩7分",
+            "en": "7 min walk from Maruyama-kōen Stn (Tōzai Line)"
+          },
+          "hp": "https://example.com"
         },
-        body: JSON.stringify(body)
-      }
-    );
-
-    if (putRes.ok) {
-      showToast('✓ GitHubにプッシュしました！Netlifyが自動デプロイします');
-    } else {
-      const err = await putRes.json();
-      showToast(`✗ エラー: ${err.message}`);
+        {
+          "img": "hok2",
+          "cat": {
+            "ja": "喫茶店",
+            "en": "Kissaten"
+          },
+          "name": {
+            "ja": "喫茶 雪明かり",
+            "en": "Kissa Yukiakari"
+          },
+          "type": {
+            "ja": "喫茶店・1979年創業",
+            "en": "Kissaten · Est. 1979"
+          },
+          "ward": {
+            "ja": "小樽・堺町",
+            "en": "Sakaimachi, Otaru"
+          },
+          "blurb": {
+            "ja": "運河近くの石蔵を改装した老舗。ネルドリップと自家製プリンの店。",
+            "en": "A converted stone warehouse near the canal — nel drip and house pudding."
+          },
+          "order": {
+            "ja": "ネルドリップ深煎り＆プリン",
+            "en": "Nel drip dark roast & pudding"
+          },
+          "owner": {
+            "ja": "高橋 文子",
+            "en": "Fumiko Takahashi"
+          },
+          "bio": {
+            "ja": "先代から受け継ぎ二代目。小樽の喫茶文化を守る一人。",
+            "en": "Second-generation owner, carrying on her father's shop and Otaru's kissa culture."
+          },
+          "awards": {
+            "ja": "小樽市 景観形成功労 表彰（建物保存）",
+            "en": "Otaru City Landscape Preservation Award"
+          },
+          "killer": {
+            "ja": "創業から変わらないネルドリップの黒い一杯",
+            "en": "The unchanged jet-black nel-drip cup, since 1979"
+          },
+          "features": {
+            "ja": "石蔵建築・全席禁煙・ジャズレコード・席数22",
+            "en": "Stone-warehouse interior · non-smoking · jazz records · 22 seats"
+          },
+          "access": {
+            "ja": "JR「小樽」駅 徒歩12分",
+            "en": "12 min walk from Otaru Stn (JR)"
+          },
+          "hp": "https://example.com"
+        }
+      ]
+    },
+    {
+      "region": {
+        "ja": "東北",
+        "en": "Tōhoku"
+      },
+      "kanji": "東北",
+      "meta": {
+        "ja": "宮城・岩手 ／ 4軒掲載",
+        "en": "Tōhoku · 4 logged"
+      },
+      "cafes": [
+        {
+          "img": "toh1",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "杜の音珈琲",
+            "en": "Morinone Coffee"
+          },
+          "type": {
+            "ja": "焙煎所・喫茶",
+            "en": "Roastery · Café"
+          },
+          "ward": {
+            "ja": "仙台・国分町",
+            "en": "Kokubunchō, Sendai"
+          },
+          "blurb": {
+            "ja": "東北のスペシャルティを牽引する一軒。浅煎りの果実感が評判。",
+            "en": "A leader of Tōhoku specialty — known for fruit-forward light roasts."
+          },
+          "order": {
+            "ja": "エチオピア 浅煎りハンドドリップ",
+            "en": "Ethiopia light, hand-drip"
+          },
+          "owner": {
+            "ja": "伊藤 涼",
+            "en": "Ryo Ito"
+          },
+          "bio": {
+            "ja": "豪州で4年バリスタとして経験を積み、2018年に帰郷して開業。",
+            "en": "Spent four years as a barista in Australia, returned home and opened in 2018."
+          },
+          "awards": {
+            "ja": "JBrC（ジャパン ブリュワーズカップ）2022 セミファイナリスト",
+            "en": "Japan Brewers Cup 2022 — Semifinalist"
+          },
+          "killer": {
+            "ja": "低温長時間ドリップで引き出す紅茶のような浅煎り",
+            "en": "Tea-like light roast from a slow low-temp drip"
+          },
+          "features": {
+            "ja": "浅煎り中心・豆12種常備・テイスティングカード付き",
+            "en": "Light-roast focused · 12 beans · tasting cards"
+          },
+          "access": {
+            "ja": "地下鉄南北線「勾当台公園」駅 徒歩5分",
+            "en": "5 min walk from Kōtōdai-kōen Stn"
+          },
+          "hp": "https://example.com"
+        },
+        {
+          "img": "toh2",
+          "cat": {
+            "ja": "喫茶店",
+            "en": "Kissaten"
+          },
+          "name": {
+            "ja": "南部鉄器と珈琲 釜",
+            "en": "Kama — Nambu Iron & Coffee"
+          },
+          "type": {
+            "ja": "喫茶・工芸",
+            "en": "Café · Craft"
+          },
+          "ward": {
+            "ja": "盛岡・鉈屋町",
+            "en": "Natayachō, Morioka"
+          },
+          "blurb": {
+            "ja": "南部鉄瓶で湯を沸かす盛岡の町家カフェ。鉄分を含むまろやかな湯。",
+            "en": "A Morioka machiya brewing with Nambu iron kettles — soft, iron-touched water."
+          },
+          "order": {
+            "ja": "鉄瓶湯のサイフォン",
+            "en": "Iron-kettle siphon"
+          },
+          "owner": {
+            "ja": "菊池 大輔",
+            "en": "Daisuke Kikuchi"
+          },
+          "bio": {
+            "ja": "南部鉄器職人の家に生まれ、工芸と珈琲を結ぶ店を構えた。",
+            "en": "Born into a Nambu ironware family; built a shop bridging craft and coffee."
+          },
+          "awards": {
+            "ja": "いわて産業デザイン賞 受賞（店舗・器）",
+            "en": "Iwate Industrial Design Award"
+          },
+          "killer": {
+            "ja": "南部鉄瓶で淹れる“やわらかい”サイフォン珈琲",
+            "en": "Siphon coffee softened by Nambu iron-kettle water"
+          },
+          "features": {
+            "ja": "町家建築・鉄器販売・席数14・要予約席あり",
+            "en": "Machiya · ironware sold · 14 seats · some reserved seating"
+          },
+          "access": {
+            "ja": "JR「盛岡」駅よりバス15分",
+            "en": "15 min by bus from Morioka Stn"
+          },
+          "hp": "https://example.com"
+        }
+      ]
+    },
+    {
+      "region": {
+        "ja": "東京",
+        "en": "Tokyo"
+      },
+      "kanji": "東京",
+      "meta": {
+        "ja": "23区内 ／ 22軒掲載",
+        "en": "Tokyo · 22 logged"
+      },
+      "cafes": [
+        {
+          "img": "tok-glitch",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Glitch Coffee & Roasters",
+            "en": "Glitch Coffee & Roasters"
+          },
+          "type": {
+            "ja": "コーヒーショップ・自家焙煎",
+            "en": "Coffee Shop · Roastery"
+          },
+          "ward": {
+            "ja": "東京・神保町",
+            "en": "Jimbōchō, Tokyo"
+          },
+          "blurb": {
+            "ja": "浅煎りシングルロースティングの聖地。世界トップクラスのバリスタも認める実験的ロースター。",
+            "en": "A temple of single-origin light roasting; an experimental roaster respected by world-class baristas."
+          },
+          "order": {
+            "ja": "シングルオリジン 浅煎りハンドドリップ",
+            "en": "Single-origin light, hand-drip"
+          },
+          "owner": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "bio": {
+            "ja": "※経歴は要確認。浅煎り単焙煎で国内シーンを牽引してきた店として知られる。",
+            "en": "Placeholder bio — known for leading Japan's light-roast scene (to confirm)."
+          },
+          "awards": {
+            "ja": "※受賞・実績は要確認（取材後に追記）。",
+            "en": "Awards/achievements to confirm."
+          },
+          "killer": {
+            "ja": "農園個性を最大化する浅煎りシングルロースティング",
+            "en": "Single-origin light roasting that maximises farm character"
+          },
+          "features": {
+            "ja": "浅煎り中心・豆販売・英語メニューあり",
+            "en": "Light-roast focused · beans · English menu"
+          },
+          "access": {
+            "ja": "地下鉄各線「神保町」駅 徒歩4分",
+            "en": "4 min walk from Jimbōchō Stn"
+          },
+          "hp": "https://glitchcoffee.com"
+        },
+        {
+          "img": "tok-mameya",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Koffee Mameya",
+            "en": "Koffee Mameya"
+          },
+          "type": {
+            "ja": "コーヒーショップ・豆販売",
+            "en": "Coffee Shop · Bean Bar"
+          },
+          "ward": {
+            "ja": "東京・表参道",
+            "en": "Omotesandō, Tokyo"
+          },
+          "blurb": {
+            "ja": "最も観光客向けの一軒。バーカウンターでバリスタが好みに合わせ世界各地の豆をテイスティング推薦。英語対応◎。",
+            "en": "The most visitor-friendly choice — at a bar counter, a barista recommends beans from around the world by tasting your preference. Strong English support."
+          },
+          "order": {
+            "ja": "バリスタおすすめのテイスティング",
+            "en": "Barista-recommended tasting"
+          },
+          "owner": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "bio": {
+            "ja": "※経歴は要確認。豆のセレクトと提案に特化したスタイルで知られる。",
+            "en": "Placeholder bio — known for a bean-selection and recommendation style (to confirm)."
+          },
+          "awards": {
+            "ja": "※受賞・実績は要確認。",
+            "en": "Awards/achievements to confirm."
+          },
+          "killer": {
+            "ja": "好みに合わせた世界各地の豆のテイスティング提案",
+            "en": "A tailored tasting recommendation across world origins"
+          },
+          "features": {
+            "ja": "バーカウンター形式・英語対応◎・豆販売",
+            "en": "Bar-counter format · strong English · beans for sale"
+          },
+          "access": {
+            "ja": "東京メトロ「表参道」駅 徒歩／Map: maps.app.goo.gl/koffeemameya",
+            "en": "Near Omotesandō Stn / Map: maps.app.goo.gl/koffeemameya"
+          },
+          "hp": "https://koffee-mameya.com"
+        },
+        {
+          "img": "tok-onibus",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Onibus Coffee Nakameguro",
+            "en": "Onibus Coffee Nakameguro"
+          },
+          "type": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "ward": {
+            "ja": "東京・中目黒",
+            "en": "Nakameguro, Tokyo"
+          },
+          "blurb": {
+            "ja": "桜並木の目黒川沿い。古民家を改装した美しい店舗で、2階の窓辺席が人気。",
+            "en": "Along the cherry-tree-lined Meguro River — a beautifully restored old house; the 2F window seats are the favourite."
+          },
+          "order": {
+            "ja": "本日のシングルオリジン",
+            "en": "Today's single origin"
+          },
+          "owner": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "bio": {
+            "ja": "※経歴は要確認。",
+            "en": "Placeholder bio — to confirm."
+          },
+          "awards": {
+            "ja": "※受賞・実績は要確認。",
+            "en": "Awards/achievements to confirm."
+          },
+          "killer": {
+            "ja": "桜並木を望む2階の窓辺席",
+            "en": "The 2F window seat over the cherry trees"
+          },
+          "features": {
+            "ja": "古民家改装・2階窓辺席・テイクアウト",
+            "en": "Restored old house · 2F window seats · takeaway"
+          },
+          "access": {
+            "ja": "東急東横線「中目黒」駅 徒歩2分",
+            "en": "2 min walk from Nakameguro Stn"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-fuglen",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Fuglen Tokyo",
+            "en": "Fuglen Tokyo"
+          },
+          "type": {
+            "ja": "コーヒーショップ・バー",
+            "en": "Coffee Shop · Bar"
+          },
+          "ward": {
+            "ja": "東京・富ヶ谷",
+            "en": "Tomigaya, Tokyo"
+          },
+          "blurb": {
+            "ja": "ノルウェー発、代々木公園のそば。昼はコーヒー、夜はカクテルバー。北欧ヴィンテージ家具の空間。",
+            "en": "From Norway, near Yoyogi Park — coffee by day, a cocktail bar by night, in a Scandinavian vintage-furniture space."
+          },
+          "order": {
+            "ja": "オスロ式ライトロースト",
+            "en": "Oslo-style light roast"
+          },
+          "owner": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "bio": {
+            "ja": "※経歴は要確認。ノルウェー・オスロ発のブランド。",
+            "en": "Placeholder bio — an Oslo, Norway brand (to confirm)."
+          },
+          "awards": {
+            "ja": "※受賞・実績は要確認。",
+            "en": "Awards/achievements to confirm."
+          },
+          "killer": {
+            "ja": "昼コーヒー／夜カクテルの二毛作と北欧ヴィンテージ空間",
+            "en": "Coffee by day, cocktails by night, in a Nordic vintage room"
+          },
+          "features": {
+            "ja": "北欧ヴィンテージ家具・夜はバー・テラス",
+            "en": "Nordic vintage furniture · evening bar · terrace"
+          },
+          "access": {
+            "ja": "東京メトロ「代々木公園」駅 徒歩5分",
+            "en": "5 min walk from Yoyogi-kōen Stn"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-bluebottle",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Blue Bottle Coffee Kiyosumi-Shirakawa",
+            "en": "Blue Bottle Coffee Kiyosumi-Shirakawa"
+          },
+          "type": {
+            "ja": "コーヒーショップ・焙煎所",
+            "en": "Coffee Shop · Roastery"
+          },
+          "ward": {
+            "ja": "東京・清澄白河",
+            "en": "Kiyosumi-Shirakawa, Tokyo"
+          },
+          "blurb": {
+            "ja": "ブルーボトル初の海外進出店。倉庫を改装した広い空間で、自家焙煎の見学も可能。",
+            "en": "Blue Bottle's first store outside the US — a spacious converted warehouse where you can watch the roasting."
+          },
+          "order": {
+            "ja": "シングルオリジン ドリップ",
+            "en": "Single-origin pour-over"
+          },
+          "owner": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "bio": {
+            "ja": "※経歴は要確認。米国発のスペシャルティブランド。",
+            "en": "Placeholder bio — a US specialty brand (to confirm)."
+          },
+          "awards": {
+            "ja": "※受賞・実績は要確認。",
+            "en": "Awards/achievements to confirm."
+          },
+          "killer": {
+            "ja": "倉庫改装の大空間と焙煎の見学",
+            "en": "A vast converted warehouse and visible roasting"
+          },
+          "features": {
+            "ja": "倉庫改装・焙煎見学可・広い客席",
+            "en": "Converted warehouse · roasting viewable · large seating"
+          },
+          "access": {
+            "ja": "東京メトロ／都営「清澄白河」駅 徒歩7分",
+            "en": "7 min walk from Kiyosumi-Shirakawa Stn"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-streamer",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Streamer Coffee Company",
+            "en": "Streamer Coffee Company"
+          },
+          "type": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "ward": {
+            "ja": "東京・渋谷",
+            "en": "Shibuya, Tokyo"
+          },
+          "blurb": {
+            "ja": "2008年バリスタチャンピオン・澤田氏の店。ラテアートの発祥的存在で、Military Latte が看板。",
+            "en": "The shop of 2008 barista champion Mr. Sawada — a latte-art landmark; the Military Latte is the signature."
+          },
+          "order": {
+            "ja": "Military Latte",
+            "en": "Military Latte"
+          },
+          "owner": {
+            "ja": "澤田 洋史（ユーザー提供情報・要確認）",
+            "en": "Hiroshi Sawada (user-provided, to confirm)"
+          },
+          "bio": {
+            "ja": "※ユーザー提供：2008年バリスタチャンピオン。詳細は要確認。",
+            "en": "User-provided: 2008 barista champion (details to confirm)."
+          },
+          "awards": {
+            "ja": "ユーザー提供：2008 バリスタチャンピオン（大会名・要確認）",
+            "en": "User-provided: 2008 barista champion (competition to confirm)"
+          },
+          "killer": {
+            "ja": "看板メニュー Military Latte（迷彩柄ラテアート）",
+            "en": "Signature Military Latte (camo latte art)"
+          },
+          "features": {
+            "ja": "ラテアート・テイクアウト・複数店舗",
+            "en": "Latte art · takeaway · multiple branches"
+          },
+          "access": {
+            "ja": "各線「渋谷」駅 徒歩圏",
+            "en": "Walking distance from Shibuya Stn"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-switch",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Switch Coffee Tokyo",
+            "en": "Switch Coffee Tokyo"
+          },
+          "type": {
+            "ja": "コーヒーショップ・自家焙煎",
+            "en": "Coffee Shop · Roastery"
+          },
+          "ward": {
+            "ja": "東京・目黒",
+            "en": "Meguro, Tokyo"
+          },
+          "blurb": {
+            "ja": "目黒の住宅街にひっそりと佇む。職人気質の浅〜中煎りで、玄人ファンが多い。",
+            "en": "Tucked quietly into a Meguro residential street — craftsman-like light-to-medium roasts with a connoisseur following."
+          },
+          "order": {
+            "ja": "本日の浅〜中煎り",
+            "en": "Today's light-to-medium roast"
+          },
+          "owner": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "bio": {
+            "ja": "※経歴は要確認。",
+            "en": "Placeholder bio — to confirm."
+          },
+          "awards": {
+            "ja": "※受賞・実績は要確認。",
+            "en": "Awards/achievements to confirm."
+          },
+          "killer": {
+            "ja": "玄人を唸らせる浅〜中煎りの精度",
+            "en": "Light-to-medium roasts that win over the experts"
+          },
+          "features": {
+            "ja": "自家焙煎・小規模・豆販売",
+            "en": "Self-roasting · small · beans for sale"
+          },
+          "access": {
+            "ja": "JR／東急「目黒」駅 徒歩圏",
+            "en": "Walking distance from Meguro Stn"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-allpress",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Allpress Espresso Tokyo Roastery",
+            "en": "Allpress Espresso Tokyo Roastery"
+          },
+          "type": {
+            "ja": "コーヒーショップ・焙煎所",
+            "en": "Coffee Shop · Roastery"
+          },
+          "ward": {
+            "ja": "東京・清澄白河",
+            "en": "Kiyosumi-Shirakawa, Tokyo"
+          },
+          "blurb": {
+            "ja": "ニュージーランド発。清澄白河エリアのコーヒー巡りの定番で、Blue Bottle と徒歩圏内。",
+            "en": "From New Zealand — a fixture of the Kiyosumi-Shirakawa coffee crawl, within walking distance of Blue Bottle."
+          },
+          "order": {
+            "ja": "エスプレッソ／フラットホワイト",
+            "en": "Espresso / flat white"
+          },
+          "owner": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "bio": {
+            "ja": "※経歴は要確認。ニュージーランド発のブランド。",
+            "en": "Placeholder bio — a New Zealand brand (to confirm)."
+          },
+          "awards": {
+            "ja": "※受賞・実績は要確認。",
+            "en": "Awards/achievements to confirm."
+          },
+          "killer": {
+            "ja": "清澄白河コーヒー巡りの定番ロースタリー",
+            "en": "A staple roastery on the Kiyosumi-Shirakawa crawl"
+          },
+          "features": {
+            "ja": "焙煎所併設・エスプレッソ主体",
+            "en": "Roastery on site · espresso-led"
+          },
+          "access": {
+            "ja": "東京メトロ／都営「清澄白河」駅 徒歩圏",
+            "en": "Walking distance from Kiyosumi-Shirakawa Stn"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-ogawalab",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Ogawa Coffee Laboratory Shimokitazawa",
+            "en": "Ogawa Coffee Laboratory Shimokitazawa"
+          },
+          "type": {
+            "ja": "コーヒーショップ・体験型",
+            "en": "Coffee Shop · Experience"
+          },
+          "ward": {
+            "ja": "東京・下北沢",
+            "en": "Shimokitazawa, Tokyo"
+          },
+          "blurb": {
+            "ja": "京都発「小川珈琲」の体験型ビーンズサロン。豆と器具を選び自分で淹れられ、焙煎体験も。",
+            "en": "Kyoto's Ogawa Coffee 'experience-based beans salon' — choose beans and gear and brew it yourself; roasting experiences too."
+          },
+          "order": {
+            "ja": "シングルオリジン（抽出器具を選択）",
+            "en": "Single origin (choose your brewer)"
+          },
+          "owner": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "bio": {
+            "ja": "※経歴は要確認。京都「小川珈琲」のフラッグシップ業態。",
+            "en": "Placeholder bio — a flagship format of Kyoto's Ogawa Coffee (to confirm)."
+          },
+          "awards": {
+            "ja": "※受賞・実績は要確認。",
+            "en": "Awards/achievements to confirm."
+          },
+          "killer": {
+            "ja": "豆と器具を選んで自分で淹れる体験型サロン",
+            "en": "A salon where you pick beans and gear and brew it yourself"
+          },
+          "features": {
+            "ja": "体験型・焙煎体験・豆販売・アプリ予約",
+            "en": "Experience-based · roasting sessions · beans · app reservation"
+          },
+          "access": {
+            "ja": "各線「下北沢」駅 徒歩圏",
+            "en": "Walking distance from Shimokitazawa Stn"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-wavy",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Wavy Coffee",
+            "en": "Wavy Coffee"
+          },
+          "type": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "ward": {
+            "ja": "東京（エリア要確認）",
+            "en": "Tokyo (area to confirm)"
+          },
+          "blurb": {
+            "ja": "※店名のみ掲載。場所・特徴など詳細は後日加筆予定。",
+            "en": "Name only — location and details to be added."
+          },
+          "order": {
+            "ja": "—",
+            "en": "—"
+          },
+          "owner": {
+            "ja": "—（未取材）",
+            "en": "— (not yet visited)"
+          },
+          "bio": {
+            "ja": "※詳細未取材。要追記。",
+            "en": "Placeholder — to research."
+          },
+          "awards": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "killer": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "features": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "access": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-minutes",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Minutes Coffee",
+            "en": "Minutes Coffee"
+          },
+          "type": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "ward": {
+            "ja": "東京（エリア要確認）",
+            "en": "Tokyo (area to confirm)"
+          },
+          "blurb": {
+            "ja": "※店名のみ掲載。場所・特徴など詳細は後日加筆予定。",
+            "en": "Name only — location and details to be added."
+          },
+          "order": {
+            "ja": "—",
+            "en": "—"
+          },
+          "owner": {
+            "ja": "—（未取材）",
+            "en": "— (not yet visited)"
+          },
+          "bio": {
+            "ja": "※詳細未取材。要追記。",
+            "en": "Placeholder — to research."
+          },
+          "awards": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "killer": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "features": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "access": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-unlimited",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Unlimited Coffee Bar",
+            "en": "Unlimited Coffee Bar"
+          },
+          "type": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "ward": {
+            "ja": "東京（エリア要確認）",
+            "en": "Tokyo (area to confirm)"
+          },
+          "blurb": {
+            "ja": "※店名のみ掲載。場所・特徴など詳細は後日加筆予定。",
+            "en": "Name only — location and details to be added."
+          },
+          "order": {
+            "ja": "—",
+            "en": "—"
+          },
+          "owner": {
+            "ja": "—（未取材）",
+            "en": "— (not yet visited)"
+          },
+          "bio": {
+            "ja": "※詳細未取材。要追記。",
+            "en": "Placeholder — to research."
+          },
+          "awards": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "killer": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "features": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "access": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-xcoffee",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "X Coffee",
+            "en": "X Coffee"
+          },
+          "type": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "ward": {
+            "ja": "東京（エリア要確認）",
+            "en": "Tokyo (area to confirm)"
+          },
+          "blurb": {
+            "ja": "※店名のみ掲載。場所・特徴など詳細は後日加筆予定。",
+            "en": "Name only — location and details to be added."
+          },
+          "order": {
+            "ja": "—",
+            "en": "—"
+          },
+          "owner": {
+            "ja": "—（未取材）",
+            "en": "— (not yet visited)"
+          },
+          "bio": {
+            "ja": "※詳細未取材。要追記。",
+            "en": "Placeholder — to research."
+          },
+          "awards": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "killer": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "features": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "access": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-kielo",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Kielo Coffee",
+            "en": "Kielo Coffee"
+          },
+          "type": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "ward": {
+            "ja": "東京（エリア要確認）",
+            "en": "Tokyo (area to confirm)"
+          },
+          "blurb": {
+            "ja": "※店名のみ掲載。場所・特徴など詳細は後日加筆予定。",
+            "en": "Name only — location and details to be added."
+          },
+          "order": {
+            "ja": "—",
+            "en": "—"
+          },
+          "owner": {
+            "ja": "—（未取材）",
+            "en": "— (not yet visited)"
+          },
+          "bio": {
+            "ja": "※詳細未取材。要追記。",
+            "en": "Placeholder — to research."
+          },
+          "awards": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "killer": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "features": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "access": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-nexpect",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Nexpect Coffee",
+            "en": "Nexpect Coffee"
+          },
+          "type": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "ward": {
+            "ja": "東京（エリア要確認）",
+            "en": "Tokyo (area to confirm)"
+          },
+          "blurb": {
+            "ja": "※店名のみ掲載。場所・特徴など詳細は後日加筆予定。",
+            "en": "Name only — location and details to be added."
+          },
+          "order": {
+            "ja": "—",
+            "en": "—"
+          },
+          "owner": {
+            "ja": "—（未取材）",
+            "en": "— (not yet visited)"
+          },
+          "bio": {
+            "ja": "※詳細未取材。要追記。",
+            "en": "Placeholder — to research."
+          },
+          "awards": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "killer": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "features": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "access": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-allseasons",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "All Seasons Coffee",
+            "en": "All Seasons Coffee"
+          },
+          "type": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "ward": {
+            "ja": "東京（エリア要確認）",
+            "en": "Tokyo (area to confirm)"
+          },
+          "blurb": {
+            "ja": "※店名のみ掲載。場所・特徴など詳細は後日加筆予定。",
+            "en": "Name only — location and details to be added."
+          },
+          "order": {
+            "ja": "—",
+            "en": "—"
+          },
+          "owner": {
+            "ja": "—（未取材）",
+            "en": "— (not yet visited)"
+          },
+          "bio": {
+            "ja": "※詳細未取材。要追記。",
+            "en": "Placeholder — to research."
+          },
+          "awards": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "killer": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "features": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "access": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-ajura",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Ajura",
+            "en": "Ajura"
+          },
+          "type": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "ward": {
+            "ja": "東京（エリア要確認）",
+            "en": "Tokyo (area to confirm)"
+          },
+          "blurb": {
+            "ja": "※店名のみ掲載。場所・特徴など詳細は後日加筆予定。",
+            "en": "Name only — location and details to be added."
+          },
+          "order": {
+            "ja": "—",
+            "en": "—"
+          },
+          "owner": {
+            "ja": "—（未取材）",
+            "en": "— (not yet visited)"
+          },
+          "bio": {
+            "ja": "※詳細未取材。要追記。",
+            "en": "Placeholder — to research."
+          },
+          "awards": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "killer": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "features": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "access": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-leaves",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Leaves Coffee Roasters",
+            "en": "Leaves Coffee Roasters"
+          },
+          "type": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "ward": {
+            "ja": "東京（エリア要確認）",
+            "en": "Tokyo (area to confirm)"
+          },
+          "blurb": {
+            "ja": "※店名のみ掲載。場所・特徴など詳細は後日加筆予定。",
+            "en": "Name only — location and details to be added."
+          },
+          "order": {
+            "ja": "—",
+            "en": "—"
+          },
+          "owner": {
+            "ja": "—（未取材）",
+            "en": "— (not yet visited)"
+          },
+          "bio": {
+            "ja": "※詳細未取材。要追記。",
+            "en": "Placeholder — to research."
+          },
+          "awards": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "killer": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "features": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "access": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-kuromame",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Kuromame Coffee",
+            "en": "Kuromame Coffee"
+          },
+          "type": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "ward": {
+            "ja": "東京（エリア要確認）",
+            "en": "Tokyo (area to confirm)"
+          },
+          "blurb": {
+            "ja": "※店名のみ掲載。場所・特徴など詳細は後日加筆予定。",
+            "en": "Name only — location and details to be added."
+          },
+          "order": {
+            "ja": "—",
+            "en": "—"
+          },
+          "owner": {
+            "ja": "—（未取材）",
+            "en": "— (not yet visited)"
+          },
+          "bio": {
+            "ja": "※詳細未取材。要追記。",
+            "en": "Placeholder — to research."
+          },
+          "awards": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "killer": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "features": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "access": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-rec",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Rec Coffee (Tokyo)",
+            "en": "Rec Coffee (Tokyo)"
+          },
+          "type": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "ward": {
+            "ja": "東京（エリア要確認）",
+            "en": "Tokyo (area to confirm)"
+          },
+          "blurb": {
+            "ja": "※店名のみ掲載。場所・特徴など詳細は後日加筆予定。",
+            "en": "Name only — location and details to be added."
+          },
+          "order": {
+            "ja": "—",
+            "en": "—"
+          },
+          "owner": {
+            "ja": "—（未取材）",
+            "en": "— (not yet visited)"
+          },
+          "bio": {
+            "ja": "※詳細未取材。要追記。",
+            "en": "Placeholder — to research."
+          },
+          "awards": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "killer": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "features": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "access": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-snite",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Snite Coffee",
+            "en": "Snite Coffee"
+          },
+          "type": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "ward": {
+            "ja": "東京（エリア要確認）",
+            "en": "Tokyo (area to confirm)"
+          },
+          "blurb": {
+            "ja": "※店名のみ掲載。場所・特徴など詳細は後日加筆予定。",
+            "en": "Name only — location and details to be added."
+          },
+          "order": {
+            "ja": "—",
+            "en": "—"
+          },
+          "owner": {
+            "ja": "—（未取材）",
+            "en": "— (not yet visited)"
+          },
+          "bio": {
+            "ja": "※詳細未取材。要追記。",
+            "en": "Placeholder — to research."
+          },
+          "awards": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "killer": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "features": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "access": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "hp": "#"
+        },
+        {
+          "img": "tok-acid",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "Acid Coffee Tokyo",
+            "en": "Acid Coffee Tokyo"
+          },
+          "type": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "ward": {
+            "ja": "東京（エリア要確認）",
+            "en": "Tokyo (area to confirm)"
+          },
+          "blurb": {
+            "ja": "※店名のみ掲載。場所・特徴など詳細は後日加筆予定。",
+            "en": "Name only — location and details to be added."
+          },
+          "order": {
+            "ja": "—",
+            "en": "—"
+          },
+          "owner": {
+            "ja": "—（未取材）",
+            "en": "— (not yet visited)"
+          },
+          "bio": {
+            "ja": "※詳細未取材。要追記。",
+            "en": "Placeholder — to research."
+          },
+          "awards": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "killer": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "features": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "access": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "hp": "#"
+        }
+      ]
+    },
+    {
+      "region": {
+        "ja": "京都",
+        "en": "Kyoto"
+      },
+      "kanji": "京都",
+      "meta": {
+        "ja": "洛中・洛東 ／ 9軒掲載",
+        "en": "Kyoto · 9 logged"
+      },
+      "cafes": [
+        {
+          "img": "kyo1",
+          "cat": {
+            "ja": "喫茶店",
+            "en": "Kissaten"
+          },
+          "name": {
+            "ja": "町家珈琲 黒鉄",
+            "en": "Machiya Coffee Kurogane"
+          },
+          "type": {
+            "ja": "町家喫茶",
+            "en": "Machiya Café"
+          },
+          "ward": {
+            "ja": "祇園・花見小路",
+            "en": "Hanamikōji, Gion"
+          },
+          "blurb": {
+            "ja": "築120年の町家。一枚氷で淹れる京都の水出しの作法。",
+            "en": "A 120-year machiya — Kyoto-style cold drip over a single block of ice."
+          },
+          "order": {
+            "ja": "水出し珈琲（無糖）",
+            "en": "Cold drip, no sugar"
+          },
+          "owner": {
+            "ja": "中村 沙耶",
+            "en": "Saya Nakamura"
+          },
+          "bio": {
+            "ja": "京都の茶道家系に育ち、抽出を“点前”として捉え直した。",
+            "en": "Raised in a Kyoto tea-ceremony family; reframes brewing as a form of temae."
+          },
+          "awards": {
+            "ja": "京都建築賞 奨励賞（町家改修）",
+            "en": "Kyoto Architecture Award — Honourable Mention"
+          },
+          "killer": {
+            "ja": "8時間かけた一枚氷の水出し珈琲",
+            "en": "8-hour single-ice-block cold drip"
+          },
+          "features": {
+            "ja": "町家・坪庭・全席禁煙・予約優先・席数16",
+            "en": "Machiya · courtyard garden · non-smoking · reservation-first · 16 seats"
+          },
+          "access": {
+            "ja": "京阪「祇園四条」駅 徒歩6分",
+            "en": "6 min walk from Gion-Shijō Stn"
+          },
+          "hp": "https://example.com"
+        },
+        {
+          "img": "kyo2",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "焙煎所 一保",
+            "en": "Roastery Ippo"
+          },
+          "type": {
+            "ja": "焙煎所",
+            "en": "Roastery"
+          },
+          "ward": {
+            "ja": "中京・御所南",
+            "en": "Goshominami, Nakagyō"
+          },
+          "blurb": {
+            "ja": "少量バッチの実験的ロースター。隔週で替わるトップロット。",
+            "en": "A small-batch experimental roaster; top lots rotate biweekly."
+          },
+          "order": {
+            "ja": "今週のトップロット",
+            "en": "This week's top lot"
+          },
+          "owner": {
+            "ja": "森口 巧",
+            "en": "Takumi Moriguchi"
+          },
+          "bio": {
+            "ja": "食品科学の研究職を経て焙煎へ。データと官能の両輪で設計。",
+            "en": "Former food-science researcher turned roaster; designs by data and palate."
+          },
+          "awards": {
+            "ja": "日本スペシャルティコーヒー協会 ローストマスターズ入賞",
+            "en": "SCAJ Roast Masters — Award"
+          },
+          "killer": {
+            "ja": "発酵プロセスを生かした実験的ライトロースト",
+            "en": "Experimental light roasts highlighting fermentation"
+          },
+          "features": {
+            "ja": "少量バッチ・シェアロースター利用可・豆20種",
+            "en": "Small-batch · share-roaster available · 20 beans"
+          },
+          "access": {
+            "ja": "地下鉄烏丸線「丸太町」駅 徒歩8分",
+            "en": "8 min walk from Marutamachi Stn"
+          },
+          "hp": "https://example.com"
+        },
+        {
+          "img": "kyo3",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "焙煎研究室（仮）",
+            "en": "Kyoto Roast Lab"
+          },
+          "type": {
+            "ja": "自家焙煎・ネルドリップ",
+            "en": "Roastery · Nel Drip"
+          },
+          "ward": {
+            "ja": "京都・右京区",
+            "en": "Ukyō, Kyoto"
+          },
+          "blurb": {
+            "ja": "京都の実験室的ロースター。エシカルロットをネルドリップで提供。",
+            "en": "A Kyoto laboratory-style roaster serving ethical lots as nel drip."
+          },
+          "order": {
+            "ja": "ハウスブレンド ネルドリップ",
+            "en": "House blend, nel drip"
+          },
+          "owner": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "bio": {
+            "ja": "※仮データ。京都の珈琲文化の原点を見つめ直す姿勢を掲げるラボ。",
+            "en": "Placeholder — a Kyoto lab revisiting the roots of Japanese coffee."
+          },
+          "awards": {
+            "ja": "※仮：サステナブル調達に関する受賞歴（要確認）",
+            "en": "Placeholder — sustainability recognition (to verify)"
+          },
+          "killer": {
+            "ja": "ネルドリップで引き出す深く丸い余韻",
+            "en": "A deep, round finish drawn through nel drip"
+          },
+          "features": {
+            "ja": "少量バッチ・シェアロースター利用可・豆20種・席数18",
+            "en": "Small-batch · share-roaster · 20 beans · 18 seats"
+          },
+          "access": {
+            "ja": "嵐電「太秦広隆寺」駅 徒歩6分",
+            "en": "6 min walk from Uzumasa-Kōryūji Stn"
+          },
+          "hp": "https://example.com"
+        }
+      ]
+    },
+    {
+      "region": {
+        "ja": "愛知",
+        "en": "Aichi"
+      },
+      "kanji": "愛知",
+      "meta": {
+        "ja": "名古屋市内 ／ 6軒掲載",
+        "en": "Aichi · 6 logged"
+      },
+      "cafes": [
+        {
+          "img": "aic1",
+          "cat": {
+            "ja": "喫茶店",
+            "en": "Kissaten"
+          },
+          "name": {
+            "ja": "喫茶 モーニング堂",
+            "en": "Kissa Morning-dō"
+          },
+          "type": {
+            "ja": "喫茶店・1972年創業",
+            "en": "Kissaten · Est. 1972"
+          },
+          "ward": {
+            "ja": "名古屋・大須",
+            "en": "Ōsu, Nagoya"
+          },
+          "blurb": {
+            "ja": "名古屋モーニング文化の生き証人。珈琲一杯に小倉トースト。",
+            "en": "A living monument to Nagoya 'morning' culture — coffee with ogura toast."
+          },
+          "order": {
+            "ja": "ブレンド＋小倉トースト",
+            "en": "Blend + ogura toast"
+          },
+          "owner": {
+            "ja": "加藤 義雄",
+            "en": "Yoshio Kato"
+          },
+          "bio": {
+            "ja": "大須で半世紀、名古屋の喫茶文化を体現する店主。",
+            "en": "Half a century in Ōsu; an embodiment of Nagoya kissa culture."
+          },
+          "awards": {
+            "ja": "名古屋観光文化交流 特別功労（喫茶文化）",
+            "en": "Nagoya Tourism & Culture — Special Recognition"
+          },
+          "killer": {
+            "ja": "半世紀続くフルサービスの“名古屋モーニング”",
+            "en": "The full-service Nagoya 'morning', for half a century"
+          },
+          "features": {
+            "ja": "全時間モーニング・席数40・喫煙可（分煙）",
+            "en": "All-day morning set · 40 seats · partial smoking"
+          },
+          "access": {
+            "ja": "地下鉄「大須観音」駅 徒歩3分",
+            "en": "3 min walk from Ōsu-Kannon Stn"
+          },
+          "hp": "https://example.com"
+        },
+        {
+          "img": "aic2",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "トラム コーヒー",
+            "en": "Tram Coffee"
+          },
+          "type": {
+            "ja": "焙煎所・スタンド",
+            "en": "Roastery · Stand"
+          },
+          "ward": {
+            "ja": "名古屋・覚王山",
+            "en": "Kakuōzan, Nagoya"
+          },
+          "blurb": {
+            "ja": "覚王山の路面スタンド。名古屋の新世代を代表する浅煎り。",
+            "en": "A Kakuōzan street stand — the new-generation Nagoya light roast."
+          },
+          "order": {
+            "ja": "ゲイシャ エスプレッソトニック",
+            "en": "Geisha espresso tonic"
+          },
+          "owner": {
+            "ja": "鈴木 玲",
+            "en": "Rei Suzuki"
+          },
+          "bio": {
+            "ja": "バリスタ競技経験者。立ち飲み文化を珈琲に持ち込んだ。",
+            "en": "Ex-competition barista who brought a standing-bar culture to coffee."
+          },
+          "awards": {
+            "ja": "ジャパン バリスタ チャンピオンシップ 2023 ファイナリスト",
+            "en": "Japan Barista Championship 2023 — Finalist"
+          },
+          "killer": {
+            "ja": "ゲイシャを使った看板のエスプレッソトニック",
+            "en": "Signature Geisha espresso tonic"
+          },
+          "features": {
+            "ja": "立ち飲み・浅煎り・豆販売・サブスクあり",
+            "en": "Standing bar · light roast · beans & subscription"
+          },
+          "access": {
+            "ja": "地下鉄東山線「覚王山」駅 徒歩4分",
+            "en": "4 min walk from Kakuōzan Stn"
+          },
+          "hp": "https://example.com"
+        }
+      ]
+    },
+    {
+      "region": {
+        "ja": "大阪",
+        "en": "Osaka"
+      },
+      "kanji": "大阪",
+      "meta": {
+        "ja": "市内・北摂 ／ 8軒掲載",
+        "en": "Osaka · 8 logged"
+      },
+      "cafes": [
+        {
+          "img": "osa1",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "中本ロースト",
+            "en": "Nakamoto Roast"
+          },
+          "type": {
+            "ja": "エスプレッソバー",
+            "en": "Espresso Bar"
+          },
+          "ward": {
+            "ja": "大阪・福島",
+            "en": "Fukushima, Osaka"
+          },
+          "blurb": {
+            "ja": "陽気で気前のいいエスプレッソ前提の店。京都の静けさの対極。",
+            "en": "Loud, generous and espresso-forward — the antithesis of Kyoto restraint."
+          },
+          "order": {
+            "ja": "ドッピオ＆炭酸水",
+            "en": "Doppio & sparkling water"
+          },
+          "owner": {
+            "ja": "中本 篤",
+            "en": "Atsushi Nakamoto"
+          },
+          "bio": {
+            "ja": "大阪のバリスタ界の兄貴分。後進育成にも力を注ぐ。",
+            "en": "A big-brother figure in Osaka's barista scene; a noted mentor."
+          },
+          "awards": {
+            "ja": "ジャパン ラテアート選手権 2020 優勝",
+            "en": "Japan Latte Art Championship 2020 — Champion"
+          },
+          "killer": {
+            "ja": "濃厚かつ甘い大阪流ドッピオ",
+            "en": "A thick, sweet Osaka-style doppio"
+          },
+          "features": {
+            "ja": "立ち飲み中心・席数6・深夜営業・豆販売",
+            "en": "Mostly standing · 6 seats · open late · beans"
+          },
+          "access": {
+            "ja": "JR東西線「新福島」駅 徒歩3分",
+            "en": "3 min walk from Shin-Fukushima Stn"
+          },
+          "hp": "https://example.com"
+        },
+        {
+          "img": "osa2",
+          "cat": {
+            "ja": "喫茶店",
+            "en": "Kissaten"
+          },
+          "name": {
+            "ja": "珈琲 蔵之介",
+            "en": "Coffee Kuranosuke"
+          },
+          "type": {
+            "ja": "自家焙煎・喫茶",
+            "en": "Self-roast Café"
+          },
+          "ward": {
+            "ja": "大阪・中崎町",
+            "en": "Nakazakichō, Osaka"
+          },
+          "blurb": {
+            "ja": "長屋を改装した中崎町の名物店。深煎りと自家製菓子。",
+            "en": "A converted row-house landmark of Nakazakichō — dark roast and house sweets."
+          },
+          "order": {
+            "ja": "深煎りネル＆チーズケーキ",
+            "en": "Dark nel & cheesecake"
+          },
+          "owner": {
+            "ja": "岡田 蔵之介",
+            "en": "Kuranosuke Okada"
+          },
+          "bio": {
+            "ja": "古道具商から転身。空間づくりに定評がある店主。",
+            "en": "A former antique dealer turned café owner, known for his interiors."
+          },
+          "awards": {
+            "ja": "大阪商業まちづくり 表彰（中崎町活性化）",
+            "en": "Osaka Town-making Award — Nakazakichō"
+          },
+          "killer": {
+            "ja": "長屋空間で味わう昔ながらの深煎りネルドリップ",
+            "en": "Old-style dark nel drip in a restored row-house"
+          },
+          "features": {
+            "ja": "長屋建築・古道具・全席禁煙・席数18",
+            "en": "Row-house · antiques · non-smoking · 18 seats"
+          },
+          "access": {
+            "ja": "地下鉄谷町線「中崎町」駅 徒歩4分",
+            "en": "4 min walk from Nakazakichō Stn"
+          },
+          "hp": "https://example.com"
+        }
+      ]
+    },
+    {
+      "region": {
+        "ja": "神奈川",
+        "en": "Kanagawa"
+      },
+      "kanji": "神奈川",
+      "meta": {
+        "ja": "鎌倉・横浜 ／ 6軒掲載",
+        "en": "Kanagawa · 6 logged"
+      },
+      "cafes": [
+        {
+          "img": "kan1",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "由比ヶ浜焙煎舎",
+            "en": "Yuigahama Roasters"
+          },
+          "type": {
+            "ja": "焙煎所・喫茶",
+            "en": "Roastery · Café"
+          },
+          "ward": {
+            "ja": "鎌倉・由比ヶ浜",
+            "en": "Yuigahama, Kamakura"
+          },
+          "blurb": {
+            "ja": "海まで歩いて3分。潮風で休ませる豆と、開け放った窓。",
+            "en": "Three minutes to the sea — beans rested in salt air, windows wide open."
+          },
+          "order": {
+            "ja": "浅煎りのアイスフィルター",
+            "en": "Light-roast iced filter"
+          },
+          "owner": {
+            "ja": "渡辺 海",
+            "en": "Kai Watanabe"
+          },
+          "bio": {
+            "ja": "サーファーでもある店主。波と焙煎の時間を両立させる。",
+            "en": "A surfer-owner who balances the tide chart and the roast curve."
+          },
+          "awards": {
+            "ja": "かながわ名産100選 選定（焙煎豆）",
+            "en": "Kanagawa Top-100 Products — Selected"
+          },
+          "killer": {
+            "ja": "潮風でエイジングした浅煎りのアイスフィルター",
+            "en": "Salt-air-aged light roast, served as iced filter"
+          },
+          "features": {
+            "ja": "海近・テラス席・犬可・豆販売・席数20",
+            "en": "Near the sea · terrace · dog-friendly · beans · 20 seats"
+          },
+          "access": {
+            "ja": "江ノ電「由比ヶ浜」駅 徒歩5分",
+            "en": "5 min walk from Yuigahama Stn (Enoden)"
+          },
+          "hp": "https://example.com"
+        },
+        {
+          "img": "kan2",
+          "cat": {
+            "ja": "喫茶店",
+            "en": "Kissaten"
+          },
+          "name": {
+            "ja": "馬車道喫茶 琥珀",
+            "en": "Bashamichi Kissa Kohaku"
+          },
+          "type": {
+            "ja": "喫茶店・1965年創業",
+            "en": "Kissaten · Est. 1965"
+          },
+          "ward": {
+            "ja": "横浜・馬車道",
+            "en": "Bashamichi, Yokohama"
+          },
+          "blurb": {
+            "ja": "横浜開港の面影残る馬車道の老舗。琥珀色のブレンド。",
+            "en": "A Bashamichi classic from the port-era city — an amber house blend."
+          },
+          "order": {
+            "ja": "琥珀ブレンド＆ナポリタン",
+            "en": "Kohaku blend & napolitan"
+          },
+          "owner": {
+            "ja": "小林 征二",
+            "en": "Seiji Kobayashi"
+          },
+          "bio": {
+            "ja": "三代続く喫茶一家。横浜喫茶組合の顧問も務める。",
+            "en": "Third-generation kissa family; advisor to the Yokohama café guild."
+          },
+          "awards": {
+            "ja": "横浜歴史的建造物 認定（店舗）",
+            "en": "Yokohama Historic Building — Certified"
+          },
+          "killer": {
+            "ja": "60年継ぎ足す“琥珀ブレンド”とサイフォン",
+            "en": "The 60-year 'amber blend', drawn by siphon"
+          },
+          "features": {
+            "ja": "レトロ建築・サイフォン・喫煙可（分煙）・席数34",
+            "en": "Retro interior · siphon · partial smoking · 34 seats"
+          },
+          "access": {
+            "ja": "みなとみらい線「馬車道」駅 徒歩2分",
+            "en": "2 min walk from Bashamichi Stn"
+          },
+          "hp": "https://example.com"
+        }
+      ]
+    },
+    {
+      "region": {
+        "ja": "福岡",
+        "en": "Fukuoka"
+      },
+      "kanji": "福岡",
+      "meta": {
+        "ja": "福岡市内 ／ 5軒掲載",
+        "en": "Fukuoka · 5 logged"
+      },
+      "cafes": [
+        {
+          "img": "fuk1",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "万葉珈琲（仮）",
+            "en": "Manyō Coffee"
+          },
+          "type": {
+            "ja": "マイクロロースター",
+            "en": "Micro-roaster"
+          },
+          "ward": {
+            "ja": "福岡・大名",
+            "en": "Daimyō, Fukuoka"
+          },
+          "blurb": {
+            "ja": "九州の実力派。発酵を効かせつつ崩れない精緻な一杯。",
+            "en": "Kyūshū's quiet powerhouse — fermented yet precise."
+          },
+          "order": {
+            "ja": "コロンビア エルパライソ",
+            "en": "Colombia El Paraíso"
+          },
+          "owner": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "bio": {
+            "ja": "※仮データ。少人数で運営するマイクロロースター。",
+            "en": "Placeholder — a small micro-roaster team."
+          },
+          "awards": {
+            "ja": "※仮：九州のバリスタ／ブリュワーズ大会 入賞（要確認）",
+            "en": "Placeholder — Kyūshū competition placement (to verify)"
+          },
+          "killer": {
+            "ja": "果実感を攻めても発酵に倒れないバランス設計",
+            "en": "Pushing fruit without tipping into ferment"
+          },
+          "features": {
+            "ja": "カウンター5席・豆販売・テイスティングフライト",
+            "en": "5-seat counter · beans · tasting flight"
+          },
+          "access": {
+            "ja": "地下鉄「赤坂」駅 徒歩6分",
+            "en": "6 min walk from Akasaka Stn (Fukuoka)"
+          },
+          "hp": "https://example.com"
+        },
+        {
+          "img": "fuk2",
+          "cat": {
+            "ja": "喫茶店",
+            "en": "Kissaten"
+          },
+          "name": {
+            "ja": "珈琲 中洲堂",
+            "en": "Coffee Nakasudō"
+          },
+          "type": {
+            "ja": "喫茶店・1969年創業",
+            "en": "Kissaten · Est. 1969"
+          },
+          "ward": {
+            "ja": "福岡・中洲",
+            "en": "Nakasu, Fukuoka"
+          },
+          "blurb": {
+            "ja": "那珂川を望む老舗喫茶。深煎りネルと昭和の応接間のような空間。",
+            "en": "An old kissaten over the Naka River — dark nel and a Shōwa parlour."
+          },
+          "order": {
+            "ja": "ネルドリップ深煎り",
+            "en": "Dark nel drip"
+          },
+          "owner": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "bio": {
+            "ja": "※仮データ。三代続く博多の喫茶一家。",
+            "en": "Placeholder — third-generation Hakata kissa family."
+          },
+          "awards": {
+            "ja": "※仮：博多の老舗表彰（要確認）",
+            "en": "Placeholder — Hakata heritage recognition (to verify)"
+          },
+          "killer": {
+            "ja": "那珂川を眺めて飲む昔ながらの深煎りネル",
+            "en": "Old-style dark nel with a river view"
+          },
+          "features": {
+            "ja": "川沿い・喫煙可（分煙）・席数30",
+            "en": "Riverside · partial smoking · 30 seats"
+          },
+          "access": {
+            "ja": "地下鉄「中洲川端」駅 徒歩4分",
+            "en": "4 min walk from Nakasu-Kawabata Stn"
+          },
+          "hp": "https://example.com"
+        }
+      ]
+    },
+    {
+      "region": {
+        "ja": "広島・瀬戸内",
+        "en": "Hiroshima & Setouchi"
+      },
+      "kanji": "広島",
+      "meta": {
+        "ja": "尾道・市内 ／ 4軒掲載",
+        "en": "Hiroshima · 4 logged"
+      },
+      "cafes": [
+        {
+          "img": "hir1",
+          "cat": {
+            "ja": "コーヒーショップ",
+            "en": "Coffee Shop"
+          },
+          "name": {
+            "ja": "瀬戸内ロースターズ（仮）",
+            "en": "Setouchi Roasters"
+          },
+          "type": {
+            "ja": "焙煎所・宿",
+            "en": "Roastery · Stay"
+          },
+          "ward": {
+            "ja": "広島・尾道",
+            "en": "Onomichi, Hiroshima"
+          },
+          "blurb": {
+            "ja": "瀬戸内の丘で焙煎し、潮風で休ませる。フィルター向きの定番。",
+            "en": "Roasted on a hill above the Inland Sea, rested in salt air."
+          },
+          "order": {
+            "ja": "グアテマラ アンティグア（フィルター）",
+            "en": "Guatemala Antigua, filter"
+          },
+          "owner": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "bio": {
+            "ja": "※仮データ。宿泊もできるロースタリーを運営。",
+            "en": "Placeholder — runs a roastery with rooms to stay."
+          },
+          "awards": {
+            "ja": "※仮：地域産品・観光関連の表彰（要確認）",
+            "en": "Placeholder — regional product award (to verify)"
+          },
+          "killer": {
+            "ja": "塩気を含む空気で寝かせる“瀬戸内エイジング”",
+            "en": "'Setouchi aging' in salt-touched air"
+          },
+          "features": {
+            "ja": "丘上・テラス・宿泊可・豆販売・席数16",
+            "en": "Hilltop · terrace · rooms · beans · 16 seats"
+          },
+          "access": {
+            "ja": "JR「尾道」駅よりバス10分",
+            "en": "10 min by bus from Onomichi Stn"
+          },
+          "hp": "https://example.com"
+        },
+        {
+          "img": "hir2",
+          "cat": {
+            "ja": "喫茶店",
+            "en": "Kissaten"
+          },
+          "name": {
+            "ja": "喫茶 海猫",
+            "en": "Kissa Umineko"
+          },
+          "type": {
+            "ja": "喫茶店・1981年創業",
+            "en": "Kissaten · Est. 1981"
+          },
+          "ward": {
+            "ja": "広島・尾道",
+            "en": "Onomichi, Hiroshima"
+          },
+          "blurb": {
+            "ja": "坂の途中の小さな喫茶。窓いっぱいの瀬戸内海と、無口なマスター。",
+            "en": "A tiny café mid-slope — a window full of the Inland Sea and a quiet master."
+          },
+          "order": {
+            "ja": "ブレンド＆レモンケーキ",
+            "en": "Blend & lemon cake"
+          },
+          "owner": {
+            "ja": "—（要確認）",
+            "en": "— (to confirm)"
+          },
+          "bio": {
+            "ja": "※仮データ。尾道の坂の暮らしを愛する個人店主。",
+            "en": "Placeholder — a solo owner who loves Onomichi's slope life."
+          },
+          "awards": {
+            "ja": "※仮：尾道のまちづくり関連表彰（要確認）",
+            "en": "Placeholder — Onomichi town-making recognition (to verify)"
+          },
+          "killer": {
+            "ja": "瀬戸内海を一望する窓辺の特等席",
+            "en": "The best window seat over the Inland Sea"
+          },
+          "features": {
+            "ja": "坂の上・眺望・全席禁煙・席数12",
+            "en": "Hillside · sea view · non-smoking · 12 seats"
+          },
+          "access": {
+            "ja": "JR「尾道」駅 徒歩15分（坂道）",
+            "en": "15 min uphill walk from Onomichi Stn"
+          },
+          "hp": "https://example.com"
+        }
+      ]
     }
-  } catch(e) {
-    showToast('✗ プッシュに失敗しました');
-  } finally {
-    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg> GitHubへプッシュ';
-    btn.disabled = false;
-  }
+  ],
+  "visits": [
+    {
+      "img": "vis1",
+      "date": "2026.05",
+      "place": {
+        "ja": "京都・祇園",
+        "en": "Gion, Kyoto"
+      },
+      "title": {
+        "ja": "一枚の氷が溶けるまで",
+        "en": "Until a Single Ice Block Melts"
+      },
+      "excerpt": {
+        "ja": "町家の坪庭に面した席で、八時間かけて落ちる水出しを待った半日の記録。",
+        "en": "Half a day spent waiting for an eight-hour cold drip, seated by a machiya courtyard garden."
+      },
+      "body": {
+        "ja": [
+          "祇園の喧噪から一本入ると、時間の速度が変わる。黒鉄の引き戸を開けると、坪庭の苔が湿った匂いとともに迎えてくれた。",
+          "注文してから供されるまで、ここでは“待つ”ことそのものが体験になっている。一枚氷がゆっくり溶け、珈琲が一滴ずつ満ちていく。その沈黙の中で、店主は一度もこちらを急かさなかった。",
+          "運ばれてきた一杯は、拍子抜けするほど澄んでいた。甘さは砂糖の甘さではなく、時間の甘さだった。観光地のただ中で、これほど静かな半日が成立することに少し驚いた。"
+        ],
+        "en": [
+          "One street in from the noise of Gion, the speed of time changes. Sliding open the iron-dark door, the damp scent of courtyard moss greeted me.",
+          "Here, waiting itself is the experience. A single block of ice melts slowly; the coffee fills drop by drop. In that silence, the owner never once hurried me.",
+          "The cup, when it came, was disarmingly clear. Its sweetness wasn't sugar — it was the sweetness of time. I was a little surprised such a quiet half-day could exist in the middle of a tourist district."
+        ]
+      }
+    },
+    {
+      "img": "vis2",
+      "date": "2026.04",
+      "place": {
+        "ja": "福岡・大名",
+        "en": "Daimyō, Fukuoka"
+      },
+      "title": {
+        "ja": "焙煎士の沈黙",
+        "en": "The Roaster's Silence"
+      },
+      "excerpt": {
+        "ja": "五席のカウンターで、生豆を読むという仕事を間近に見せてもらった夜。",
+        "en": "A night at a five-seat counter, watching the work of reading a green bean up close."
+      },
+      "body": {
+        "ja": [
+          "カウンターは五席だけ。焙煎機の前に立つ店主は、ハゼの音に耳を澄ませながら、ほとんど喋らない。",
+          "「この一秒で全部変わる」と彼は短く言った。データを見ているようでいて、最後は鼻と耳で決めているのが分かった。",
+          "出てきたコロンビアは、荔枝のような香りが立ちながら、発酵には倒れていなかった。攻めと制御の境界線を、舌の上ではっきりと感じた一杯だった。"
+        ],
+        "en": [
+          "Only five seats at the counter. Standing before the roaster, the owner barely speaks, listening for the crack.",
+          "'Everything changes in this one second,' he said, briefly. He seemed to watch the data, but in the end he decided by nose and ear.",
+          "The Colombia that arrived lifted with lychee aromatics yet never tipped into ferment. On the tongue, I could feel the exact border between daring and control."
+        ]
+      }
+    },
+    {
+      "img": "vis3",
+      "date": "2026.03",
+      "place": {
+        "ja": "北海道・小樽",
+        "en": "Otaru, Hokkaido"
+      },
+      "title": {
+        "ja": "石蔵に降る雪の音",
+        "en": "Snow Falling on a Stone Warehouse"
+      },
+      "excerpt": {
+        "ja": "運河沿いの古い石蔵で、半世紀変わらないネルドリップの黒い一杯を飲んだ。",
+        "en": "In an old canal-side stone warehouse, a jet-black nel-drip cup unchanged for half a century."
+      },
+      "body": {
+        "ja": [
+          "小樽運河の風は刺すように冷たく、石蔵の扉を押すと、その寒さが嘘のように消えた。",
+          "二代目の店主は、先代から受け継いだネルを今も毎朝手で洗うと言った。供された珈琲は黒く、苦みの奥に時間の層があった。",
+          "窓の外で雪が音もなく積もっていく。観光のリストには載らない時間が、ここには確かに流れていた。"
+        ],
+        "en": [
+          "The wind off the Otaru canal was biting; pushing the warehouse door, the cold vanished as if it had never been.",
+          "The second-generation owner said she still hand-washes the nel inherited from her father every morning. The coffee was black, with layers of time behind the bitterness.",
+          "Outside the window, snow piled up without a sound. A kind of time that never makes the tourist lists was, unmistakably, flowing here."
+        ]
+      }
+    }
+  ]
 }
-
-// 初期表示
-renderRoasterList();
-</script>
-</body>
-</html>

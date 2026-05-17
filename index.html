@@ -7,6 +7,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..400&family=Hanken+Grotesk:wght@300;400;500;600&family=Zen+Old+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Stay22 affiliate (hotel suggestions for cafes) -->
+<script>
+(function (s, t, a, y, twenty, two) {
+s.Stay22 = s.Stay22 || {};
+s.Stay22.params = { lmaID: '6a09b867eaad88fd98f947e6' };
+twenty = t.createElement(a);
+two = t.getElementsByTagName(a)[0];
+twenty.async = 1;
+twenty.src = y;
+two.parentNode.insertBefore(twenty, two);
+})(window, document, 'script', 'https://scripts.stay22.com/letmeallez.js');
+</script>
 <style>
   :root{
     --paper:#F4F1EA;--paper-2:#ECE8DD;--concrete:#E2DDD0;
@@ -504,6 +516,8 @@ function row(k,v,big){ return v ? `<div class="panel-row"><div class="rk">${k}</
 
 function openCafe(ai,ci){
   const c = DATA.areas[ai].cafes[ci], a = DATA.areas[ai];
+  const addr = encodeURIComponent((c.ward&&c.ward.en) || (c.ward&&c.ward.ja) || a.region.en || '');
+  const hotelLabel = LANG==='ja' ? 'このエリアの宿を探す ↗' : 'Find hotels nearby ↗';
   openPanel(`
     <div class="panel-img">${img(c.img,1200,750)}</div>
     <div class="panel-body">
@@ -519,6 +533,7 @@ function openCafe(ai,ci){
       ${row(STR.m_order[LANG], c.order[LANG])}
       ${row(STR.m_access[LANG], c.access[LANG])}
       <div class="panel-row"><div class="rk">HP</div><a class="panel-hp" href="${c.hp}" target="_blank" rel="noopener">${STR.m_hp[LANG]} ↗</a></div>
+      <div class="panel-row"><div class="rk">${LANG==='ja'?'宿泊':'Stay'}</div><a class="panel-hp" href="https://www.booking.com/searchresults.html?ss=${addr}" target="_blank" rel="noopener">${hotelLabel}</a></div>
     </div>`);
 }
 

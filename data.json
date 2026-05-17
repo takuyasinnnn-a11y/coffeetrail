@@ -1386,60 +1386,7 @@
         "ja": "鎌倉・横浜 ／ 6軒掲載",
         "en": "Kanagawa · 6 logged"
       },
-      "cafes": [
-        {
-          "img": "kan2",
-          "cat": {
-            "ja": "喫茶店",
-            "en": "Kissaten"
-          },
-          "name": {
-            "ja": "馬車道喫茶 琥珀",
-            "en": "Bashamichi Kissa Kohaku"
-          },
-          "type": {
-            "ja": "喫茶店・1965年創業",
-            "en": "Kissaten · Est. 1965"
-          },
-          "ward": {
-            "ja": "横浜・馬車道",
-            "en": "Bashamichi, Yokohama"
-          },
-          "blurb": {
-            "ja": "横浜開港の面影残る馬車道の老舗。琥珀色のブレンド。",
-            "en": "A Bashamichi classic from the port-era city — an amber house blend."
-          },
-          "order": {
-            "ja": "琥珀ブレンド＆ナポリタン",
-            "en": "Kohaku blend & napolitan"
-          },
-          "owner": {
-            "ja": "小林 征二",
-            "en": "Seiji Kobayashi"
-          },
-          "bio": {
-            "ja": "三代続く喫茶一家。横浜喫茶組合の顧問も務める。",
-            "en": "Third-generation kissa family; advisor to the Yokohama café guild."
-          },
-          "awards": {
-            "ja": "横浜歴史的建造物 認定（店舗）",
-            "en": "Yokohama Historic Building — Certified"
-          },
-          "killer": {
-            "ja": "60年継ぎ足す“琥珀ブレンド”とサイフォン",
-            "en": "The 60-year 'amber blend', drawn by siphon"
-          },
-          "features": {
-            "ja": "レトロ建築・サイフォン・喫煙可（分煙）・席数34",
-            "en": "Retro interior · siphon · partial smoking · 34 seats"
-          },
-          "access": {
-            "ja": "みなとみらい線「馬車道」駅 徒歩2分",
-            "en": "2 min walk from Bashamichi Stn"
-          },
-          "hp": "https://example.com"
-        }
-      ]
+      "cafes": []
     },
     {
       "region": {

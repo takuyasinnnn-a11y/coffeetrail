@@ -127,58 +127,6 @@
           },
           "img": "/images/keyaki coffee.jpeg",
           "hp": "https://keyakicoffee.base.shop/"
-        },
-        {
-          "img": "toh2",
-          "cat": {
-            "ja": "喫茶店",
-            "en": "Kissaten"
-          },
-          "name": {
-            "ja": "南部鉄器と珈琲 釜",
-            "en": "Kama — Nambu Iron & Coffee"
-          },
-          "type": {
-            "ja": "喫茶・工芸",
-            "en": "Café · Craft"
-          },
-          "ward": {
-            "ja": "盛岡・鉈屋町",
-            "en": "Natayachō, Morioka"
-          },
-          "blurb": {
-            "ja": "南部鉄瓶で湯を沸かす盛岡の町家カフェ。鉄分を含むまろやかな湯。",
-            "en": "A Morioka machiya brewing with Nambu iron kettles — soft, iron-touched water."
-          },
-          "order": {
-            "ja": "鉄瓶湯のサイフォン",
-            "en": "Iron-kettle siphon"
-          },
-          "owner": {
-            "ja": "菊池 大輔",
-            "en": "Daisuke Kikuchi"
-          },
-          "bio": {
-            "ja": "南部鉄器職人の家に生まれ、工芸と珈琲を結ぶ店を構えた。",
-            "en": "Born into a Nambu ironware family; built a shop bridging craft and coffee."
-          },
-          "awards": {
-            "ja": "いわて産業デザイン賞 受賞（店舗・器）",
-            "en": "Iwate Industrial Design Award"
-          },
-          "killer": {
-            "ja": "南部鉄瓶で淹れる“やわらかい”サイフォン珈琲",
-            "en": "Siphon coffee softened by Nambu iron-kettle water"
-          },
-          "features": {
-            "ja": "町家建築・鉄器販売・席数14・要予約席あり",
-            "en": "Machiya · ironware sold · 14 seats · some reserved seating"
-          },
-          "access": {
-            "ja": "JR「盛岡」駅よりバス15分",
-            "en": "15 min by bus from Morioka Stn"
-          },
-          "hp": "https://example.com"
         }
       ]
     },
@@ -1336,6 +1284,58 @@
             "en": "— (to confirm)"
           },
           "hp": "#"
+        },
+        {
+          "cat": {
+            "ja": "",
+            "en": ""
+          },
+          "name": {
+            "ja": "OGAWA COFFEE LABORATORY下北沢",
+            "en": "OGAWA COFFEE LABORATORY Shimokitazawa"
+          },
+          "type": {
+            "ja": "コーヒーショップ・体験型ビーンズサロン",
+            "en": "Experiential Coffee Lounge & Beans Salon"
+          },
+          "ward": {
+            "ja": "東京・下北沢",
+            "en": "Tokyo,Shimokitazawa"
+          },
+          "blurb": {
+            "ja": "京都の老舗「小川珈琲」のフラッグシップブランド。美味しいコーヒーを淹れるための実験室がコンセプト。20種類以上あるコーヒー豆を、ドリップ、エアロプレス、エスプレッソなど様々な抽出方法で楽しむことができる。",
+            "en": "The flagship brand of Kyoto's historic \"Ogawa Coffee.\" Conceived as a laboratory for brewing the perfect cup, it offers over 20 types of coffee beans that can be enjoyed through various extraction methods, including drip, Aeropress, and espresso."
+          },
+          "order": {
+            "ja": "",
+            "en": ""
+          },
+          "owner": {
+            "ja": "",
+            "en": ""
+          },
+          "bio": {
+            "ja": "",
+            "en": ""
+          },
+          "awards": {
+            "ja": "",
+            "en": ""
+          },
+          "killer": {
+            "ja": "",
+            "en": ""
+          },
+          "features": {
+            "ja": "",
+            "en": ""
+          },
+          "access": {
+            "ja": "小田急線・京王井の頭線「下北沢駅」東口・小田急中央口から徒歩約4分（商業施設「reload」1-1）",
+            "en": "A 4-minute walk from Shimokitazawa Station (East or Od齊yu Central Exit), located inside \"reload\" 1-1."
+          },
+          "img": "/images/ogawa coffee.jpg",
+          "hp": "https://www.oc-ogawa.co.jp/ocl-shimokitazawa/"
         }
       ]
     },
@@ -1466,60 +1466,7 @@
         "ja": "名古屋市内 ／ 6軒掲載",
         "en": "Aichi · 6 logged"
       },
-      "cafes": [
-        {
-          "img": "aic2",
-          "cat": {
-            "ja": "コーヒーショップ",
-            "en": "Coffee Shop"
-          },
-          "name": {
-            "ja": "トラム コーヒー",
-            "en": "Tram Coffee"
-          },
-          "type": {
-            "ja": "焙煎所・スタンド",
-            "en": "Roastery · Stand"
-          },
-          "ward": {
-            "ja": "名古屋・覚王山",
-            "en": "Kakuōzan, Nagoya"
-          },
-          "blurb": {
-            "ja": "覚王山の路面スタンド。名古屋の新世代を代表する浅煎り。",
-            "en": "A Kakuōzan street stand — the new-generation Nagoya light roast."
-          },
-          "order": {
-            "ja": "ゲイシャ エスプレッソトニック",
-            "en": "Geisha espresso tonic"
-          },
-          "owner": {
-            "ja": "鈴木 玲",
-            "en": "Rei Suzuki"
-          },
-          "bio": {
-            "ja": "バリスタ競技経験者。立ち飲み文化を珈琲に持ち込んだ。",
-            "en": "Ex-competition barista who brought a standing-bar culture to coffee."
-          },
-          "awards": {
-            "ja": "ジャパン バリスタ チャンピオンシップ 2023 ファイナリスト",
-            "en": "Japan Barista Championship 2023 — Finalist"
-          },
-          "killer": {
-            "ja": "ゲイシャを使った看板のエスプレッソトニック",
-            "en": "Signature Geisha espresso tonic"
-          },
-          "features": {
-            "ja": "立ち飲み・浅煎り・豆販売・サブスクあり",
-            "en": "Standing bar · light roast · beans & subscription"
-          },
-          "access": {
-            "ja": "地下鉄東山線「覚王山」駅 徒歩4分",
-            "en": "4 min walk from Kakuōzan Stn"
-          },
-          "hp": "https://example.com"
-        }
-      ]
+      "cafes": []
     },
     {
       "region": {
@@ -1544,58 +1491,6 @@
         "en": "Kanagawa · 6 logged"
       },
       "cafes": [
-        {
-          "img": "kan1",
-          "cat": {
-            "ja": "コーヒーショップ",
-            "en": "Coffee Shop"
-          },
-          "name": {
-            "ja": "由比ヶ浜焙煎舎",
-            "en": "Yuigahama Roasters"
-          },
-          "type": {
-            "ja": "焙煎所・喫茶",
-            "en": "Roastery · Café"
-          },
-          "ward": {
-            "ja": "鎌倉・由比ヶ浜",
-            "en": "Yuigahama, Kamakura"
-          },
-          "blurb": {
-            "ja": "海まで歩いて3分。潮風で休ませる豆と、開け放った窓。",
-            "en": "Three minutes to the sea — beans rested in salt air, windows wide open."
-          },
-          "order": {
-            "ja": "浅煎りのアイスフィルター",
-            "en": "Light-roast iced filter"
-          },
-          "owner": {
-            "ja": "渡辺 海",
-            "en": "Kai Watanabe"
-          },
-          "bio": {
-            "ja": "サーファーでもある店主。波と焙煎の時間を両立させる。",
-            "en": "A surfer-owner who balances the tide chart and the roast curve."
-          },
-          "awards": {
-            "ja": "かながわ名産100選 選定（焙煎豆）",
-            "en": "Kanagawa Top-100 Products — Selected"
-          },
-          "killer": {
-            "ja": "潮風でエイジングした浅煎りのアイスフィルター",
-            "en": "Salt-air-aged light roast, served as iced filter"
-          },
-          "features": {
-            "ja": "海近・テラス席・犬可・豆販売・席数20",
-            "en": "Near the sea · terrace · dog-friendly · beans · 20 seats"
-          },
-          "access": {
-            "ja": "江ノ電「由比ヶ浜」駅 徒歩5分",
-            "en": "5 min walk from Yuigahama Stn (Enoden)"
-          },
-          "hp": "https://example.com"
-        },
         {
           "img": "kan2",
           "cat": {
@@ -1672,60 +1567,7 @@
         "ja": "尾道・市内 ／ 4軒掲載",
         "en": "Hiroshima · 4 logged"
       },
-      "cafes": [
-        {
-          "img": "hir2",
-          "cat": {
-            "ja": "喫茶店",
-            "en": "Kissaten"
-          },
-          "name": {
-            "ja": "喫茶 海猫",
-            "en": "Kissa Umineko"
-          },
-          "type": {
-            "ja": "喫茶店・1981年創業",
-            "en": "Kissaten · Est. 1981"
-          },
-          "ward": {
-            "ja": "広島・尾道",
-            "en": "Onomichi, Hiroshima"
-          },
-          "blurb": {
-            "ja": "坂の途中の小さな喫茶。窓いっぱいの瀬戸内海と、無口なマスター。",
-            "en": "A tiny café mid-slope — a window full of the Inland Sea and a quiet master."
-          },
-          "order": {
-            "ja": "ブレンド＆レモンケーキ",
-            "en": "Blend & lemon cake"
-          },
-          "owner": {
-            "ja": "—（要確認）",
-            "en": "— (to confirm)"
-          },
-          "bio": {
-            "ja": "※仮データ。尾道の坂の暮らしを愛する個人店主。",
-            "en": "Placeholder — a solo owner who loves Onomichi's slope life."
-          },
-          "awards": {
-            "ja": "※仮：尾道のまちづくり関連表彰（要確認）",
-            "en": "Placeholder — Onomichi town-making recognition (to verify)"
-          },
-          "killer": {
-            "ja": "瀬戸内海を一望する窓辺の特等席",
-            "en": "The best window seat over the Inland Sea"
-          },
-          "features": {
-            "ja": "坂の上・眺望・全席禁煙・席数12",
-            "en": "Hillside · sea view · non-smoking · 12 seats"
-          },
-          "access": {
-            "ja": "JR「尾道」駅 徒歩15分（坂道）",
-            "en": "15 min uphill walk from Onomichi Stn"
-          },
-          "hp": "https://example.com"
-        }
-      ]
+      "cafes": []
     }
   ],
   "visits": [

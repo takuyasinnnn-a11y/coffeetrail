@@ -77,21 +77,20 @@
       },
       "cafes": [
         {
-          "img": "toh1",
           "cat": {
             "ja": "コーヒーショップ",
             "en": "Coffee Shop"
           },
           "name": {
-            "ja": "杜の音珈琲",
-            "en": "Morinone Coffee"
+            "ja": "KEYAKI COFFEE",
+            "en": "KEYAKI COFFEE"
           },
           "type": {
-            "ja": "焙煎所・喫茶",
-            "en": "Roastery · Café"
+            "ja": "Speciality Coffee Roaster",
+            "en": "Speciality Coffee Roaster"
           },
           "ward": {
-            "ja": "仙台・国分町",
+            "ja": "仙台・若林区",
             "en": "Kokubunchō, Sendai"
           },
           "blurb": {
@@ -99,34 +98,35 @@
             "en": "A leader of Tōhoku specialty — known for fruit-forward light roasts."
           },
           "order": {
-            "ja": "エチオピア 浅煎りハンドドリップ",
-            "en": "Ethiopia light, hand-drip"
+            "ja": "エスプレッソ・カプチーノセット",
+            "en": "Espresso & Cappuccino"
           },
           "owner": {
-            "ja": "伊藤 涼",
-            "en": "Ryo Ito"
+            "ja": "",
+            "en": ""
           },
           "bio": {
-            "ja": "豪州で4年バリスタとして経験を積み、2018年に帰郷して開業。",
-            "en": "Spent four years as a barista in Australia, returned home and opened in 2018."
+            "ja": "",
+            "en": ""
           },
           "awards": {
-            "ja": "JBrC（ジャパン ブリュワーズカップ）2022 セミファイナリスト",
-            "en": "Japan Brewers Cup 2022 — Semifinalist"
+            "ja": "",
+            "en": ""
           },
           "killer": {
-            "ja": "低温長時間ドリップで引き出す紅茶のような浅煎り",
-            "en": "Tea-like light roast from a slow low-temp drip"
+            "ja": "",
+            "en": ""
           },
           "features": {
-            "ja": "浅煎り中心・豆12種常備・テイスティングカード付き",
-            "en": "Light-roast focused · 12 beans · tasting cards"
+            "ja": "フレーバー豊かなシングルオリジンと、レベルの高い抽出",
+            "en": "Richly flavored single-origin beans and expertly executed brewing."
           },
           "access": {
-            "ja": "地下鉄南北線「勾当台公園」駅 徒歩5分",
-            "en": "5 min walk from Kōtōdai-kōen Stn"
+            "ja": "仙台市営地下鉄東西線 卸町駅より徒歩5分",
+            "en": "A 5-minute walk from Oroshimachi Station on the Subway Tozai Line."
           },
-          "hp": "https://example.com"
+          "img": "/images/keyaki coffee.jpeg",
+          "hp": "https://keyakicoffee.base.shop/"
         },
         {
           "img": "toh2",

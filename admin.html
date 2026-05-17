@@ -84,6 +84,8 @@
     <button class="sm" onclick="loadFromFile()">📂 data.json 読込</button>
     <button class="sm" onclick="reloadServer()">↻ サーバー版に戻す</button>
     <button class="sm dg" onclick="resetDraft()">下書き破棄</button>
+    <button class="sm" onclick="openGhSettings()">⚙️ GitHub設定</button>
+    <button class="pri ac" onclick="pushToGitHub()" id="ghPushBtn" style="background:var(--ac);border-color:var(--ac);color:#fff">📤 GitHubに送信</button>
     <button class="pri" onclick="exportJSON()">💾 data.json を書き出す</button>
   </div>
 </header>
@@ -91,7 +93,9 @@
 <div class="wrap">
 
   <div class="hint">
-    <b>使い方</b> — ① ここで編集（自動でブラウザに下書き保存。閉じても残ります）→ ② 右上「<b>data.json を書き出す</b>」でダウンロード → ③ その <code>data.json</code> をサイトと同じ場所にアップロード（上書き）すれば本番反映。<code>index.html</code> 本体は触りません。<br>
+    <b>使い方（おすすめ）</b> — ① ここで編集 → ② 右上の <b>「📤 GitHubに送信」</b> ボタンでワンタップ反映（30秒で本番更新）。<br>
+    <b>初回のみ</b>：「⚙️ GitHub設定」から Personal Access Token を登録してください。<br>
+    <b>従来の方法</b> — 「💾 data.json を書き出す」でダウンロード → GitHubに手動アップロードでもOK。<br>
     別PCで編集した <code>data.json</code> を続きから編集したいときは「📂 data.json 読込」。最初の表示はサイトの <code>data.json</code> を読みます。
   </div>
 
@@ -115,6 +119,53 @@
 </div>
 
 <input type="file" id="fileInput" accept="application/json,.json" style="display:none">
+
+<!-- GitHub settings modal -->
+<div class="ov" id="ghOv">
+  <div class="ed">
+    <div class="ed-h"><h2>⚙️ GitHub 設定</h2><button class="sm" onclick="closeGhSettings()">✕ 閉じる</button></div>
+    <div class="ed-b">
+      <div class="hint" style="margin-bottom:18px">
+        <b>Fine-grained Personal Access Token の作り方</b><br>
+        ① GitHub → 右上アイコン → Settings → Developer settings → Personal access tokens → <b>Fine-grained tokens</b> → <b>Generate new token</b><br>
+        ② <b>Repository access</b>: Only select repositories → <code>coffeetrail</code> を選択<br>
+        ③ <b>Repository permissions</b>: Contents → <b>Read and write</b><br>
+        ④ Generate token → 表示されたトークン（<code>github_pat_...</code>）をコピーして下に貼り付け<br>
+        ⚠️ トークンはブラウザの localStorage に保存されます。共有PCでは使わないでください。
+      </div>
+      <div class="fld">
+        <label>Personal Access Token <span class="req">*</span></label>
+        <input type="password" id="ghToken" placeholder="github_pat_xxxxx...">
+      </div>
+      <div class="pair">
+        <div class="fld">
+          <label>オーナー名（GitHub ユーザー名）</label>
+          <input type="text" id="ghOwner" placeholder="takuyasinnnn-a11y">
+        </div>
+        <div class="fld">
+          <label>リポジトリ名</label>
+          <input type="text" id="ghRepo" placeholder="coffeetrail">
+        </div>
+      </div>
+      <div class="pair">
+        <div class="fld">
+          <label>ブランチ名</label>
+          <input type="text" id="ghBranch" placeholder="main">
+        </div>
+        <div class="fld">
+          <label>ファイルパス</label>
+          <input type="text" id="ghPath" placeholder="data.json">
+        </div>
+      </div>
+    </div>
+    <div class="ed-f">
+      <button class="dg" onclick="clearGhSettings()">設定をクリア</button>
+      <div style="flex:1"></div>
+      <button onclick="testGh()">接続テスト</button>
+      <button class="pri" onclick="saveGhSettings()">保存</button>
+    </div>
+  </div>
+</div>
 
 <!-- editor modal -->
 <div class="ov" id="ov">
@@ -393,8 +444,91 @@ function exportJSON(){
   toast('data.json を書き出しました。サイトに上書きアップロードしてください');
 }
 
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&$('#ov').classList.contains('on')) closeEd(); });
+/* ---------- GitHub push ---------- */
+const GH_KEY = 'jct_admin_gh_v1';
+function getGh(){ try{ return JSON.parse(localStorage.getItem(GH_KEY)||'null'); }catch(e){ return null; } }
+function openGhSettings(){
+  const s = getGh() || {};
+  $('#ghToken').value  = s.token  || '';
+  $('#ghOwner').value  = s.owner  || 'takuyasinnnn-a11y';
+  $('#ghRepo').value   = s.repo   || 'coffeetrail';
+  $('#ghBranch').value = s.branch || 'main';
+  $('#ghPath').value   = s.path   || 'data.json';
+  $('#ghOv').classList.add('on');
+}
+function closeGhSettings(){ $('#ghOv').classList.remove('on'); }
+function saveGhSettings(){
+  const token=$('#ghToken').value.trim();
+  const owner=$('#ghOwner').value.trim();
+  const repo=$('#ghRepo').value.trim();
+  const branch=$('#ghBranch').value.trim()||'main';
+  const path=$('#ghPath').value.trim()||'data.json';
+  if(!token||!owner||!repo){ alert('Token・オーナー名・リポジトリ名は必須です'); return; }
+  try{ localStorage.setItem(GH_KEY, JSON.stringify({token,owner,repo,branch,path})); }catch(e){}
+  toast('GitHub設定を保存しました');
+  closeGhSettings();
+}
+function clearGhSettings(){
+  if(!confirm('保存されたGitHub設定（Token含む）を削除します。よろしいですか？')) return;
+  localStorage.removeItem(GH_KEY);
+  $('#ghToken').value=''; $('#ghOwner').value=''; $('#ghRepo').value=''; $('#ghBranch').value=''; $('#ghPath').value='';
+  toast('設定を削除しました');
+}
+async function testGh(){
+  const s=getGh()||{token:$('#ghToken').value.trim(),owner:$('#ghOwner').value.trim(),repo:$('#ghRepo').value.trim()};
+  if(!s.token||!s.owner||!s.repo){ alert('先に Token・オーナー・リポジトリを入力してください'); return; }
+  toast('接続テスト中…');
+  try{
+    const r=await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}`,{headers:{Authorization:`Bearer ${s.token}`,Accept:'application/vnd.github+json'}});
+    if(r.ok){ toast('✓ 接続成功'); }
+    else{ const j=await r.json().catch(()=>({})); alert(`接続失敗（${r.status}）: ${j.message||''}\nToken / リポジトリ / 権限を確認してください`); }
+  }catch(e){ alert('ネットワークエラー: '+e.message); }
+}
+async function pushToGitHub(){
+  const s=getGh();
+  if(!s||!s.token){ alert('先に「⚙️ GitHub設定」からトークンを登録してください'); openGhSettings(); return; }
+  const btn=$('#ghPushBtn'); const orig=btn.innerHTML;
+  btn.disabled=true; btn.innerHTML='送信中…';
+  try{
+    // 現在ファイルの sha を取得（存在しなければ新規作成扱い）
+    let sha=null;
+    const gr=await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}/contents/${s.path}?ref=${s.branch}`,{
+      headers:{Authorization:`Bearer ${s.token}`,Accept:'application/vnd.github+json'}
+    });
+    if(gr.ok){ const j=await gr.json(); sha=j.sha; }
+    else if(gr.status!==404){ const j=await gr.json().catch(()=>({})); throw new Error(`取得エラー(${gr.status}): ${j.message||''}`); }
+
+    const content=JSON.stringify(DATA,null,2);
+    const body={
+      message:`Update ${s.path} via admin (${DATA.areas.length} areas / ${DATA.areas.reduce((n,a)=>n+(a.cafes||[]).length,0)} cafes)`,
+      content:btoa(unescape(encodeURIComponent(content))),
+      branch:s.branch
+    };
+    if(sha) body.sha=sha;
+
+    const pr=await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}/contents/${s.path}`,{
+      method:'PUT',
+      headers:{Authorization:`Bearer ${s.token}`,Accept:'application/vnd.github+json','Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    });
+    if(!pr.ok){ const j=await pr.json().catch(()=>({})); throw new Error(`送信失敗(${pr.status}): ${j.message||''}`); }
+    $('#saveState').innerHTML='GitHubに送信済 <b>✓</b>';
+    toast('✓ GitHubに送信しました。Cloudflareが30秒〜1分で反映します');
+    dirty=false;
+  }catch(e){
+    alert('送信に失敗しました\n\n'+e.message);
+  }finally{
+    btn.disabled=false; btn.innerHTML=orig;
+  }
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape') return;
+  if($('#ov').classList.contains('on')) closeEd();
+  if($('#ghOv').classList.contains('on')) closeGhSettings();
+});
 $('#ov').addEventListener('click',e=>{ if(e.target===$('#ov')) closeEd(); });
+$('#ghOv').addEventListener('click',e=>{ if(e.target===$('#ghOv')) closeGhSettings(); });
 window.addEventListener('beforeunload',e=>{ if(dirty){ e.preventDefault(); e.returnValue=''; } });
 
 boot();

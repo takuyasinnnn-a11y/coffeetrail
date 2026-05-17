@@ -12,58 +12,6 @@
       },
       "cafes": [
         {
-          "img": "hok1",
-          "cat": {
-            "ja": "コーヒーショップ",
-            "en": "Coffee Shop"
-          },
-          "name": {
-            "ja": "森のロースタリー",
-            "en": "Mori Roastery"
-          },
-          "type": {
-            "ja": "焙煎所・喫茶",
-            "en": "Roastery · Café"
-          },
-          "ward": {
-            "ja": "札幌・円山",
-            "en": "Maruyama, Sapporo"
-          },
-          "blurb": {
-            "ja": "円山の住宅街にある薪火の小さな焙煎所。北海道の冬に合う深めの一杯。",
-            "en": "A tiny wood-fired roastery in a Maruyama backstreet — deep roasts built for Hokkaido winters."
-          },
-          "order": {
-            "ja": "本日の薪火ブレンド",
-            "en": "Today's wood-fire blend"
-          },
-          "owner": {
-            "ja": "佐藤 健一",
-            "en": "Kenichi Sato"
-          },
-          "bio": {
-            "ja": "札幌の老舗喫茶で15年勤めた後、2016年に独立。薪火焙煎を独学で確立。",
-            "en": "Worked 15 years at a classic Sapporo kissaten before going independent in 2016; self-taught in wood-fire roasting."
-          },
-          "awards": {
-            "ja": "ジャパン ロースティング選手権 2021 ファイナリスト",
-            "en": "Japan Roasting Championship 2021 — Finalist"
-          },
-          "killer": {
-            "ja": "薪火の直火焙煎による“煙の余韻”が残る深煎り",
-            "en": "Direct wood-flame deep roast with a lingering smoke finish"
-          },
-          "features": {
-            "ja": "薪火焙煎・席数8・冬季はストーブ常設・豆販売あり",
-            "en": "Wood-fire roasting · 8 seats · winter stove · beans for sale"
-          },
-          "access": {
-            "ja": "地下鉄東西線「円山公園」駅 徒歩7分",
-            "en": "7 min walk from Maruyama-kōen Stn (Tōzai Line)"
-          },
-          "hp": "https://example.com"
-        },
-        {
           "img": "hok2",
           "cat": {
             "ja": "喫茶店",
@@ -114,6 +62,58 @@
             "en": "12 min walk from Otaru Stn (JR)"
           },
           "hp": "https://example.com"
+        },
+        {
+          "cat": {
+            "ja": "",
+            "en": ""
+          },
+          "name": {
+            "ja": "BARISTART COFFEE",
+            "en": "BARISTART COFFEE"
+          },
+          "type": {
+            "ja": "Speciality Coffee Roaster",
+            "en": "Speciality Coffee Roaster"
+          },
+          "ward": {
+            "ja": "札幌、大通り",
+            "en": "Sapporo,Odori"
+          },
+          "blurb": {
+            "ja": "北海道産ミルクにこだわり抜いた、札幌を代表する実力派コーヒースタンド。希少なジャージー乳など厳選された牛乳と、それに合わせるエスプレッソの完璧なマリアージュを楽しめます。",
+            "en": "A prominent coffee stand in Sapporo that focuses on rich Hokkaido milk. Enjoy the perfect marriage of espresso paired with premium selected milks, including rare Jersey milk."
+          },
+          "order": {
+            "ja": "",
+            "en": ""
+          },
+          "owner": {
+            "ja": "竹内 雄基",
+            "en": "Yuki Takeuchi"
+          },
+          "bio": {
+            "ja": "国内外への多店舗展開",
+            "en": ""
+          },
+          "awards": {
+            "ja": "",
+            "en": ""
+          },
+          "killer": {
+            "ja": "数種類の北海道産ミルクと浅煎りシングルオリジン、それぞれ好きなものを選び組み合わせたラテ",
+            "en": ""
+          },
+          "features": {
+            "ja": "ミルクは、数種類の北海道産ミルクから、コーヒー浅煎りシングルオリジンから、それぞれ好きなものを選んでラテをオーダーできる。",
+            "en": ""
+          },
+          "access": {
+            "ja": "",
+            "en": ""
+          },
+          "img": "seed-m66e3",
+          "hp": "https://www.baristartcoffee.com/"
         }
       ]
     },

@@ -350,58 +350,6 @@
           "hp": "#"
         },
         {
-          "img": "tok-bluebottle",
-          "cat": {
-            "ja": "コーヒーショップ",
-            "en": "Coffee Shop"
-          },
-          "name": {
-            "ja": "Blue Bottle Coffee Kiyosumi-Shirakawa",
-            "en": "Blue Bottle Coffee Kiyosumi-Shirakawa"
-          },
-          "type": {
-            "ja": "コーヒーショップ・焙煎所",
-            "en": "Coffee Shop · Roastery"
-          },
-          "ward": {
-            "ja": "東京・清澄白河",
-            "en": "Kiyosumi-Shirakawa, Tokyo"
-          },
-          "blurb": {
-            "ja": "ブルーボトル初の海外進出店。倉庫を改装した広い空間で、自家焙煎の見学も可能。",
-            "en": "Blue Bottle's first store outside the US — a spacious converted warehouse where you can watch the roasting."
-          },
-          "order": {
-            "ja": "シングルオリジン ドリップ",
-            "en": "Single-origin pour-over"
-          },
-          "owner": {
-            "ja": "—（要確認）",
-            "en": "— (to confirm)"
-          },
-          "bio": {
-            "ja": "※経歴は要確認。米国発のスペシャルティブランド。",
-            "en": "Placeholder bio — a US specialty brand (to confirm)."
-          },
-          "awards": {
-            "ja": "※受賞・実績は要確認。",
-            "en": "Awards/achievements to confirm."
-          },
-          "killer": {
-            "ja": "倉庫改装の大空間と焙煎の見学",
-            "en": "A vast converted warehouse and visible roasting"
-          },
-          "features": {
-            "ja": "倉庫改装・焙煎見学可・広い客席",
-            "en": "Converted warehouse · roasting viewable · large seating"
-          },
-          "access": {
-            "ja": "東京メトロ／都営「清澄白河」駅 徒歩7分",
-            "en": "7 min walk from Kiyosumi-Shirakawa Stn"
-          },
-          "hp": "#"
-        },
-        {
           "img": "tok-streamer",
           "cat": {
             "ja": "コーヒーショップ",
@@ -1351,108 +1299,56 @@
       },
       "cafes": [
         {
-          "img": "kyo2",
           "cat": {
-            "ja": "コーヒーショップ",
+            "ja": "コーヒーショ",
             "en": "Coffee Shop"
           },
           "name": {
-            "ja": "焙煎所 一保",
-            "en": "Roastery Ippo"
+            "ja": "Goodman Roaster Kyoto",
+            "en": "Goodman Roaster Kyoto"
           },
           "type": {
-            "ja": "焙煎所",
-            "en": "Roastery"
+            "ja": "Specialty Coffee Roaster",
+            "en": "Specialty Coffee Roaster"
           },
           "ward": {
-            "ja": "中京・御所南",
-            "en": "Goshominami, Nakagyō"
+            "ja": "京都・下京区",
+            "en": "Shimogyō, Kyoto"
           },
           "blurb": {
-            "ja": "少量バッチの実験的ロースター。隔週で替わるトップロット。",
-            "en": "A small-batch experimental roaster; top lots rotate biweekly."
+            "ja": "台湾・台北で絶大な人気を誇るロースタリーの京都店。創業者自ら農家と直接取引する、世界最高峰の台湾・阿里山（アリサン）産コーヒーを、洗練されたライトローストで堪能できます。",
+            "en": "The Kyoto branch of a highly acclaimed Taipei-based roaster. Discover world-class Taiwanese Alishan coffee, sourced directly from farmers and served in a beautifully refined light roast."
           },
           "order": {
-            "ja": "今週のトップロット",
-            "en": "This week's top lot"
+            "ja": "",
+            "en": ""
           },
           "owner": {
-            "ja": "森口 巧",
-            "en": "Takumi Moriguchi"
+            "ja": "伊藤 篤臣",
+            "en": "Atuomi Ito"
           },
           "bio": {
-            "ja": "食品科学の研究職を経て焙煎へ。データと官能の両輪で設計。",
-            "en": "Former food-science researcher turned roaster; designs by data and palate."
+            "ja": "スターバックス等でのキャリアを経て、台湾・阿里山コーヒーの浅煎りの風味に衝撃を受け単身台湾へ。台北の空港の小さなスペースから「Goodman Roaster」をスタートさせ、瞬く間に人気ブランドへと成長。2019年、念願の日本1号店を古都・京都にオープンした。",
+            "en": "After working as a barista in Japan, he moved to Taiwan, captivated by the vibrant light roasts of Alishan coffee. He launched Goodman Roaster in Taipei, later expanding to Kyoto in 2019."
           },
           "awards": {
-            "ja": "日本スペシャルティコーヒー協会 ローストマスターズ入賞",
-            "en": "SCAJ Roast Masters — Award"
-          },
-          "killer": {
-            "ja": "発酵プロセスを生かした実験的ライトロースト",
-            "en": "Experimental light roasts highlighting fermentation"
-          },
-          "features": {
-            "ja": "少量バッチ・シェアロースター利用可・豆20種",
-            "en": "Small-batch · share-roaster available · 20 beans"
-          },
-          "access": {
-            "ja": "地下鉄烏丸線「丸太町」駅 徒歩8分",
-            "en": "8 min walk from Marutamachi Stn"
-          },
-          "hp": "https://example.com"
-        },
-        {
-          "img": "kyo3",
-          "cat": {
-            "ja": "コーヒーショップ",
-            "en": "Coffee Shop"
-          },
-          "name": {
-            "ja": "焙煎研究室（仮）",
-            "en": "Kyoto Roast Lab"
-          },
-          "type": {
-            "ja": "自家焙煎・ネルドリップ",
-            "en": "Roastery · Nel Drip"
-          },
-          "ward": {
-            "ja": "京都・右京区",
-            "en": "Ukyō, Kyoto"
-          },
-          "blurb": {
-            "ja": "京都の実験室的ロースター。エシカルロットをネルドリップで提供。",
-            "en": "A Kyoto laboratory-style roaster serving ethical lots as nel drip."
-          },
-          "order": {
-            "ja": "ハウスブレンド ネルドリップ",
-            "en": "House blend, nel drip"
-          },
-          "owner": {
-            "ja": "—（要確認）",
-            "en": "— (to confirm)"
-          },
-          "bio": {
-            "ja": "※仮データ。京都の珈琲文化の原点を見つめ直す姿勢を掲げるラボ。",
-            "en": "Placeholder — a Kyoto lab revisiting the roots of Japanese coffee."
-          },
-          "awards": {
-            "ja": "※仮：サステナブル調達に関する受賞歴（要確認）",
-            "en": "Placeholder — sustainability recognition (to verify)"
+            "ja": "",
+            "en": ""
           },
           "killer": {
             "ja": "ネルドリップで引き出す深く丸い余韻",
             "en": "A deep, round finish drawn through nel drip"
           },
           "features": {
-            "ja": "少量バッチ・シェアロースター利用可・豆20種・席数18",
-            "en": "Small-batch · share-roaster · 20 beans · 18 seats"
+            "ja": "",
+            "en": ""
           },
           "access": {
-            "ja": "嵐電「太秦広隆寺」駅 徒歩6分",
-            "en": "6 min walk from Uzumasa-Kōryūji Stn"
+            "ja": "京都市営地下鉄烏丸線「四条駅」から徒歩約5分、阪急京都線「烏丸駅」から徒歩約6分（綾小路通りを西へ、西洞院通りの手前）",
+            "en": "A 5-minute walk from Shijo Station, or a 6-minute walk from Karasuma Station."
           },
-          "hp": "https://example.com"
+          "img": "kyo3",
+          "hp": "https://goodmanroaster.com/"
         }
       ]
     },

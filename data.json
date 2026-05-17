@@ -12,58 +12,6 @@
       },
       "cafes": [
         {
-          "img": "hok2",
-          "cat": {
-            "ja": "喫茶店",
-            "en": "Kissaten"
-          },
-          "name": {
-            "ja": "喫茶 雪明かり",
-            "en": "Kissa Yukiakari"
-          },
-          "type": {
-            "ja": "喫茶店・1979年創業",
-            "en": "Kissaten · Est. 1979"
-          },
-          "ward": {
-            "ja": "小樽・堺町",
-            "en": "Sakaimachi, Otaru"
-          },
-          "blurb": {
-            "ja": "運河近くの石蔵を改装した老舗。ネルドリップと自家製プリンの店。",
-            "en": "A converted stone warehouse near the canal — nel drip and house pudding."
-          },
-          "order": {
-            "ja": "ネルドリップ深煎り＆プリン",
-            "en": "Nel drip dark roast & pudding"
-          },
-          "owner": {
-            "ja": "高橋 文子",
-            "en": "Fumiko Takahashi"
-          },
-          "bio": {
-            "ja": "先代から受け継ぎ二代目。小樽の喫茶文化を守る一人。",
-            "en": "Second-generation owner, carrying on her father's shop and Otaru's kissa culture."
-          },
-          "awards": {
-            "ja": "小樽市 景観形成功労 表彰（建物保存）",
-            "en": "Otaru City Landscape Preservation Award"
-          },
-          "killer": {
-            "ja": "創業から変わらないネルドリップの黒い一杯",
-            "en": "The unchanged jet-black nel-drip cup, since 1979"
-          },
-          "features": {
-            "ja": "石蔵建築・全席禁煙・ジャズレコード・席数22",
-            "en": "Stone-warehouse interior · non-smoking · jazz records · 22 seats"
-          },
-          "access": {
-            "ja": "JR「小樽」駅 徒歩12分",
-            "en": "12 min walk from Otaru Stn (JR)"
-          },
-          "hp": "https://example.com"
-        },
-        {
           "cat": {
             "ja": "",
             "en": ""
@@ -112,7 +60,7 @@
             "ja": "",
             "en": ""
           },
-          "img": "seed-m66e3",
+          "img": "https://www.baristartcoffee.com/wp-content/themes/baristartcoffee/images/ourstory01.jpg",
           "hp": "https://www.baristartcoffee.com/"
         }
       ]
@@ -1403,58 +1351,6 @@
       },
       "cafes": [
         {
-          "img": "kyo1",
-          "cat": {
-            "ja": "喫茶店",
-            "en": "Kissaten"
-          },
-          "name": {
-            "ja": "町家珈琲 黒鉄",
-            "en": "Machiya Coffee Kurogane"
-          },
-          "type": {
-            "ja": "町家喫茶",
-            "en": "Machiya Café"
-          },
-          "ward": {
-            "ja": "祇園・花見小路",
-            "en": "Hanamikōji, Gion"
-          },
-          "blurb": {
-            "ja": "築120年の町家。一枚氷で淹れる京都の水出しの作法。",
-            "en": "A 120-year machiya — Kyoto-style cold drip over a single block of ice."
-          },
-          "order": {
-            "ja": "水出し珈琲（無糖）",
-            "en": "Cold drip, no sugar"
-          },
-          "owner": {
-            "ja": "中村 沙耶",
-            "en": "Saya Nakamura"
-          },
-          "bio": {
-            "ja": "京都の茶道家系に育ち、抽出を“点前”として捉え直した。",
-            "en": "Raised in a Kyoto tea-ceremony family; reframes brewing as a form of temae."
-          },
-          "awards": {
-            "ja": "京都建築賞 奨励賞（町家改修）",
-            "en": "Kyoto Architecture Award — Honourable Mention"
-          },
-          "killer": {
-            "ja": "8時間かけた一枚氷の水出し珈琲",
-            "en": "8-hour single-ice-block cold drip"
-          },
-          "features": {
-            "ja": "町家・坪庭・全席禁煙・予約優先・席数16",
-            "en": "Machiya · courtyard garden · non-smoking · reservation-first · 16 seats"
-          },
-          "access": {
-            "ja": "京阪「祇園四条」駅 徒歩6分",
-            "en": "6 min walk from Gion-Shijō Stn"
-          },
-          "hp": "https://example.com"
-        },
-        {
           "img": "kyo2",
           "cat": {
             "ja": "コーヒーショップ",
@@ -1572,58 +1468,6 @@
       },
       "cafes": [
         {
-          "img": "aic1",
-          "cat": {
-            "ja": "喫茶店",
-            "en": "Kissaten"
-          },
-          "name": {
-            "ja": "喫茶 モーニング堂",
-            "en": "Kissa Morning-dō"
-          },
-          "type": {
-            "ja": "喫茶店・1972年創業",
-            "en": "Kissaten · Est. 1972"
-          },
-          "ward": {
-            "ja": "名古屋・大須",
-            "en": "Ōsu, Nagoya"
-          },
-          "blurb": {
-            "ja": "名古屋モーニング文化の生き証人。珈琲一杯に小倉トースト。",
-            "en": "A living monument to Nagoya 'morning' culture — coffee with ogura toast."
-          },
-          "order": {
-            "ja": "ブレンド＋小倉トースト",
-            "en": "Blend + ogura toast"
-          },
-          "owner": {
-            "ja": "加藤 義雄",
-            "en": "Yoshio Kato"
-          },
-          "bio": {
-            "ja": "大須で半世紀、名古屋の喫茶文化を体現する店主。",
-            "en": "Half a century in Ōsu; an embodiment of Nagoya kissa culture."
-          },
-          "awards": {
-            "ja": "名古屋観光文化交流 特別功労（喫茶文化）",
-            "en": "Nagoya Tourism & Culture — Special Recognition"
-          },
-          "killer": {
-            "ja": "半世紀続くフルサービスの“名古屋モーニング”",
-            "en": "The full-service Nagoya 'morning', for half a century"
-          },
-          "features": {
-            "ja": "全時間モーニング・席数40・喫煙可（分煙）",
-            "en": "All-day morning set · 40 seats · partial smoking"
-          },
-          "access": {
-            "ja": "地下鉄「大須観音」駅 徒歩3分",
-            "en": "3 min walk from Ōsu-Kannon Stn"
-          },
-          "hp": "https://example.com"
-        },
-        {
           "img": "aic2",
           "cat": {
             "ja": "コーヒーショップ",
@@ -1687,112 +1531,7 @@
         "ja": "市内・北摂 ／ 8軒掲載",
         "en": "Osaka · 8 logged"
       },
-      "cafes": [
-        {
-          "img": "osa1",
-          "cat": {
-            "ja": "コーヒーショップ",
-            "en": "Coffee Shop"
-          },
-          "name": {
-            "ja": "中本ロースト",
-            "en": "Nakamoto Roast"
-          },
-          "type": {
-            "ja": "エスプレッソバー",
-            "en": "Espresso Bar"
-          },
-          "ward": {
-            "ja": "大阪・福島",
-            "en": "Fukushima, Osaka"
-          },
-          "blurb": {
-            "ja": "陽気で気前のいいエスプレッソ前提の店。京都の静けさの対極。",
-            "en": "Loud, generous and espresso-forward — the antithesis of Kyoto restraint."
-          },
-          "order": {
-            "ja": "ドッピオ＆炭酸水",
-            "en": "Doppio & sparkling water"
-          },
-          "owner": {
-            "ja": "中本 篤",
-            "en": "Atsushi Nakamoto"
-          },
-          "bio": {
-            "ja": "大阪のバリスタ界の兄貴分。後進育成にも力を注ぐ。",
-            "en": "A big-brother figure in Osaka's barista scene; a noted mentor."
-          },
-          "awards": {
-            "ja": "ジャパン ラテアート選手権 2020 優勝",
-            "en": "Japan Latte Art Championship 2020 — Champion"
-          },
-          "killer": {
-            "ja": "濃厚かつ甘い大阪流ドッピオ",
-            "en": "A thick, sweet Osaka-style doppio"
-          },
-          "features": {
-            "ja": "立ち飲み中心・席数6・深夜営業・豆販売",
-            "en": "Mostly standing · 6 seats · open late · beans"
-          },
-          "access": {
-            "ja": "JR東西線「新福島」駅 徒歩3分",
-            "en": "3 min walk from Shin-Fukushima Stn"
-          },
-          "hp": "https://example.com"
-        },
-        {
-          "img": "osa2",
-          "cat": {
-            "ja": "喫茶店",
-            "en": "Kissaten"
-          },
-          "name": {
-            "ja": "珈琲 蔵之介",
-            "en": "Coffee Kuranosuke"
-          },
-          "type": {
-            "ja": "自家焙煎・喫茶",
-            "en": "Self-roast Café"
-          },
-          "ward": {
-            "ja": "大阪・中崎町",
-            "en": "Nakazakichō, Osaka"
-          },
-          "blurb": {
-            "ja": "長屋を改装した中崎町の名物店。深煎りと自家製菓子。",
-            "en": "A converted row-house landmark of Nakazakichō — dark roast and house sweets."
-          },
-          "order": {
-            "ja": "深煎りネル＆チーズケーキ",
-            "en": "Dark nel & cheesecake"
-          },
-          "owner": {
-            "ja": "岡田 蔵之介",
-            "en": "Kuranosuke Okada"
-          },
-          "bio": {
-            "ja": "古道具商から転身。空間づくりに定評がある店主。",
-            "en": "A former antique dealer turned café owner, known for his interiors."
-          },
-          "awards": {
-            "ja": "大阪商業まちづくり 表彰（中崎町活性化）",
-            "en": "Osaka Town-making Award — Nakazakichō"
-          },
-          "killer": {
-            "ja": "長屋空間で味わう昔ながらの深煎りネルドリップ",
-            "en": "Old-style dark nel drip in a restored row-house"
-          },
-          "features": {
-            "ja": "長屋建築・古道具・全席禁煙・席数18",
-            "en": "Row-house · antiques · non-smoking · 18 seats"
-          },
-          "access": {
-            "ja": "地下鉄谷町線「中崎町」駅 徒歩4分",
-            "en": "4 min walk from Nakazakichō Stn"
-          },
-          "hp": "https://example.com"
-        }
-      ]
+      "cafes": []
     },
     {
       "region": {
@@ -1921,112 +1660,7 @@
         "ja": "福岡市内 ／ 5軒掲載",
         "en": "Fukuoka · 5 logged"
       },
-      "cafes": [
-        {
-          "img": "fuk1",
-          "cat": {
-            "ja": "コーヒーショップ",
-            "en": "Coffee Shop"
-          },
-          "name": {
-            "ja": "万葉珈琲（仮）",
-            "en": "Manyō Coffee"
-          },
-          "type": {
-            "ja": "マイクロロースター",
-            "en": "Micro-roaster"
-          },
-          "ward": {
-            "ja": "福岡・大名",
-            "en": "Daimyō, Fukuoka"
-          },
-          "blurb": {
-            "ja": "九州の実力派。発酵を効かせつつ崩れない精緻な一杯。",
-            "en": "Kyūshū's quiet powerhouse — fermented yet precise."
-          },
-          "order": {
-            "ja": "コロンビア エルパライソ",
-            "en": "Colombia El Paraíso"
-          },
-          "owner": {
-            "ja": "—（要確認）",
-            "en": "— (to confirm)"
-          },
-          "bio": {
-            "ja": "※仮データ。少人数で運営するマイクロロースター。",
-            "en": "Placeholder — a small micro-roaster team."
-          },
-          "awards": {
-            "ja": "※仮：九州のバリスタ／ブリュワーズ大会 入賞（要確認）",
-            "en": "Placeholder — Kyūshū competition placement (to verify)"
-          },
-          "killer": {
-            "ja": "果実感を攻めても発酵に倒れないバランス設計",
-            "en": "Pushing fruit without tipping into ferment"
-          },
-          "features": {
-            "ja": "カウンター5席・豆販売・テイスティングフライト",
-            "en": "5-seat counter · beans · tasting flight"
-          },
-          "access": {
-            "ja": "地下鉄「赤坂」駅 徒歩6分",
-            "en": "6 min walk from Akasaka Stn (Fukuoka)"
-          },
-          "hp": "https://example.com"
-        },
-        {
-          "img": "fuk2",
-          "cat": {
-            "ja": "喫茶店",
-            "en": "Kissaten"
-          },
-          "name": {
-            "ja": "珈琲 中洲堂",
-            "en": "Coffee Nakasudō"
-          },
-          "type": {
-            "ja": "喫茶店・1969年創業",
-            "en": "Kissaten · Est. 1969"
-          },
-          "ward": {
-            "ja": "福岡・中洲",
-            "en": "Nakasu, Fukuoka"
-          },
-          "blurb": {
-            "ja": "那珂川を望む老舗喫茶。深煎りネルと昭和の応接間のような空間。",
-            "en": "An old kissaten over the Naka River — dark nel and a Shōwa parlour."
-          },
-          "order": {
-            "ja": "ネルドリップ深煎り",
-            "en": "Dark nel drip"
-          },
-          "owner": {
-            "ja": "—（要確認）",
-            "en": "— (to confirm)"
-          },
-          "bio": {
-            "ja": "※仮データ。三代続く博多の喫茶一家。",
-            "en": "Placeholder — third-generation Hakata kissa family."
-          },
-          "awards": {
-            "ja": "※仮：博多の老舗表彰（要確認）",
-            "en": "Placeholder — Hakata heritage recognition (to verify)"
-          },
-          "killer": {
-            "ja": "那珂川を眺めて飲む昔ながらの深煎りネル",
-            "en": "Old-style dark nel with a river view"
-          },
-          "features": {
-            "ja": "川沿い・喫煙可（分煙）・席数30",
-            "en": "Riverside · partial smoking · 30 seats"
-          },
-          "access": {
-            "ja": "地下鉄「中洲川端」駅 徒歩4分",
-            "en": "4 min walk from Nakasu-Kawabata Stn"
-          },
-          "hp": "https://example.com"
-        }
-      ]
+      "cafes": []
     },
     {
       "region": {
@@ -2039,58 +1673,6 @@
         "en": "Hiroshima · 4 logged"
       },
       "cafes": [
-        {
-          "img": "hir1",
-          "cat": {
-            "ja": "コーヒーショップ",
-            "en": "Coffee Shop"
-          },
-          "name": {
-            "ja": "瀬戸内ロースターズ（仮）",
-            "en": "Setouchi Roasters"
-          },
-          "type": {
-            "ja": "焙煎所・宿",
-            "en": "Roastery · Stay"
-          },
-          "ward": {
-            "ja": "広島・尾道",
-            "en": "Onomichi, Hiroshima"
-          },
-          "blurb": {
-            "ja": "瀬戸内の丘で焙煎し、潮風で休ませる。フィルター向きの定番。",
-            "en": "Roasted on a hill above the Inland Sea, rested in salt air."
-          },
-          "order": {
-            "ja": "グアテマラ アンティグア（フィルター）",
-            "en": "Guatemala Antigua, filter"
-          },
-          "owner": {
-            "ja": "—（要確認）",
-            "en": "— (to confirm)"
-          },
-          "bio": {
-            "ja": "※仮データ。宿泊もできるロースタリーを運営。",
-            "en": "Placeholder — runs a roastery with rooms to stay."
-          },
-          "awards": {
-            "ja": "※仮：地域産品・観光関連の表彰（要確認）",
-            "en": "Placeholder — regional product award (to verify)"
-          },
-          "killer": {
-            "ja": "塩気を含む空気で寝かせる“瀬戸内エイジング”",
-            "en": "'Setouchi aging' in salt-touched air"
-          },
-          "features": {
-            "ja": "丘上・テラス・宿泊可・豆販売・席数16",
-            "en": "Hilltop · terrace · rooms · beans · 16 seats"
-          },
-          "access": {
-            "ja": "JR「尾道」駅よりバス10分",
-            "en": "10 min by bus from Onomichi Stn"
-          },
-          "hp": "https://example.com"
-        },
         {
           "img": "hir2",
           "cat": {

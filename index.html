@@ -448,6 +448,7 @@ const STR = {
    ============================================================ */
 let LANG = 'ja';
 const $ = s => document.querySelector(s);
+const t = (obj) => (obj && typeof obj === 'object' ? (obj[LANG] || obj.ja || obj.en || '') : (obj || ''));
 const img = (val,w=900,h=650)=>{
   const v = String(val||'');
   const isUrl = /^(https?:\/\/|\/)/.test(v);
@@ -463,22 +464,22 @@ function applyStatic(){
 }
 
 function renderAreas(){
-  $('#area-list').innerHTML = DATA.areas.map((a,ai)=>`
+  $('#area-list').innerHTML = (DATA.areas||[]).map((a,ai)=>`
     <div class="area reveal">
       <div class="area-head">
-        <div class="ttl"><h3>${a.region[LANG]}</h3><span class="jpn">${a.kanji}</span></div>
-        <div class="meta">${a.meta[LANG]}</div>
+        <div class="ttl"><h3>${t(a.region)}</h3><span class="jpn">${a.kanji||''}</span></div>
+        <div class="meta">${t(a.meta)}</div>
       </div>
       <div class="cafe-grid">
-        ${a.cafes.map((c,ci)=>`
+        ${(a.cafes||[]).map((c,ci)=>`
           <article class="cafe" onclick="openCafe(${ai},${ci})">
-            <div class="cafe-art"><span class="cafe-no">0${ci+1}</span>${img(c.img,800,600)}</div>
+            <div class="cafe-art"><span class="cafe-no">${String(ci+1).padStart(2,'0')}</span>${img(c.img,800,600)}</div>
             <div class="cafe-in">
-              <div class="type">${c.cat[LANG]} · ${c.type[LANG]}</div>
-              <h4>${c.name[LANG]}</h4>
-              <div class="ward jp">${c.ward[LANG]}</div>
-              <p>${c.blurb[LANG]}</p>
-              <div class="ord"><div><span>${STR.m_order[LANG]}</span><b>${c.order[LANG]}</b></div><div class="ar">→</div></div>
+              <div class="type">${[t(c.cat), t(c.type)].filter(Boolean).join(' · ')}</div>
+              <h4>${t(c.name)||'—'}</h4>
+              <div class="ward jp">${t(c.ward)}</div>
+              <p>${t(c.blurb)}</p>
+              <div class="ord"><div><span>${STR.m_order[LANG]}</span><b>${t(c.order)||'—'}</b></div><div class="ar">→</div></div>
             </div>
           </article>`).join('')}
       </div>
@@ -486,12 +487,12 @@ function renderAreas(){
 }
 
 function renderVisits(){
-  $('#visit-list').innerHTML = DATA.visits.map((v,vi)=>`
+  $('#visit-list').innerHTML = (DATA.visits||[]).map((v,vi)=>`
     <article class="visit" onclick="openVisit(${vi})">
       <div class="visit-art">${img(v.img,1000,620)}</div>
-      <div class="meta"><span>${v.date}</span><span class="pl">${v.place[LANG]}</span></div>
-      <h3>${v.title[LANG]}</h3>
-      <p>${v.excerpt[LANG]}</p>
+      <div class="meta"><span>${v.date||''}</span><span class="pl">${t(v.place)}</span></div>
+      <h3>${t(v.title)||'—'}</h3>
+      <p>${t(v.excerpt)}</p>
       <div class="rd">${STR.m_read[LANG]} <span class="ar">→</span></div>
     </article>`).join('');
 }
@@ -516,23 +517,24 @@ function row(k,v,big){ return v ? `<div class="panel-row"><div class="rk">${k}</
 
 function openCafe(ai,ci){
   const c = DATA.areas[ai].cafes[ci], a = DATA.areas[ai];
-  const addr = encodeURIComponent((c.ward&&c.ward.en) || (c.ward&&c.ward.ja) || a.region.en || '');
+  const wardEn = (c.ward&&c.ward.en) || (c.ward&&c.ward.ja) || (a.region&&a.region.en) || '';
+  const addr = encodeURIComponent(wardEn);
   const hotelLabel = LANG==='ja' ? 'このエリアの宿を探す ↗' : 'Find hotels nearby ↗';
   openPanel(`
     <div class="panel-img">${img(c.img,1200,750)}</div>
     <div class="panel-body">
-      <div class="panel-kicker">${STR.m_cafe[LANG]} · ${a.region[LANG]}</div>
-      <h2>${c.name[LANG]}</h2>
-      <div class="panel-loc">${c.ward[LANG]}　/　${c.cat[LANG]}</div>
-      ${row(STR.m_cat[LANG], c.type[LANG])}
-      ${row(STR.m_killer[LANG], c.killer[LANG], true)}
-      ${row(STR.m_owner[LANG], c.owner[LANG])}
-      ${row(STR.m_bio[LANG], c.bio[LANG])}
-      ${row(STR.m_awards[LANG], c.awards[LANG])}
-      ${row(STR.m_features[LANG], c.features[LANG])}
-      ${row(STR.m_order[LANG], c.order[LANG])}
-      ${row(STR.m_access[LANG], c.access[LANG])}
-      <div class="panel-row"><div class="rk">HP</div><a class="panel-hp" href="${c.hp}" target="_blank" rel="noopener">${STR.m_hp[LANG]} ↗</a></div>
+      <div class="panel-kicker">${STR.m_cafe[LANG]} · ${t(a.region)}</div>
+      <h2>${t(c.name)||'—'}</h2>
+      <div class="panel-loc">${[t(c.ward), t(c.cat)].filter(Boolean).join('　/　')}</div>
+      ${row(STR.m_cat[LANG], t(c.type))}
+      ${row(STR.m_killer[LANG], t(c.killer), true)}
+      ${row(STR.m_owner[LANG], t(c.owner))}
+      ${row(STR.m_bio[LANG], t(c.bio))}
+      ${row(STR.m_awards[LANG], t(c.awards))}
+      ${row(STR.m_features[LANG], t(c.features))}
+      ${row(STR.m_order[LANG], t(c.order))}
+      ${row(STR.m_access[LANG], t(c.access))}
+      ${c.hp ? `<div class="panel-row"><div class="rk">HP</div><a class="panel-hp" href="${c.hp}" target="_blank" rel="noopener">${STR.m_hp[LANG]} ↗</a></div>` : ''}
       <div class="panel-row"><div class="rk">${LANG==='ja'?'宿泊':'Stay'}</div><a class="panel-hp" href="https://www.booking.com/searchresults.html?ss=${addr}" target="_blank" rel="noopener">${hotelLabel}</a></div>
     </div>`);
 }
@@ -574,7 +576,7 @@ $('#ct-btn').addEventListener('click',()=>{
 });
 
 /* ---- reveal ---- */
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08,rootMargin:'0px 0px -6% 0px'});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:0,rootMargin:'0px 0px -40px 0px'});
 function observeReveals(){ document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el)); }
 
 /* ---- init ---- */

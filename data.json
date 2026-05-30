@@ -62,6 +62,58 @@
           },
           "img": "/images/baristart.jpg",
           "hp": "https://www.baristartcoffee.com/"
+        },
+        {
+          "cat": {
+            "ja": "",
+            "en": ""
+          },
+          "name": {
+            "ja": "丸美珈琲店",
+            "en": "MARUMI　COFFEE"
+          },
+          "type": {
+            "ja": "",
+            "en": ""
+          },
+          "ward": {
+            "ja": "",
+            "en": ""
+          },
+          "blurb": {
+            "ja": "",
+            "en": ""
+          },
+          "order": {
+            "ja": "",
+            "en": ""
+          },
+          "owner": {
+            "ja": "",
+            "en": ""
+          },
+          "bio": {
+            "ja": "",
+            "en": ""
+          },
+          "awards": {
+            "ja": "",
+            "en": ""
+          },
+          "killer": {
+            "ja": "",
+            "en": ""
+          },
+          "features": {
+            "ja": "",
+            "en": ""
+          },
+          "access": {
+            "ja": "",
+            "en": ""
+          },
+          "img": "seed-8cwlg",
+          "hp": "#"
         }
       ]
     },
@@ -1248,7 +1300,7 @@
       "cafes": [
         {
           "cat": {
-            "ja": "コーヒーショ",
+            "ja": "コーヒーショップ",
             "en": "Coffee Shop"
           },
           "name": {
@@ -1284,8 +1336,8 @@
             "en": ""
           },
           "killer": {
-            "ja": "ネルドリップで引き出す深く丸い余韻",
-            "en": "A deep, round finish drawn through nel drip"
+            "ja": "",
+            "en": ""
           },
           "features": {
             "ja": "",
@@ -1411,6 +1463,71 @@
         "en": "Hiroshima · 4 logged"
       },
       "cafes": []
+    },
+    {
+      "region": {
+        "ja": "山梨",
+        "en": "Yamanashi"
+      },
+      "kanji": "山梨",
+      "meta": {
+        "ja": "",
+        "en": ""
+      },
+      "cafes": [
+        {
+          "cat": {
+            "ja": "",
+            "en": ""
+          },
+          "name": {
+            "ja": "AKITO COFFEE",
+            "en": "AKITO COFFEE"
+          },
+          "type": {
+            "ja": "",
+            "en": ""
+          },
+          "ward": {
+            "ja": "山梨",
+            "en": "Yamanashi"
+          },
+          "blurb": {
+            "ja": "「日々に寄り添うコーヒーを」をコンセプトに、山梨県甲府市を拠点に展開するローカルに根ざしたスペシャルティコーヒーロースター",
+            "en": ""
+          },
+          "order": {
+            "ja": "",
+            "en": ""
+          },
+          "owner": {
+            "ja": "",
+            "en": ""
+          },
+          "bio": {
+            "ja": "",
+            "en": ""
+          },
+          "awards": {
+            "ja": "",
+            "en": ""
+          },
+          "killer": {
+            "ja": "",
+            "en": ""
+          },
+          "features": {
+            "ja": "",
+            "en": ""
+          },
+          "access": {
+            "ja": "",
+            "en": ""
+          },
+          "img": "",
+          "hp": "https://akitocoffee.com/"
+        }
+      ]
     }
   ],
   "visits": [

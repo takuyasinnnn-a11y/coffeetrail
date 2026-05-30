@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JAPAN COFFEE TRAIL — 管理画面</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Zen+Old+Mincho:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{--pp:#F4F1EA;--p2:#ECE8DD;--ink:#1B1A16;--ink2:#5B564B;--gr:#8B8576;--ac:#8C5A38;--ok:#4B7A52;--dg:#A6443B;--ln:rgba(27,26,22,.16);--ln2:rgba(27,26,22,.07)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--pp);color:var(--ink);font-family:"Hanken Grotesk",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .jp{font-family:"Zen Old Mincho",serif}
+  a{color:var(--ac)}
+  /* top bar */
+  header{position:sticky;top:0;z-index:50;background:rgba(244,241,234,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--ln);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+  header h1{font-size:1.05rem;font-weight:700;letter-spacing:.04em}
+  header h1 small{display:block;font-weight:500;color:var(--gr);font-size:.7rem;letter-spacing:.2em;margin-top:2px}
+  .bar-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .save-state{font-size:.78rem;color:var(--gr);font-weight:500}
+  .save-state b{color:var(--ok)}
+  button{font-family:inherit;cursor:pointer;border:1px solid var(--ink);background:none;color:var(--ink);padding:9px 16px;font-size:.8rem;font-weight:600;letter-spacing:.04em;border-radius:2px;transition:.2s}
+  button:hover{background:var(--ink);color:var(--pp)}
+  button.pri{background:var(--ink);color:var(--pp)}
+  button.pri:hover{opacity:.82}
+  button.ac{border-color:var(--ac);color:var(--ac)}
+  button.ac:hover{background:var(--ac);color:#fff}
+  button.dg{border-color:var(--dg);color:var(--dg)}
+  button.dg:hover{background:var(--dg);color:#fff}
+  button.sm{padding:5px 10px;font-size:.72rem}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px}
+  .tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap}
+  .tab{padding:10px 20px;border:1px solid var(--ln);background:var(--p2);font-weight:600;font-size:.85rem;border-radius:2px}
+  .tab.on{background:var(--ink);color:var(--pp);border-color:var(--ink)}
+  .hint{background:var(--p2);border:1px solid var(--ln);border-left:3px solid var(--ac);padding:14px 18px;font-size:.84rem;color:var(--ink2);margin-bottom:22px;border-radius:2px}
+  .hint code{background:rgba(0,0,0,.06);padding:1px 6px;border-radius:3px;font-size:.82em}
+  /* area + cafe layout */
+  .area-card{border:1px solid var(--ln);background:#fff;border-radius:3px;margin-bottom:18px;overflow:hidden}
+  .area-head{display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--p2);border-bottom:1px solid var(--ln);flex-wrap:wrap}
+  .area-head .rn{font-weight:700;font-size:1.05rem}
+  .area-head .rn .jp{color:var(--gr);font-weight:500;font-size:.85rem;margin-left:8px}
+  .area-head .cnt{font-size:.74rem;color:var(--gr);font-weight:600;letter-spacing:.08em}
+  .area-head .sp{flex:1}
+  .cafe-row{display:flex;align-items:center;gap:14px;padding:13px 20px;border-bottom:1px solid var(--ln2)}
+  .cafe-row:last-child{border-bottom:none}
+  .cafe-row .nm{font-weight:600;flex:1;min-width:0}
+  .cafe-row .nm small{display:block;color:var(--gr);font-weight:500;font-size:.74rem}
+  .cafe-row .tg{font-size:.7rem;color:var(--ac);font-weight:600;border:1px solid var(--ac);padding:3px 8px;border-radius:999px;white-space:nowrap}
+  .ord-btns{display:flex;gap:4px}
+  .ord-btns button{padding:4px 8px;font-size:.7rem;border-color:var(--ln)}
+  .empty{padding:30px;text-align:center;color:var(--gr);font-size:.85rem}
+  /* visit list */
+  .v-row{display:flex;align-items:center;gap:14px;padding:14px 18px;border:1px solid var(--ln);background:#fff;border-radius:3px;margin-bottom:10px}
+  .v-row .nm{flex:1;font-weight:600}
+  .v-row .nm small{display:block;color:var(--gr);font-weight:500;font-size:.74rem}
+  /* modal editor */
+  .ov{position:fixed;inset:0;background:rgba(20,19,15,.5);backdrop-filter:blur(4px);display:none;z-index:100;justify-content:center;align-items:flex-start;overflow-y:auto;padding:40px 16px}
+  .ov.on{display:flex}
+  .ed{background:var(--pp);width:min(760px,100%);border-radius:4px;border:1px solid var(--ln);box-shadow:0 30px 80px -30px rgba(0,0,0,.5)}
+  .ed-h{position:sticky;top:0;background:var(--pp);border-bottom:1px solid var(--ln);padding:18px 24px;display:flex;justify-content:space-between;align-items:center;z-index:2}
+  .ed-h h2{font-size:1.05rem;font-weight:700}
+  .ed-b{padding:22px 24px 30px}
+  .fld{margin-bottom:18px}
+  .fld label{display:block;font-size:.74rem;font-weight:700;letter-spacing:.06em;color:var(--ink2);margin-bottom:6px}
+  .fld label .req{color:var(--dg)}
+  .fld .hint-sm{font-size:.7rem;color:var(--gr);font-weight:500;margin-top:4px;line-height:1.5}
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .pair .sub{font-size:.66rem;color:var(--gr);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:.1em}
+  input,textarea,select{width:100%;font-family:inherit;font-size:.92rem;color:var(--ink);background:#fff;border:1px solid var(--ln);border-radius:2px;padding:9px 11px;outline:none}
+  input:focus,textarea:focus,select:focus{border-color:var(--ac)}
+  textarea{resize:vertical;min-height:64px;line-height:1.6}
+  .ed-f{position:sticky;bottom:0;background:var(--pp);border-top:1px solid var(--ln);padding:16px 24px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--pp);padding:12px 22px;border-radius:3px;font-size:.85rem;font-weight:600;opacity:0;pointer-events:none;transition:.35s;z-index:200}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .file-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  @media(max-width:640px){.pair{grid-template-columns:1fr}.wrap{padding:18px}.cafe-row{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>JAPAN COFFEE TRAIL<small>管理画面 / CONTENT EDITOR</small></h1>
+  <div class="bar-actions">
+    <span class="save-state" id="saveState">未編集</span>
+    <button class="sm" onclick="loadFromFile()">📂 data.json 読込</button>
+    <button class="sm" onclick="reloadServer()">↻ サーバー版に戻す</button>
+    <button class="sm dg" onclick="resetDraft()">下書き破棄</button>
+    <button class="sm" onclick="openGhSettings()">⚙️ GitHub設定</button>
+    <button class="pri ac" onclick="pushToGitHub()" id="ghPushBtn" style="background:var(--ac);border-color:var(--ac);color:#fff">📤 GitHubに送信</button>
+    <button class="pri" onclick="exportJSON()">💾 data.json を書き出す</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hint">
+    <b>使い方（おすすめ）</b> — ① ここで編集 → ② 右上の <b>「📤 GitHubに送信」</b> ボタンでワンタップ反映（30秒で本番更新）。<br>
+    <b>初回のみ</b>：「⚙️ GitHub設定」から Personal Access Token を登録してください。<br>
+    <b>従来の方法</b> — 「💾 data.json を書き出す」でダウンロード → GitHubに手動アップロードでもOK。<br>
+    別PCで編集した <code>data.json</code> を続きから編集したいときは「📂 data.json 読込」。最初の表示はサイトの <code>data.json</code> を読みます。
+  </div>
+
+  <div class="tabs">
+    <div class="tab on" id="tab-areas" onclick="switchTab('areas')">エリア・店舗</div>
+    <div class="tab" id="tab-visits" onclick="switchTab('visits')">カフェ訪問紀</div>
+  </div>
+
+  <div id="view-areas">
+    <div style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="ac" onclick="addArea()">＋ エリアを追加</button>
+    </div>
+    <div id="areaList"></div>
+  </div>
+
+  <div id="view-visits" style="display:none">
+    <div style="margin-bottom:16px"><button class="ac" onclick="editVisit(-1)">＋ 訪問紀を追加</button></div>
+    <div id="visitList"></div>
+  </div>
+
+</div>
+
+<input type="file" id="fileInput" accept="application/json,.json" style="display:none">
+
+<!-- GitHub settings modal -->
+<div class="ov" id="ghOv">
+  <div class="ed">
+    <div class="ed-h"><h2>⚙️ GitHub 設定</h2><button class="sm" onclick="closeGhSettings()">✕ 閉じる</button></div>
+    <div class="ed-b">
+      <div class="hint" style="margin-bottom:18px">
+        <b>Fine-grained Personal Access Token の作り方</b><br>
+        ① GitHub → 右上アイコン → Settings → Developer settings → Personal access tokens → <b>Fine-grained tokens</b> → <b>Generate new token</b><br>
+        ② <b>Repository access</b>: Only select repositories → <code>coffeetrail</code> を選択<br>
+        ③ <b>Repository permissions</b>: Contents → <b>Read and write</b><br>
+        ④ Generate token → 表示されたトークン（<code>github_pat_...</code>）をコピーして下に貼り付け<br>
+        ⚠️ トークンはブラウザの localStorage に保存されます。共有PCでは使わないでください。
+      </div>
+      <div class="fld">
+        <label>Personal Access Token <span class="req">*</span></label>
+        <input type="password" id="ghToken" placeholder="github_pat_xxxxx...">
+      </div>
+      <div class="pair">
+        <div class="fld">
+          <label>オーナー名（GitHub ユーザー名）</label>
+          <input type="text" id="ghOwner" placeholder="takuyasinnnn-a11y">
+        </div>
+        <div class="fld">
+          <label>リポジトリ名</label>
+          <input type="text" id="ghRepo" placeholder="coffeetrail">
+        </div>
+      </div>
+      <div class="pair">
+        <div class="fld">
+          <label>ブランチ名</label>
+          <input type="text" id="ghBranch" placeholder="main">
+        </div>
+        <div class="fld">
+          <label>ファイルパス</label>
+          <input type="text" id="ghPath" placeholder="data.json">
+        </div>
+      </div>
+    </div>
+    <div class="ed-f">
+      <button class="dg" onclick="clearGhSettings()">設定をクリア</button>
+      <div style="flex:1"></div>
+      <button onclick="testGh()">接続テスト</button>
+      <button class="pri" onclick="saveGhSettings()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- editor modal -->
+<div class="ov" id="ov">
+  <div class="ed">
+    <div class="ed-h"><h2 id="edTitle">編集</h2><button class="sm" onclick="closeEd()">✕ 閉じる</button></div>
+    <div class="ed-b" id="edBody"></div>
+    <div class="ed-f">
+      <button class="dg" id="edDelete" onclick="deleteCurrent()">この項目を削除</button>
+      <div style="flex:1"></div>
+      <button onclick="closeEd()">キャンセル</button>
+      <button class="pri" onclick="saveEd()">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const LS_KEY = 'jct_admin_draft_v1';
+let DATA = { areas:[], visits:[] };
+let dirty = false;
+let ctx = null; // {kind:'cafe'|'area'|'visit', ai, ci, vi, isNew}
+
+const $ = s=>document.querySelector(s);
+const esc = v => (v==null?'':String(v)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2200); }
+function markDirty(){ dirty=true; persist(); $('#saveState').innerHTML='下書き保存済 <b>●</b>'; }
+function persist(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(DATA)); }catch(e){ console.warn(e);} }
+
+/* ---------- boot ---------- */
+async function boot(){
+  const draft = localStorage.getItem(LS_KEY);
+  if(draft){
+    try{ DATA = JSON.parse(draft); $('#saveState').innerHTML='下書きを復元 <b>●</b>'; render(); return; }catch(e){}
+  }
+  await reloadServer(true);
+}
+async function reloadServer(silent){
+  try{
+    const r = await fetch('data.json?_='+Date.now());
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    DATA = await r.json();
+    if(!DATA.areas) DATA.areas=[]; if(!DATA.visits) DATA.visits=[];
+    $('#saveState').textContent='サーバー版を表示中';
+    dirty=false; persist(); render();
+    if(!silent) toast('サーバーの data.json を読み込みました');
+  }catch(e){
+    DATA = { areas:[], visits:[] };
+    $('#saveState').textContent='data.json 未検出（新規）';
+    render();
+    if(!silent) toast('data.json が見つかりません。新規作成モードです');
+  }
+}
+function resetDraft(){
+  if(!confirm('ブラウザ内の下書きを破棄して、サーバーの data.json を再読み込みします。よろしいですか？')) return;
+  localStorage.removeItem(LS_KEY); reloadServer();
+}
+function loadFromFile(){ $('#fileInput').click(); }
+$('#fileInput').addEventListener('change', e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const rd=new FileReader();
+  rd.onload=()=>{ try{ const j=JSON.parse(rd.result); DATA=j; if(!DATA.areas)DATA.areas=[]; if(!DATA.visits)DATA.visits=[]; markDirty(); render(); toast('ファイルを読み込みました'); }catch(err){ alert('JSON の読み込みに失敗しました: '+err.message); } };
+  rd.readAsText(f); e.target.value='';
+});
+
+/* ---------- tabs ---------- */
+function switchTab(t){
+  $('#tab-areas').classList.toggle('on',t==='areas');
+  $('#tab-visits').classList.toggle('on',t==='visits');
+  $('#view-areas').style.display = t==='areas'?'':'none';
+  $('#view-visits').style.display = t==='visits'?'':'none';
+}
+
+/* ---------- render ---------- */
+function render(){ renderAreas(); renderVisits(); }
+
+function renderAreas(){
+  const el=$('#areaList');
+  if(!DATA.areas.length){ el.innerHTML='<div class="empty">エリアがありません。「＋ エリアを追加」から作成してください。</div>'; return; }
+  el.innerHTML = DATA.areas.map((a,ai)=>`
+    <div class="area-card">
+      <div class="area-head">
+        <span class="rn">${esc(a.region&&a.region.ja||'(無題)')}<span class="jp">${esc(a.region&&a.region.en||'')}</span></span>
+        <span class="cnt">${(a.cafes||[]).length} 軒</span>
+        <span class="sp"></span>
+        <div class="ord-btns">
+          <button class="sm" ${ai===0?'disabled':''} onclick="moveArea(${ai},-1)">▲</button>
+          <button class="sm" ${ai===DATA.areas.length-1?'disabled':''} onclick="moveArea(${ai},1)">▼</button>
+        </div>
+        <button class="sm" onclick="editArea(${ai})">エリア設定</button>
+        <button class="sm ac" onclick="editCafe(${ai},-1)">＋ 店舗追加</button>
+      </div>
+      ${(a.cafes||[]).map((c,ci)=>`
+        <div class="cafe-row">
+          <span class="nm">${esc(c.name&&c.name.ja||'(無題)')}<small>${esc(c.ward&&c.ward.ja||'')} ・ ${esc(c.type&&c.type.ja||'')}</small></span>
+          <span class="tg">${esc(c.cat&&c.cat.ja||'—')}</span>
+          <div class="ord-btns">
+            <button ${ci===0?'disabled':''} onclick="moveCafe(${ai},${ci},-1)">▲</button>
+            <button ${ci===a.cafes.length-1?'disabled':''} onclick="moveCafe(${ai},${ci},1)">▼</button>
+          </div>
+          <button class="sm" onclick="editCafe(${ai},${ci})">編集</button>
+        </div>`).join('') || '<div class="empty">店舗がありません</div>'}
+    </div>`).join('');
+}
+
+function renderVisits(){
+  const el=$('#visitList');
+  if(!DATA.visits.length){ el.innerHTML='<div class="empty">訪問紀がありません。</div>'; return; }
+  el.innerHTML = DATA.visits.map((v,vi)=>`
+    <div class="v-row">
+      <span class="nm">${esc(v.title&&v.title.ja||'(無題)')}<small>${esc(v.date||'')} ・ ${esc(v.place&&v.place.ja||'')}</small></span>
+      <div class="ord-btns">
+        <button class="sm" ${vi===0?'disabled':''} onclick="moveVisit(${vi},-1)">▲</button>
+        <button class="sm" ${vi===DATA.visits.length-1?'disabled':''} onclick="moveVisit(${vi},1)">▼</button>
+      </div>
+      <button class="sm" onclick="editVisit(${vi})">編集</button>
+    </div>`).join('');
+}
+
+/* ---------- reorder ---------- */
+function mv(arr,i,d){ const j=i+d; if(j<0||j>=arr.length) return; [arr[i],arr[j]]=[arr[j],arr[i]]; }
+function moveArea(i,d){ mv(DATA.areas,i,d); markDirty(); renderAreas(); }
+function moveCafe(ai,ci,d){ mv(DATA.areas[ai].cafes,ci,d); markDirty(); renderAreas(); }
+function moveVisit(i,d){ mv(DATA.visits,i,d); markDirty(); renderVisits(); }
+
+/* ---------- field builders ---------- */
+function pairField(label,key,obj,req,ta){
+  const o=obj&&obj[key]||{};
+  const I=(v,ph)=> ta
+    ? `<textarea data-k="${key}" data-l="${ph}">${esc(v)}</textarea>`
+    : `<input data-k="${key}" data-l="${ph}" value="${esc(v)}">`;
+  return `<div class="fld"><label>${label}${req?' <span class="req">*</span>':''}</label>
+    <div class="pair">
+      <div><div class="sub">日本語 JA</div>${I(o.ja,'ja')}</div>
+      <div><div class="sub">English EN</div>${I(o.en,'en')}</div>
+    </div></div>`;
+}
+function plainField(label,key,val,ph,hintHtml){
+  const hint = hintHtml ? `<div class="hint-sm">${hintHtml}</div>` : '';
+  return `<div class="fld"><label>${label}</label><input data-pk="${key}" value="${esc(val)}" placeholder="${esc(ph||'')}">${hint}</div>`;
+}
+function collectPairs(scope){
+  const out={};
+  scope.querySelectorAll('[data-k]').forEach(inp=>{
+    const k=inp.getAttribute('data-k'), l=inp.getAttribute('data-l');
+    out[k]=out[k]||{}; out[k][l]=inp.value;
+  });
+  return out;
+}
+
+/* ---------- CAFE editor ---------- */
+function editCafe(ai,ci){
+  const isNew = ci<0;
+  const c = isNew ? {} : JSON.parse(JSON.stringify(DATA.areas[ai].cafes[ci]));
+  ctx={kind:'cafe',ai,ci,isNew};
+  $('#edTitle').textContent = isNew ? '店舗を追加（'+(DATA.areas[ai].region.ja)+'）' : '店舗を編集';
+  $('#edDelete').style.display = isNew?'none':'';
+  $('#edBody').innerHTML =
+    plainField('画像シード / 画像URL（img）','img', c.img||('seed-'+Math.random().toString(36).slice(2,7)), '例: tok-glitch または https://...') +
+    pairField('分類（cat）例: 喫茶店 / コーヒーショップ','cat',c,true) +
+    pairField('店名（name）','name',c,true) +
+    pairField('業態（type）例: 自家焙煎・スペシャルティ','type',c) +
+    pairField('エリア表記（ward）例: 東京・神保町','ward',c) +
+    pairField('一覧文（blurb）','blurb',c,false,true) +
+    pairField('おすすめの一杯（order）','order',c) +
+    pairField('オーナー（owner）','owner',c) +
+    pairField('経歴（bio）','bio',c,false,true) +
+    pairField('実績・受賞（awards）','awards',c,false,true) +
+    pairField('キラーコンテンツ（killer）','killer',c) +
+    pairField('特徴（features）','features',c) +
+    pairField('アクセス（access）','access',c) +
+    plainField('公式サイト（hp）','hp', c.hp||'', 'https://… / 無い場合は # ') +
+    plainField('アフィリエイトリンク（affiliate） — 任意','affiliate', c.affiliate||'', 'https://www.booking.com/searchresults.html?ss=…',
+      'このカフェ専用の宿泊リンク（Booking.com など）。空欄なら index.html がエリア名から自動で生成します。Stay22 スクリプトが自動でアフィリエイト化します。');
+  openEd();
+}
+
+/* ---------- AREA editor ---------- */
+function editArea(ai){
+  const a=JSON.parse(JSON.stringify(DATA.areas[ai]));
+  ctx={kind:'area',ai,isNew:false};
+  $('#edTitle').textContent='エリア設定';
+  $('#edDelete').style.display='';
+  $('#edBody').innerHTML =
+    pairField('エリア名（region）例: 東京 / Tokyo','region',a,true) +
+    plainField('見出し漢字（kanji）例: 東京','kanji',a.kanji||'') +
+    pairField('補足（meta）例: 23区内 ／ 22軒掲載','meta',a);
+  openEd();
+}
+function addArea(){
+  ctx={kind:'area',ai:-1,isNew:true};
+  $('#edTitle').textContent='エリアを追加';
+  $('#edDelete').style.display='none';
+  $('#edBody').innerHTML =
+    pairField('エリア名（region）例: 東京 / Tokyo','region',{},true) +
+    plainField('見出し漢字（kanji）','kanji','') +
+    pairField('補足（meta）例: 市内 ／ 0軒掲載','meta',{});
+  openEd();
+}
+
+/* ---------- VISIT editor ---------- */
+function editVisit(vi){
+  const isNew = vi<0;
+  const v = isNew ? {} : JSON.parse(JSON.stringify(DATA.visits[vi]));
+  ctx={kind:'visit',vi,isNew};
+  $('#edTitle').textContent = isNew?'訪問紀を追加':'訪問紀を編集';
+  $('#edDelete').style.display = isNew?'none':'';
+  const bodyJa=(v.body&&v.body.ja||[]).join('\n\n');
+  const bodyEn=(v.body&&v.body.en||[]).join('\n\n');
+  $('#edBody').innerHTML =
+    plainField('画像シード / 画像URL（img）','img', v.img||('vis-'+Math.random().toString(36).slice(2,7))) +
+    plainField('日付（date）例: 2026.05','date', v.date||'') +
+    pairField('場所（place）例: 京都・祇園','place',v,true) +
+    pairField('タイトル（title）','title',v,true) +
+    pairField('抜粋（excerpt）','excerpt',v,false,true) +
+    `<div class="fld"><label>本文（body）— 段落は空行で区切る</label>
+      <div class="pair">
+        <div><div class="sub">日本語 JA</div><textarea id="bodyJa" style="min-height:140px">${esc(bodyJa)}</textarea></div>
+        <div><div class="sub">English EN</div><textarea id="bodyEn" style="min-height:140px">${esc(bodyEn)}</textarea></div>
+      </div></div>`;
+  openEd();
+}
+
+/* ---------- save ---------- */
+function openEd(){ $('#ov').classList.add('on'); }
+function closeEd(){ $('#ov').classList.remove('on'); ctx=null; }
+
+function saveEd(){
+  const body=$('#edBody');
+  const pairs=collectPairs(body);
+  const plains={};
+  body.querySelectorAll('[data-pk]').forEach(i=>plains[i.getAttribute('data-pk')]=i.value.trim());
+
+  if(ctx.kind==='cafe'){
+    if(!(pairs.name&&pairs.name.ja)){ alert('店名（日本語）は必須です'); return; }
+    const obj=Object.assign({}, pairs);
+    obj.img = plains.img||'';
+    obj.hp = plains.hp||'#';
+    obj.affiliate = plains.affiliate||'';
+    if(ctx.isNew){ DATA.areas[ctx.ai].cafes = DATA.areas[ctx.ai].cafes||[]; DATA.areas[ctx.ai].cafes.push(obj); }
+    else DATA.areas[ctx.ai].cafes[ctx.ci]=obj;
+  }
+  else if(ctx.kind==='area'){
+    if(!(pairs.region&&pairs.region.ja)){ alert('エリア名（日本語）は必須です'); return; }
+    if(ctx.isNew){
+      DATA.areas.push({ region:pairs.region, kanji:plains.kanji||pairs.region.ja, meta:pairs.meta||{ja:'',en:''}, cafes:[] });
+    } else {
+      const a=DATA.areas[ctx.ai];
+      a.region=pairs.region; a.kanji=plains.kanji||a.kanji||pairs.region.ja; a.meta=pairs.meta;
+    }
+  }
+  else if(ctx.kind==='visit'){
+    if(!(pairs.title&&pairs.title.ja)){ alert('タイトル（日本語）は必須です'); return; }
+    const obj=Object.assign({}, pairs);
+    obj.img=plains.img||''; obj.date=plains.date||'';
+    const ja=$('#bodyJa').value.split(/\n{2,}/).map(s=>s.trim()).filter(Boolean);
+    const en=$('#bodyEn').value.split(/\n{2,}/).map(s=>s.trim()).filter(Boolean);
+    obj.body={ja,en};
+    if(ctx.isNew) DATA.visits.push(obj); else DATA.visits[ctx.vi]=obj;
+  }
+  markDirty(); render(); closeEd(); toast('保存しました（下書き）');
+}
+
+function deleteCurrent(){
+  if(!ctx||ctx.isNew) return;
+  if(!confirm('この項目を削除します。よろしいですか？')) return;
+  if(ctx.kind==='cafe') DATA.areas[ctx.ai].cafes.splice(ctx.ci,1);
+  else if(ctx.kind==='area'){ if(!confirm('エリア内の全店舗も削除されます。本当に削除しますか？')) return; DATA.areas.splice(ctx.ai,1); }
+  else if(ctx.kind==='visit') DATA.visits.splice(ctx.vi,1);
+  markDirty(); render(); closeEd(); toast('削除しました');
+}
+
+/* ---------- export ---------- */
+function exportJSON(){
+  const blob=new Blob([JSON.stringify(DATA,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='data.json'; a.click();
+  URL.revokeObjectURL(url);
+  $('#saveState').innerHTML='書き出し済 <b>✓</b>';
+  toast('data.json を書き出しました。サイトに上書きアップロードしてください');
+}
+
+/* ---------- GitHub push ---------- */
+const GH_KEY = 'jct_admin_gh_v1';
+function getGh(){ try{ return JSON.parse(localStorage.getItem(GH_KEY)||'null'); }catch(e){ return null; } }
+function openGhSettings(){
+  const s = getGh() || {};
+  $('#ghToken').value  = s.token  || '';
+  $('#ghOwner').value  = s.owner  || 'takuyasinnnn-a11y';
+  $('#ghRepo').value   = s.repo   || 'coffeetrail';
+  $('#ghBranch').value = s.branch || 'main';
+  $('#ghPath').value   = s.path   || 'data.json';
+  $('#ghOv').classList.add('on');
+}
+function closeGhSettings(){ $('#ghOv').classList.remove('on'); }
+function saveGhSettings(){
+  const token=$('#ghToken').value.trim();
+  const owner=$('#ghOwner').value.trim();
+  const repo=$('#ghRepo').value.trim();
+  const branch=$('#ghBranch').value.trim()||'main';
+  const path=$('#ghPath').value.trim()||'data.json';
+  if(!token||!owner||!repo){ alert('Token・オーナー名・リポジトリ名は必須です'); return; }
+  try{ localStorage.setItem(GH_KEY, JSON.stringify({token,owner,repo,branch,path})); }catch(e){}
+  toast('GitHub設定を保存しました');
+  closeGhSettings();
+}
+function clearGhSettings(){
+  if(!confirm('保存されたGitHub設定（Token含む）を削除します。よろしいですか？')) return;
+  localStorage.removeItem(GH_KEY);
+  $('#ghToken').value=''; $('#ghOwner').value=''; $('#ghRepo').value=''; $('#ghBranch').value=''; $('#ghPath').value='';
+  toast('設定を削除しました');
+}
+async function testGh(){
+  const s=getGh()||{token:$('#ghToken').value.trim(),owner:$('#ghOwner').value.trim(),repo:$('#ghRepo').value.trim()};
+  if(!s.token||!s.owner||!s.repo){ alert('先に Token・オーナー・リポジトリを入力してください'); return; }
+  toast('接続テスト中…');
+  try{
+    const r=await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}`,{headers:{Authorization:`Bearer ${s.token}`,Accept:'application/vnd.github+json'}});
+    if(r.ok){ toast('✓ 接続成功'); }
+    else{ const j=await r.json().catch(()=>({})); alert(`接続失敗（${r.status}）: ${j.message||''}\nToken / リポジトリ / 権限を確認してください`); }
+  }catch(e){ alert('ネットワークエラー: '+e.message); }
+}
+async function pushToGitHub(){
+  const s=getGh();
+  if(!s||!s.token){ alert('先に「⚙️ GitHub設定」からトークンを登録してください'); openGhSettings(); return; }
+  const btn=$('#ghPushBtn'); const orig=btn.innerHTML;
+  btn.disabled=true; btn.innerHTML='送信中…';
+  try{
+    // 現在ファイルの sha を取得（存在しなければ新規作成扱い）
+    let sha=null;
+    const gr=await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}/contents/${s.path}?ref=${s.branch}`,{
+      headers:{Authorization:`Bearer ${s.token}`,Accept:'application/vnd.github+json'}
+    });
+    if(gr.ok){ const j=await gr.json(); sha=j.sha; }
+    else if(gr.status!==404){ const j=await gr.json().catch(()=>({})); throw new Error(`取得エラー(${gr.status}): ${j.message||''}`); }
+
+    const content=JSON.stringify(DATA,null,2);
+    const body={
+      message:`Update ${s.path} via admin (${DATA.areas.length} areas / ${DATA.areas.reduce((n,a)=>n+(a.cafes||[]).length,0)} cafes)`,
+      content:btoa(unescape(encodeURIComponent(content))),
+      branch:s.branch
+    };
+    if(sha) body.sha=sha;
+
+    const pr=await fetch(`https://api.github.com/repos/${s.owner}/${s.repo}/contents/${s.path}`,{
+      method:'PUT',
+      headers:{Authorization:`Bearer ${s.token}`,Accept:'application/vnd.github+json','Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    });
+    if(!pr.ok){ const j=await pr.json().catch(()=>({})); throw new Error(`送信失敗(${pr.status}): ${j.message||''}`); }
+    $('#saveState').innerHTML='GitHubに送信済 <b>✓</b>';
+    toast('✓ GitHubに送信しました。Cloudflareが30秒〜1分で反映します');
+    dirty=false;
+  }catch(e){
+    alert('送信に失敗しました\n\n'+e.message);
+  }finally{
+    btn.disabled=false; btn.innerHTML=orig;
+  }
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape') return;
+  if($('#ov').classList.contains('on')) closeEd();
+  if($('#ghOv').classList.contains('on')) closeGhSettings();
+});
+$('#ov').addEventListener('click',e=>{ if(e.target===$('#ov')) closeEd(); });
+$('#ghOv').addEventListener('click',e=>{ if(e.target===$('#ghOv')) closeGhSettings(); });
+window.addEventListener('beforeunload',e=>{ if(dirty){ e.preventDefault(); e.returnValue=''; } });
+
+boot();
+</script>
+</body>
+</html>
